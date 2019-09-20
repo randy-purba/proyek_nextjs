@@ -14,7 +14,9 @@ export default (props) => {
 
     const { 
         title, listZone, listQuestionType
+        
     } = props
+    console.log('%c 🍒 title: ', 'font-size:20px;background-color: #FCA650;color:#fff;', title);
 
     
     const [startDate, setStartDate] = useState(new Date())
