@@ -1,0 +1,224 @@
+{
+    "banners": [
+        { "id": 1, "title": "Gambar 1", "picture": "https://i.pinimg.com/originals/6f/1e/86/6f1e86ffdb2926aead1616cc8719ca41.jpg" },
+		{ "id": 2, "title": "Gambar 2", "picture": "https://www.cuckoo.co.id/wp-content/uploads/2018/01/cuckoo-banner-award-winning2-1024x400.jpg" },
+		{ "id": 3, "title": "Gambar 3", "picture": "https://oedipus.com/wp-content/uploads/2017/05/PO-Banner-2048%C3%97800-1024x400.png" }
+    ],
+    "listKota": [
+        { 
+            "id": 1, 
+            "name": "DKI Jakarta",
+            "provinsi": [
+                { "id": 1, "name": "Jakarta Barat" },
+                { "id": 2, "name": "Jakarta Pusat" },
+                { "id": 3, "name": "Jakarta Selatan" },
+                { "id": 4, "name": "Jakarta Timur" },
+                { "id": 5, "name": "Jakarta Utara" }
+            ] 
+        },
+		{ 
+            "id": 2, 
+            "name": "Bandung",
+            "provinsi": [
+                { "id": 1, "name": "Andir" },
+                { "id": 2, "name": "Antapani" },
+                { "id": 3, "name": "Arcamanik" },
+                { "id": 4, "name": "Astana Anyar" },
+                { "id": 5, "name": "Babakan Ciparay" },
+                { "id": 6, "name": "Bandung Kidul" }
+            ]  
+        }
+    ],
+    "listZona": [
+        {
+            "id": 1,
+            "name": "Sea",
+            "value": "sea"
+        },
+        {
+            "id": 2,
+            "name": "Island",
+            "value": "island"
+        },
+        {
+            "id": 3,
+            "name": "Jungle",
+            "value": "jungle"
+        },
+        {
+            "id": 4,
+            "name": "Cave",
+            "value": "cave"
+        }
+    ],
+    "questionType": [
+        {
+            "id":1,
+            "name": "Essay",
+            "value": "essay"
+        },
+        {
+            "id":2,
+            "name": "Multiple Choice",
+            "value": "multiple_choice"
+        }
+    ],
+    "bankQuestionData": [
+        { "id": 1, "name": "Test Umum","question_type": "Gamification", "date": 1562267610234, "education": "all"},
+        { "id": 2, "name": "Test Intelligent I","question_type": "Text - MC", "date": 1562267610234, "education": "SMK"},
+        { "id": 3, "name": "Test Intelligent II","question_type": "Text & Picture - MC", "date": 1562267610234, "education": "D3"},
+        { "id": 4, "name": "Test DISC","question_type": "Text - MC", "date": 1562267610234, "education": "S1"},
+        { "id": 5, "name": "Test Umum","question_type": "Gamification", "date": 1562267610234, "education": "all"},
+        { "id": 6, "name": "Test Intelligent I","question_type": "Text - MC", "date": 1562267610234, "education": "SMK"},
+        { "id": 7, "name": "Test Intelligent II","question_type": "Text & Picture - MC", "date": 1562267610234, "education": "D3"},
+        { "id": 8, "name": "Test DISC","question_type": "Text - MC", "date": 1562267610234, "education": "S1"},
+        { "id": 9, "name": "Test Umum","question_type": "Gamification", "date": 1562267610234, "education": "all"},
+        { "id": 10, "name": "Test Intelligent I","question_type": "Text - MC", "date": 1562267610234, "education": "SMK"},
+        { "id": 11, "name": "Test Intelligent II","question_type": "Text & Picture - MC", "date": 1562267610234, "education": "D3"},
+        { "id": 12, "name": "Test DISC","question_type": "Text - MC", "date": 1562267610234, "education": "S1"}
+    ],
+    "listTransaction": [
+        { "id": 1, "name": "Samsung Galaxy Note 10", "qty": 2, "currency": "IDR", "price": 12000000, "total": 24000000, "date": 1561807610234 },
+        { "id": 2, "name": "Apple iPhone XR", "qty": 1, "currency": "IDR", "price": 14500000, "total": 14500000, "date": 1561867610234 },
+        { "id": 3, "name": "Apple MacBook Pro 2019", "qty": 1, "currency": "IDR", "price": 34500000, "total": 34500000, "date": 1562067610234 },
+        { "id": 4, "name": "Apple MacBook Air 2018", "qty": 1, "currency": "IDR", "price": 30500000, "total": 30500000, "date": 1562267610234 },
+        { "id": 5, "name": "Apple MacBook Pro 2017", "qty": 2, "currency": "IDR", "price": 25000000, "total": 50000000, "date": 1562567610234 },
+        { "id": 6, "name": "Apple MacBook Pro 2016", "qty": 2, "currency": "IDR", "price": 22000000, "total": 44000000, "date": 1563067610234 },
+        { "id": 7, "name": "Apple MacBook Pro 2015", "qty": 1, "currency": "IDR", "price": 20000000, "total": 20000000, "date": 1563267610234 },
+        { "id": 8, "name": "Apple MacBook Pro 2014", "qty": 2, "currency": "IDR", "price": 18000000, "total": 36000000, "date": 1563567610234 },
+        { "id": 9, "name": "Apple MacBook Pro 2013", "qty": 5, "currency": "IDR", "price": 15000000, "total": 75000000, "date": 1563967610234 },
+        { "id": 10, "name": "Apple MacBook Pro 2012", "qty": 1, "currency": "IDR", "price": 10500000, "total": 10500000, "date": 1565067610234 },
+        { "id": 11, "name": "Apple MacBook Pro 2011", "qty": 2, "currency": "IDR", "price": 8500000, "total": 17000000, "date": 1565567610234 },
+        { "id": 12, "name": "Apple MacBook Pro 2010", "qty": 1, "currency": "IDR", "price": 6500000, "total": 6500000, "date": 1565667610234 },
+        { "id": 13, "name": "Samsung Galaxy Note 9", "qty": 2, "currency": "IDR", "price": 12000000, "total": 24000000,"date": 1566067610234 },
+        { "id": 14, "name": "Apple iPhone XR", "qty": 1, "currency": "IDR", "price": 14500000, "total": 19000000, "date": 1566667610234 },
+        { "id": 15, "name": "Apple MacBook Pro 2019", "qty": 1, "currency": "IDR", "price": 34500000, "total": 34500000, "date": 1567167610234 },
+        { "id": 16, "name": "Apple MacBook Air 2018", "qty": 1, "currency": "IDR", "price": 30500000, "total": 30500000, "date": 1567242396234 },
+        { "id": 17, "name": "Apple MacBook Pro 2017", "qty": 2, "currency": "IDR", "price": 25000000, "total": 50000000, "date": 1567299975234 },
+        { "id": 18, "name": "Apple MacBook Pro 2016", "qty": 2, "currency": "IDR", "price": 22000000, "total": 44000000, "date": 1567317960234 },
+        { "id": 19, "name": "Apple MacBook Pro 2015", "qty": 1, "currency": "IDR", "price": 20000000, "total": 20000000, "date": 1567425933234 },
+        { "id": 20, "name": "Apple MacBook Pro 2014", "qty": 1, "currency": "IDR", "price": 18000000, "total": 18000000, "date": 1567451120234 },
+        { "id": 21, "name": "Apple MacBook Pro 2013", "qty": 5, "currency": "IDR", "price": 15000000, "total": 75000000, "date": 1567483506234 },
+        { "id": 22, "name": "Apple MacBook Pro 2012", "qty": 1, "currency": "IDR", "price": 10500000, "total": 10500000, "date": 1567501484234 },
+        { "id": 23, "name": "Apple MacBook Pro 2011", "qty": 2, "currency": "IDR", "price": 8500000, "total": 17000000, "date": 1567559070234 },
+        { "id": 24, "name": "Apple MacBook Pro 2010", "qty": 1, "currency": "IDR", "price": 6500000, "total": 6500000, "date": 1567587828234 }
+    ],
+    "lineChart": [
+        { "name": "Page A", "uv": 4000, "pv": 2400, "amt": 2400 },
+        { "name": "Page B", "uv": 3000, "pv": 1398, "amt": 2210 },
+        { "name": "Page C", "uv": 2000, "pv": 9800, "amt": 2290 },
+        { "name": "Page D", "uv": 2780, "pv": 3908, "amt": 2000 },
+        { "name": "Page E", "uv": 1890, "pv": 4800, "amt": 2181 },
+        { "name": "Page F", "uv": 2390, "pv": 3800, "amt": 2500 },
+        { "name": "Page G", "uv": 3490, "pv": 4300, "amt": 2100 }
+    ],
+    "horizontalChart": [
+        { "name": "Page A", "uv": 4000, "pv": 2400, "amt": 2400 },
+        { "name": "Page B", "uv": 3000, "pv": 1398, "amt": 2210 },
+        { "name": "Page C", "uv": 2000, "pv": 9800, "amt": 2290 },
+        { "name": "Page D", "uv": 2780, "pv": 3908, "amt": 2000 },
+        { "name": "Page E", "uv": 1890, "pv": 4800, "amt": 2181 },
+        { "name": "Page F", "uv": 2390, "pv": 3800, "amt": 2500 },
+        { "name": "Page G", "uv": 3490, "pv": 4300, "amt": 2100 }
+    ],
+    "pieDoubleChart": {
+        "data01": [
+            { "name": "Group A", "value": 400 }, 
+            { "name": "Group B", "value": 300 },
+            { "name": "Group C", "value": 300 }, 
+            { "name": "Group D", "value": 200 }
+        ],
+        "data02": [
+            { "name": "A1", "value": 100 },
+            { "name": "A2", "value": 300 },
+            { "name": "B1", "value": 100 },
+            { "name": "B2", "value": 80 },
+            { "name": "B3", "value": 40 },
+            { "name": "B4", "value": 30 },
+            { "name": "B5", "value": 50 },
+            { "name": "C1", "value": 100 },
+            { "name": "C2", "value": 200 },
+            { "name": "D1", "value": 150 },
+            { "name": "D2", "value": 50 }
+        ]
+    },
+    "radarChart": [
+        { "subject": "Math", "A": 120, "B": 110, "fullMark": 150 },
+        { "subject": "Chinese", "A": 98, "B": 130, "fullMark": 150 },
+        { "subject": "English", "A": 86, "B": 130, "fullMark": 150 },
+        { "subject": "Geography", "A": 99, "B": 100, "fullMark": 150 },
+        { "subject": "Physics", "A": 85, "B": 90, "fullMark": 150 },
+        { "subject": "History", "A": 65, "B": 85, "fullMark": 150 }
+    ],
+    "brushBarChart": [
+        { "name": "1", "uv": 300, "pv": 656 },
+        { "name": "2", "uv": -145, "pv": 230 },
+        { "name": "3", "uv": -100, "pv": 345 },
+        { "name": "4", "uv": -8, "pv": 450 },
+        { "name": "5", "uv": 100, "pv": 321 },
+        { "name": "6", "uv": 9, "pv": 235 },
+        { "name": "7", "uv": 53, "pv": 267 },
+        { "name": "8", "uv": 252, "pv": -378 },
+        { "name": "9", "uv": 79, "pv": -210 },
+        { "name": "10", "uv": 294, "pv": -23 },
+        { "name": "12", "uv": 43, "pv": 45 },
+        { "name": "13", "uv": -74, "pv": 90 },
+        { "name": "14", "uv": -71, "pv": 130 },
+        { "name": "15", "uv": -117, "pv": 11 },
+        { "name": "16", "uv": -186, "pv": 107 },
+        { "name": "17", "uv": -16, "pv": 926 },
+        { "name": "18", "uv": -125, "pv": 653 },
+        { "name": "19", "uv": 222, "pv": 366 },
+        { "name": "20", "uv": 372, "pv": 486 },
+        { "name": "21", "uv": 182, "pv": 512 },
+        { "name": "22", "uv": 164, "pv": 302 },
+        { "name": "23", "uv": 316, "pv": 425 },
+        { "name": "24", "uv": 131, "pv": 467 },
+        { "name": "25", "uv": 291, "pv": -190 },
+        { "name": "26", "uv": -47, "pv": 194 },
+        { "name": "27", "uv": -415, "pv": 371 },
+        { "name": "28", "uv": -182, "pv": 376 },
+        { "name": "29", "uv": -93, "pv": 295 },
+        { "name": "30", "uv": -99, "pv": 322 },
+        { "name": "31", "uv": -52, "pv": 246 },
+        { "name": "32", "uv": 154, "pv": 33 },
+        { "name": "33", "uv": 205, "pv": 354 },
+        { "name": "34", "uv": 70, "pv": 258 },
+        { "name": "35", "uv": -25, "pv": 359 },
+        { "name": "36", "uv": -59, "pv": 192 },
+        { "name": "37", "uv": -63, "pv": 464 },
+        { "name": "38", "uv": -91, "pv": -2 },
+        { "name": "39", "uv": -66, "pv": 154 },
+        { "name": "40", "uv": -50, "pv": 186 }
+    ],  
+    "pieChart": [
+        { "name": "Group A", "value": 400 }, 
+        { "name": "Group B", "value": 300 },
+        { "name": "Group C", "value": 300 }, 
+        { "name": "Group D", "value": 200 }
+    ],
+    "globalChart": [
+        { "name": "Page A", "uv": 4000, "pv": 2400, "amt": 2400 },
+        { "name": "Page B", "uv": 3000, "pv": 1398, "amt": 2210 },
+        { "name": "Page C", "uv": 2000, "pv": 9800, "amt": 2290 },
+        { "name": "Page D", "uv": 2780, "pv": 3908, "amt": 2000 },
+        { "name": "Page E", "uv": 1890, "pv": 4800, "amt": 2181 },
+        { "name": "Page F", "uv": 2390, "pv": 3800, "amt": 2500 },
+        { "name": "Page G", "uv": 3490, "pv": 4300, "amt": 2100 }
+    ],
+    "pointCollectionToday": {
+        "today": 2120,
+        "yesterday": 1919,
+        "lastSync": "Monday, 16-08-2019 10:27"
+    },
+    "totalSalesToday": {
+        "today": 166746000,
+        "yesterday": 124219000,
+        "lastSync": "Monday, 16-08-2019 10:27"
+    },
+    "itemSoldToday": {
+        "today": 135,
+        "yesterday": 225,
+        "lastSync": "Monday, 16-08-2019 10:27"
+    }
+}
