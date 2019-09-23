@@ -20,7 +20,8 @@ export default (props) => {
                 <NavMenu link="/statistic" href="/statistic" width={navMinWidth} title="Statistic" iconName="icon-trending-up" />
                 <NavMenu link="/sample-form" href="/sampleForm" width={navMinWidth} title="Sample Form" iconName="icon-hash" />
                 <NavMenu link="/sample-banner" href="/sampleBanner" width={navMinWidth} title="Sample Banner" iconName="icon-image" />
-                <NavMenu link="/bank-soal" href="/bankQuestion" width={navMinWidth} title="Bank Soal" iconName="icon-hash" />
+                <NavMenu link="/management-users" href="/managementUser" width={navMinWidth} title="Management User" iconName="icon-users" />
+                <NavMenu link="/bank-soal" href="/bankQuestion" width={navMinWidth} title="Bank Soal" iconName="icon-database" />
                 <div className="navListItem d-inline-block w-100">
                     <div 
                         className="navItem animate-all position-relative d-inline-block w-100"

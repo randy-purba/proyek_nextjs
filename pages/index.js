@@ -143,4 +143,5 @@ class Home extends React.Component {
 // 		userLogin: bindActionCreators(userLogin, dispatch)
 // 	}
 // }
+
 export default connect(state => state, {})(Home)

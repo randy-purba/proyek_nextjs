@@ -2,7 +2,7 @@ import fetch from 'isomorphic-fetch'
 import Router from 'next/router'
 import nextCookie from 'next-cookies'
 import cookie from 'js-cookie'
-// import { actionTypes } from '../../components/types'
+import { actionTypes } from '../../components/types'
 
 const API_URL = process.env.API_URL
 const CLIENT_ID = process.env.API_CLIENT_ID
@@ -30,5 +30,5 @@ export const userLogin = async (token) =>  {
 }
 
 export const userLogout = async () => {
-    
+	Router.push('/dashboard');
 }

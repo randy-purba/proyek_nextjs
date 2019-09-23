@@ -64,7 +64,13 @@
         }
     ],
     "bankQuestionData": [
-        { "id": 1, "name": "Test Umum","question_type": "Gamification", "date": 1562267610234, "education": "all"},
+        { "id": 1, "name": "Test Umum","question_type": "Gamification", "date": 1562267610234, "education": "all", 
+            "questions" : [
+                { "id":1, "zona": 1, "question_type": 2, "question": "1+5 = "},
+                { "id":2, "zona": 2, "question_type": 1, "question": "1+7 = "},
+                { "id":3, "zona": 3, "question_type": 2, "question": "2+5 = "}
+            ]
+        },
         { "id": 2, "name": "Test Intelligent I","question_type": "Text - MC", "date": 1562267610234, "education": "SMK"},
         { "id": 3, "name": "Test Intelligent II","question_type": "Text & Picture - MC", "date": 1562267610234, "education": "D3"},
         { "id": 4, "name": "Test DISC","question_type": "Text - MC", "date": 1562267610234, "education": "S1"},

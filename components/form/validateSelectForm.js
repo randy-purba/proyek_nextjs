@@ -7,10 +7,12 @@ export default (props) => {
             className={`mb-3 position-relative pt-0 ${props.containerClassName ? props.containerClassName : ''}`}
             {...props.containerStyle}
         >
+            
             {
                 props.withLabel ?
                 <Label for={props.formId} className={props.labelClassName}>{props.labelName}</Label> : ""
             }
+
             <AvField 
                 type="select"
                 name={props.formName} 

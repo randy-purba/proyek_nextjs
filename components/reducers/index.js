@@ -12,6 +12,7 @@ import ItemSoldTodayReducer from './ItemSoldTodayReducers';
 import BrushBarChartReducer from './BrushBarChartReducers';
 import ListBankQuestionReducer from './ListBankQuestionReducers';
 import TotalBankQuestionReducer from './TotalBankQuestionReducers';
+import ListUsersReducer from './ListUsersReducers';
 
 export default combineReducers({
     listBanner: BannerReducer,
@@ -26,5 +27,6 @@ export default combineReducers({
     itemSoldToday: ItemSoldTodayReducer,
     brushBarChart: BrushBarChartReducer,
     listBankQuestion: ListBankQuestionReducer,
-    totalBankQuestion: TotalBankQuestionReducer
+    totalBankQuestion: TotalBankQuestionReducer,
+    listUser: ListUsersReducer
 })

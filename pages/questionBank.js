@@ -4,11 +4,13 @@ import { bindActionCreators } from 'redux'
 import { Container, Row, Col, Button } from 'reactstrap'
 import TableBox from '../components/tables'
 import Pagination from '../components/cards/PaginationCard'
-import { getListBankQuestion, getListCities } from '../components/actions'
-import { timestampToDateTime } from '../components/functions'
+import { getListBankQuestion } from '../components/actions'
+import { timestampToDateTime, regexHtmlTag, convertStringToBoolean } from '../components/functions'
 import Modal from '../components/modals'
 import QuestionForm from '../components/fragments/question/questionForm'
+import ViewCategoryQuestion from '../components/fragments/question/viewCategoryQuestion'
 import { createMemoryHistory } from 'history'
+
 class QuestionBank extends React.Component {
 
 	static async getInitialProps({ store }) {
@@ -17,8 +19,6 @@ class QuestionBank extends React.Component {
 		try {
 			// Scope List Transaction
 			if(!stores.listBankQuestion) await store.dispatch(getListBankQuestion(props.transanctionPage, props.transactionMaxLen))
-
-			if(!stores.listCity) await store.dispatch(getListCities())
 
 		} catch (e) {
 			props.error = 'Unable to fetch AsyncData on server'
@@ -44,12 +44,28 @@ class QuestionBank extends React.Component {
 			transactionSearchKey: "",
 			listBankQuestion: props.listBankQuestion,
 			totalBankQuestion: props.totalBankQuestion,
-			modal:false,
-			listCity: props.listCity,
-			formKota: 2
+
+			modalAddNewQuestion:false,
+			modalViewCategoryQuestion:false,
+
+			fieldZone: 0,
+			fieldQuestionType: 1,
+			fieldQuestion: "",
+			fieldChoiceAnswerA: "",
+			fieldCheckboxChoiceAnswerA: false,
+			fieldChoiceAnswerB: "",
+			fieldCheckboxChoiceAnswerB: false,
+			fieldChoiceAnswerC: "",
+			fieldCheckboxChoiceAnswerC: false,
+			fieldChoiceAnswerD: "",
+			fieldCheckboxChoiceAnswerD: false,
+			fieldAnswerEssay:"",
+			fieldVideoLink:""
 		}
 
 		this.toogleModalsNewQuestion = this.toogleModalsNewQuestion.bind(this);
+
+		this.toogleModalsViewCategoryQuestion = this.toogleModalsViewCategoryQuestion.bind(this);
 
 		this.history = createMemoryHistory();
 	}
@@ -64,7 +80,13 @@ class QuestionBank extends React.Component {
 
 	toogleModalsNewQuestion() {
 		this.setState(prevState => ({
-			modal: !prevState.modal
+			modalAddNewQuestion: !prevState.modalAddNewQuestion
+		}));
+	}
+
+	toogleModalsViewCategoryQuestion() {
+		this.setState(prevState => ({
+			modalViewCategoryQuestion: !prevState.modalViewCategoryQuestion
 		}));
 	}
 
@@ -87,21 +109,54 @@ class QuestionBank extends React.Component {
 		this.setState({transactionPage: 0, transactionSortBy: value})
 	}
 
-
-
 	onSearchKeyword = (keywords) => {
 		const { transactionPage, transactionFetchLen, transactionDateFrom, transactionDateTo, transactionSortBy } = this.state
 		this.props.getListBankQuestion(transactionPage, transactionFetchLen, transactionDateFrom, transactionDateTo, transactionSortBy, keywords)
 		this.setState({transactionSearchKey: keywords})
 	}
 
+	handleChange = (e) => {
+		const target = e.target, value = target.value, name = target.name, related = target.getAttribute('related')
+		this.setState({ [name]: regexHtmlTag(value) })
+		if(related) this.setState({ [related]: regexHtmlTag(value) })
+	}
+
+	handleCheckbox = (e) => {
+		const target = e.target, value = target.value, name = target.name, related = target.getAttribute('related')
+		const checkboxChecked = !convertStringToBoolean(value)
+		this.setState({ [name]: checkboxChecked })
+	}
+
+	handleSelectOption = (e) => {
+		const target = e.target, value = target.value, name = target.name, related = target.getAttribute('related')
+		this.setState({ [name]: Number(value) })
+		if(related) this.setState({ [related]: 0 })
+	}
+
+	handleSubmit = (e) => {
+		console.log("handleSubmit");
+		console.log('%c 🍝 fieldZone: ', 'font-size:20px;background-color: #4b4b4b;color:#fff;', this.state.fieldZone);
+		console.log('%c 🍇 fieldQuestionType: ', 'font-size:20px;background-color: #FFDD4D;color:#fff;', this.state.fieldQuestionType);
+		console.log('%c 🍣 fieldQuestion: ', 'font-size:20px;background-color: #2EAFB0;color:#fff;', this.state.fieldQuestion);
+		console.log('%c 🥔 fieldChoiceAnswerA: ', 'font-size:20px;background-color: #B03734;color:#fff;', this.state.fieldChoiceAnswerA);
+		console.log('%c 🌽 fieldCheckboxChoiceAnswerA: ', 'font-size:20px;background-color: #93C0A4;color:#fff;', this.state.fieldCheckboxChoiceAnswerA);
+		console.log('%c 🍩 fieldChoiceAnswerB: ', 'font-size:20px;background-color: #FFDD4D;color:#fff;', this.state.fieldChoiceAnswerB);
+		console.log('%c 🥧 fieldCheckboxChoiceAnswerB: ', 'font-size:20px;background-color: #F5CE50;color:#fff;', this.state.fieldCheckboxChoiceAnswerB);
+		console.log('%c 🎂 fieldChoiceAnswerC: ', 'font-size:20px;background-color: #3F7CFF;color:#fff;', this.state.fieldChoiceAnswerC);
+		console.log('%c 🍇 fieldCheckboxChoiceAnswerC: ', 'font-size:20px;background-color: #33A5FF;color:#fff;', this.state.fieldCheckboxChoiceAnswerC);
+		console.log('%c 🍎 fieldChoiceAnswerD: ', 'font-size:20px;background-color: #33A5FF;color:#fff;', this.state.fieldChoiceAnswerD);
+		console.log('%c 🍇 fieldCheckboxChoiceAnswerD: ', 'font-size:20px;background-color: #3F7CFF;color:#fff;', this.state.fieldCheckboxChoiceAnswerD);
+		console.log('%c 🍔 fieldAnswerEssay: ', 'font-size:20px;background-color: #93C0A4;color:#fff;', this.state.fieldAnswerEssay);
+		console.log('%c 🍡 fieldVideoLink: ', 'font-size:20px;background-color: #3F7CFF;color:#fff;', this.state.fieldVideoLink);
+	}
+
 	render() {
 		const { 
-			showHeader, headerHeight, navIsOpen, navMinWidth, navMaxWidth, listCity,
+			showHeader, headerHeight, navIsOpen, navMinWidth, navMaxWidth,
 			listBankQuestion, totalBankQuestion, transactionPage, transactionFetchLen, transactionSortBy
 		} = this.state
 
-		const listProvince = listCity.filter(data => data.id === this.state.formKota)[0].provinsi
+			
 		
 		return (
 				<div 
@@ -168,7 +223,7 @@ class QuestionBank extends React.Component {
 												<td>{data.education}</td>
 												<td>
 													<Button size="sm" color="info" className="mr-2 px-2 font-14" style={{marginTop: "5px", height: "31px"}} onClick={this.toogleModalsNewQuestion}><i className="mr-1 icon-plus"></i>Soal</Button>
-													<Button size="sm" color="secondary" className="mr-2 px-2 font-14" style={{marginTop: "5px", height: "31px"}}><i className="icon-eye"></i></Button>
+													<Button size="sm" color="secondary" className="mr-2 px-2 font-14" style={{marginTop: "5px", height: "31px"}} onClick={this.toogleModalsViewCategoryQuestion}><i className="icon-eye"></i></Button>
 													<Button size="sm" color="warning" className="mr-2 px-2 font-14" style={{marginTop: "5px", height: "31px"}}><i className="icon-edit"></i></Button>
 													<Button size="sm" color="danger" className="mr-2 px-2 font-14" style={{marginTop: "5px", height: "31px"}}><i className="icon-trash"></i></Button>
 												</td>
@@ -181,7 +236,7 @@ class QuestionBank extends React.Component {
 					</Container>
 
 					<Modal 
-						modalIsOpen={this.state.modal}
+						modalIsOpen={this.state.modalAddNewQuestion}
 						toggleModal={this.toogleModalsNewQuestion}
 						classNameModal={this.props.className}
 						titleModalHeader="Add New Question"
@@ -189,18 +244,50 @@ class QuestionBank extends React.Component {
 						centeredModal={true}
 					>
 						<QuestionForm
+							dataZone={this.state.fieldZone}
+							dataQuestionType={this.state.fieldQuestionType}
+							dataQuestion={this.state.fieldQuestion}
+							dataChoiceAnswerA={this.state.fieldChoiceAnswerA}
+							dataCheckboxChoiceAnswerA={this.state.fieldCheckboxChoiceAnswerA}
+							dataChoiceAnswerB={this.state.datafieldChoiceAnswerB}
+							dataCheckboxChoiceAnswerB={this.state.fieldCheckboxChoiceAnswerB}
+							dataChoiceAnswerC={this.state.fieldChoiceAnswerC}
+							dataCheckboxChoiceAnswerC={this.state.fieldCheckboxChoiceAnswerC}
+							dataChoiceAnswerD={this.state.fieldChoiceAnswerD}
+							dataCheckboxChoiceAnswerD={this.state.fieldCheckboxChoiceAnswerD}
+							dataAnswerEssay={this.state.fieldAnswerEssay} 
+							dataVideoLink={this.state.fieldVideoLink}
+							onHandleSubmit={this.handleSubmit}
+							onHandleChange={this.handleChange}
+							onHandleCheckbox={this.handleCheckbox}
+							onHandleSelectOption={this.handleSelectOption}
 							listZone={[
-								{ id: "sea", name: "Sea"}, 
-								{ id: "island", name: "Island" }, 
-								{ id: "jungle", name: "Jungle" }, 
-								{ id: "education", name: "Education"}
+								{ id: 1, name: "Sea"}, 
+								{ id: 2, name: "Island" }, 
+								{ id: 3, name: "Jungle" }, 
+								{ id: 4, name: "Education"}
 							]}
 							listQuestionType={[
-								{ id: "multiple_choice", name: "Multiple Choice"}, 
-								{ id: "essay", name: "Essay" }
+								{ id: 1, name: "Multiple Choice"}, 
+								{ id: 2, name: "Essay" }
 							]}
 						/>
 					</Modal>
+					<Modal 
+						modalIsOpen={this.state.modalViewCategoryQuestion}
+						toggleModal={this.toogleModalsViewCategoryQuestion}
+						classNameModal={this.props.className}
+						titleModalHeader="View Category Question"
+						sizeModal="lg"
+						centeredModal={true}
+					>
+						<ViewCategoryQuestion 
+							category="Test Category"
+							questionType="Gamification"
+							createdDate="05-06-2019 02:13"
+							education="All" 
+						/>
+					</Modal> 
 				</div>
 		)
 	}
@@ -208,8 +295,7 @@ class QuestionBank extends React.Component {
 
 const mapDispatchToProps = dispatch => {
 	return {
-		getListBankQuestion: bindActionCreators(getListBankQuestion, dispatch),
-		getListCities: bindActionCreators(getListCities, dispatch)
+		getListBankQuestion: bindActionCreators(getListBankQuestion, dispatch)
 	}
 }
 export default connect(state => state, mapDispatchToProps)(QuestionBank)

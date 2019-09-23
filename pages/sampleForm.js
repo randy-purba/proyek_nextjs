@@ -56,6 +56,10 @@ class SampleForm extends React.Component {
 		if(related) this.setState({ [related]: regexHtmlTag(value) })
 	}
 
+	handleSubmit = (e) => {
+		// console.dir(e);
+	}
+
 	handleSelectOption = (e) => {
 		const target = e.target, value = target.value, name = target.name, related = target.getAttribute('related')
 		this.setState({ [name]: Number(value) })
