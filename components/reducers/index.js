@@ -13,6 +13,7 @@ import BrushBarChartReducer from './BrushBarChartReducers';
 import ListBankQuestionReducer from './ListBankQuestionReducers';
 import TotalBankQuestionReducer from './TotalBankQuestionReducers';
 import ListUsersReducer from './ListUsersReducers';
+import DetailBankQuestionReducer from './DetailBankQuestionReducers'
 
 export default combineReducers({
     listBanner: BannerReducer,
@@ -28,5 +29,6 @@ export default combineReducers({
     brushBarChart: BrushBarChartReducer,
     listBankQuestion: ListBankQuestionReducer,
     totalBankQuestion: TotalBankQuestionReducer,
-    listUser: ListUsersReducer
+    listUser: ListUsersReducer,
+    detailBankQuestion: DetailBankQuestionReducer
 })
