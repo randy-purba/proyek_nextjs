@@ -59,7 +59,7 @@ app.prepare().then(() => {
   })
 
   server.get('/bank-soal', (req, res) => {
-    const actualPage = '/questionBank'
+    const actualPage = '/listQuestionBank'
     return app.render(req, res, actualPage)
   })
 

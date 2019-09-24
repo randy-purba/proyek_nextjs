@@ -71,17 +71,29 @@
                 { "id":3, "zona": 3, "question_type": 2, "question": "2+5 = "}
             ]
         },
-        { "id": 2, "name": "Test Intelligent I","question_type": "Text - MC", "date": 1562267610234, "education": "SMK"},
-        { "id": 3, "name": "Test Intelligent II","question_type": "Text & Picture - MC", "date": 1562267610234, "education": "D3"},
-        { "id": 4, "name": "Test DISC","question_type": "Text - MC", "date": 1562267610234, "education": "S1"},
-        { "id": 5, "name": "Test Umum","question_type": "Gamification", "date": 1562267610234, "education": "all"},
-        { "id": 6, "name": "Test Intelligent I","question_type": "Text - MC", "date": 1562267610234, "education": "SMK"},
-        { "id": 7, "name": "Test Intelligent II","question_type": "Text & Picture - MC", "date": 1562267610234, "education": "D3"},
-        { "id": 8, "name": "Test DISC","question_type": "Text - MC", "date": 1562267610234, "education": "S1"},
-        { "id": 9, "name": "Test Umum","question_type": "Gamification", "date": 1562267610234, "education": "all"},
-        { "id": 10, "name": "Test Intelligent I","question_type": "Text - MC", "date": 1562267610234, "education": "SMK"},
-        { "id": 11, "name": "Test Intelligent II","question_type": "Text & Picture - MC", "date": 1562267610234, "education": "D3"},
-        { "id": 12, "name": "Test DISC","question_type": "Text - MC", "date": 1562267610234, "education": "S1"}
+        { "id": 2, "name": "Test Intelligent I","question_type": "Text - MC", "date": 1562267610234, "education": "SMK",
+            "questions" : [
+                { "id":1, "zona": 1, "question_type": 2, "question": "1+5 = "},
+                { "id":2, "zona": 2, "question_type": 1, "question": "1+7 = "},
+                { "id":3, "zona": 3, "question_type": 2, "question": "2+5 = "}
+            ]
+        },
+        { "id": 3, "name": "Test Intelligent II","question_type": "Text & Picture - MC", "date": 1562267610234, "education": "D3",
+            "questions" : [
+                { "id":1, "zona": 1, "question_type": 2, "question": "1+5 = "},
+                { "id":2, "zona": 2, "question_type": 1, "question": "1+7 = "},
+                { "id":3, "zona": 3, "question_type": 2, "question": "2+5 = "}
+            ]
+        },
+        { "id": 4, "name": "Test DISC","question_type": "Text - MC", "date": 1562267610234, "education": "S1", "questions":[]},
+        { "id": 5, "name": "Test Umum","question_type": "Gamification", "date": 1562267610234, "education": "all", "questions":[]},
+        { "id": 6, "name": "Test Intelligent I","question_type": "Text - MC", "date": 1562267610234, "education": "SMK", "questions":[]},
+        { "id": 7, "name": "Test Intelligent II","question_type": "Text & Picture - MC", "date": 1562267610234, "education": "D3", "questions":[]},
+        { "id": 8, "name": "Test DISC","question_type": "Text - MC", "date": 1562267610234, "education": "S1", "questions":[]},
+        { "id": 9, "name": "Test Umum","question_type": "Gamification", "date": 1562267610234, "education": "all", "questions":[]},
+        { "id": 10, "name": "Test Intelligent I","question_type": "Text - MC", "date": 1562267610234, "education": "SMK", "questions":[]},
+        { "id": 11, "name": "Test Intelligent II","question_type": "Text & Picture - MC", "date": 1562267610234, "education": "D3", "questions":[]},
+        { "id": 12, "name": "Test DISC","question_type": "Text - MC", "date": 1562267610234, "education": "S1", "questions":[]}
     ],
     "listTransaction": [
         { "id": 1, "name": "Samsung Galaxy Note 10", "qty": 2, "currency": "IDR", "price": 12000000, "total": 24000000, "date": 1561807610234 },
@@ -226,5 +238,36 @@
         "today": 135,
         "yesterday": 225,
         "lastSync": "Monday, 16-08-2019 10:27"
-    }
+    }, 
+    "listUser": [
+        {
+            "id": 1,
+            "name": "apul",
+            "no_hp": 1234567890,
+            "username": "apul@mail.com",
+            "created_date": 1565567610234,
+            "updated_date": 1565567610234
+        }, {
+            "id": 2,
+            "name": "ujang",
+            "no_hp": 678923450,
+            "username": "ujang@mail.com",
+            "created_date": 1565567610123,
+            "updated_date": 1565567610234
+        },{
+            "id": 3,
+            "name": "jankrik boss",
+            "no_hp": 56789123,
+            "username": "jangkrik.boss@mail.com",
+            "created_date": 1565567610567,
+            "updated_date": 1565567610234
+        }, {
+            "id": 4,
+            "name": "boss kadal",
+            "no_hp": 6789456123,
+            "username": "kadal@mail.com",
+            "created_date": 1565567610789,
+            "updated_date": 1565567610234
+        }
+    ]
 }

@@ -1,22 +1,20 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
-import { Container, Row, Col } from 'reactstrap'
+import { Container, Row, Col,Button } from 'reactstrap'
 import TableBox from '../components/tables'
 import Pagination from '../components/cards/PaginationCard'
-import { getListTransaction, getListUser } from '../components/actions'
+import { getListUser } from '../components/actions'
 import { timestampToDateTime, numberToCurrency, numberWithDot } from '../components/functions'
 
 class ManagementUser extends React.Component {
 	static async getInitialProps({ store }) {
-		let props = { showHeader: true, showFooter: true, transanctionPage: 0, transactionMaxLen: 10 }
+		let props = { showHeader: true, showFooter: true, usersPage: 0, usersMaxLen: 10 }
 		let stores = await store.getState()
 		
 		try {
-			// Scope List Transaction
-			if(!stores.listTransaction) await store.dispatch(getListTransaction(props.transanctionPage, props.transactionMaxLen))
-		
-			if(!stores.listUser) await store.dispatch(getListUser())
+
+			if(!stores.listUser) await store.dispatch(getListUser(props.usersPage, props.usersMaxLen))
 
 		} catch (e) {
 			props.error = 'Unable to fetch AsyncData on server'
@@ -34,14 +32,12 @@ class ManagementUser extends React.Component {
 			navIsOpen: props.navIsOpen,
 			navMaxWidth: props.showHeader ? props.navMaxWidth : "0px",
 			navMinWidth: props.showHeader ? props.navMinWidth : "0px",
-			transactionPage: props.transanctionPage,
-			transactionFetchLen: props.transactionMaxLen,
-			transactionDateFrom: undefined,
-			transactionDateTo: undefined,
-			transactionSortBy: "date",
-			transactionSearchKey: "",
-			listTransaction: props.listTransaction,
-			totalTransaction: props.totalTransaction,
+			usersPage: props.usersPage,
+			usersFetchLen: props.usersMaxLen,
+			usersDateFrom: undefined,
+			usersDateTo: undefined,
+			usersSortBy: "created_date",
+			usersSearchKey: "",
 			listUser: props.listUser
 		}
 	}
@@ -49,47 +45,40 @@ class ManagementUser extends React.Component {
 	UNSAFE_componentWillReceiveProps(nextProps) {
 		this.setState({
 			navIsOpen: nextProps.navIsOpen,
-			listTransaction: nextProps.listTransaction,
-			totalTransaction: nextProps.totalTransaction,
-			listUser: nextProps.listUser,
-			lineChart: nextProps.lineChart
+			listUser: nextProps.listUser
 		})
 	}
 
 	onPaginationClick = (page) => {
-		const { transactionFetchLen, transactionDateFrom, transactionDateTo, transactionSortBy, transactionSearchKey } = this.state
-		this.props.getListTransaction(page, transactionFetchLen, transactionDateFrom, transactionDateTo, transactionSortBy, transactionSearchKey)
-		this.setState({transactionPage: page})
+		const { usersFetchLen, usersDateFrom, usersDateTo, usersSortBy, usersSearchKey } = this.state
+		this.props.getListUser(page, usersFetchLen, usersDateFrom, usersDateTo, usersSortBy, usersSearchKey)
+		this.setState({usersPage: page})
 		this.props.getListUser()
 	}
 
 	onFilterInit = (dateFrom, dateTo) => {
-		const { transactionFetchLen, transactionSortBy, transactionSearchKey } = this.state
-		this.props.getListTransaction(0, transactionFetchLen, dateFrom, dateTo, transactionSortBy, transactionSearchKey)
-		this.setState({transactionPage: 0, transactionDateFrom: dateFrom, transactionDateTo: dateTo})
+		const { usersFetchLen, usersSortBy, usersSearchKey } = this.state
+		this.props.getListUser(0, usersFetchLen, dateFrom, dateTo, usersSortBy, usersSearchKey)
+		this.setState({usersPage: 0, usersDateFrom: dateFrom, usersDateTo: dateTo})
 	}
 
 	onSortInit = (e) => {
 		const target = e.target, value = target.value
-		const { transactionFetchLen, transactionDateFrom, transactionDateTo, transactionSearchKey } = this.state
-		this.props.getListTransaction(0, transactionFetchLen, transactionDateFrom, transactionDateTo, value, transactionSearchKey)
-		this.setState({transactionPage: 0, transactionSortBy: value})
+		const { usersFetchLen, usersDateFrom, usersDateTo, usersSearchKey } = this.state
+		this.props.getListUser(0, usersFetchLen, usersDateFrom, usersDateTo, value, usersSearchKey)
+		this.setState({usersPage: 0, usersSortBy: value})
 	}
 
 	onSearchKeyword = (keywords) => {
-		const { transactionPage, transactionFetchLen, transactionDateFrom, transactionDateTo, transactionSortBy } = this.state
-		this.props.getListTransaction(transactionPage, transactionFetchLen, transactionDateFrom, transactionDateTo, transactionSortBy, keywords)
-		this.setState({transactionSearchKey: keywords})
+		const { usersPage, usersFetchLen, usersDateFrom, usersDateTo, usersSortBy } = this.state
+		this.props.getListUser(usersPage, usersFetchLen, usersDateFrom, usersDateTo, usersSortBy, keywords)
+		this.setState({usersSearchKey: keywords})
 	}
 
 	render() {
 		const { 
-			showHeader, headerHeight, navIsOpen, navMinWidth, navMaxWidth, listUser,
-			listTransaction, totalTransaction, transactionPage, transactionFetchLen, transactionSortBy
+			showHeader, headerHeight, navIsOpen, navMinWidth, navMaxWidth, listUser, usersPage, usersFetchLen, usersSortBy
 		} = this.state
-				
-		console.dir(listUser)
-		console.dir(listTransaction)
 
 		return (
 			<div 
@@ -112,53 +101,57 @@ class ManagementUser extends React.Component {
 					<Row>
 						<Col xs="12">
 							<TableBox 
-								title="Today's Item Sales" 
+								title="List User" 
 								isResponsive={true} 
-								tHead={["#", "Item Name", "QTY", "Item Price", "Total Price", "Buy Date"]}
+								tHead={["#", "Name", "Username", "No HP", "Created Date", "Updated Date", "Actions"]}
 								sortItems={[
-									{ id: "name", name: "Item Name"}, 
-									{ id: "qty", name: "Quantity" }, 
-									{ id: "price", name: "Item Price" }, 
-									{ id: "total", name: "Total Price"}, 
-									{ id: "date", name: "Buy Date" }
+									{ id: "name", name: "Name"}, 
+									{ id: "username", name: "username" }, 
+									{ id: "no_hp", name: "No.HP" }, 
+									{ id: "created_date", name: "Created Date"}, 
+									{ id: "updated_date", name: "Updated Date" }
 								]}
 								onSortClick={this.onSortInit}
-								sortValue={transactionSortBy}
+								sortValue={usersSortBy}
 								deepSearch={true}
 								maxRangeDateFilter={5}
 								exportToFile={true}
-								exportData={listTransaction}
+								exportData={listUser}
 								exportFileName={`Transaction${(new Date()).getTime()}`}
 								onFilterClick={this.onFilterInit}
 								onKeySearch={this.onSearchKeyword}
-								noResult={listTransaction.length === 0}
+								exportData={listUser}
+								noResult={listUser.length === 0}
 								pagination={
 									<Pagination 
 										ariaLabel="Page navigation"
 										size="sm"
-										totalContent={totalTransaction}
-										currentPage={transactionPage}
-										contentMaxLength={transactionFetchLen}
+										totalContent={listUser.length}
+										currentPage={usersPage}
+										contentMaxLength={usersFetchLen}
 										onClick={this.onPaginationClick}
 									/>
 								}
 							>
 								{
-									listTransaction.map((data, key) => (
+									listUser.map((data, key) => (
 										<tr key={key}>
 											<th scope="row">
-												{(key + 1) +  (transactionPage * transactionFetchLen)}
+												{(key + 1) +  (usersPage * usersFetchLen)}
 											</th>
 											<td>{data.name}</td>
-											<td>{data.qty}</td>
+											<td>{data.username}</td>
+											<td>{data.no_hp}</td>
 											<td>
-												{numberToCurrency(data.price, data.currency, false)}
+												{timestampToDateTime(data.created_date, false)}
 											</td>
 											<td>
-												{numberToCurrency((data.qty * data.price), data.currency, false)}
+												{timestampToDateTime(data.updated_date, false)}
 											</td>
 											<td>
-												{timestampToDateTime(data.date, false)}
+												<Button size="sm" color="secondary" className="mr-2 px-2 font-14" style={{marginTop: "5px", height: "31px"}}><i className="icon-eye"></i></Button>
+												<Button size="sm" color="warning" className="mr-2 px-2 font-14" style={{marginTop: "5px", height: "31px"}}><i className="icon-edit"></i></Button>
+												<Button size="sm" color="danger" className="mr-2 px-2 font-14" style={{marginTop: "5px", height: "31px"}}><i className="icon-trash"></i></Button>
 											</td>
 										</tr>
 									))
@@ -174,7 +167,6 @@ class ManagementUser extends React.Component {
 
 const mapDispatchToProps = dispatch => {
 	return {
-		getListTransaction: bindActionCreators(getListTransaction, dispatch),
 		getListUser: bindActionCreators(getListUser, dispatch)
 	}
 }

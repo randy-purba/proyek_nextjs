@@ -4,14 +4,14 @@ import { bindActionCreators } from 'redux'
 import { Container, Row, Col, Button } from 'reactstrap'
 import TableBox from '../components/tables'
 import Pagination from '../components/cards/PaginationCard'
-import { getListBankQuestion } from '../components/actions'
+import { getListBankQuestion, getDetailBankQuestion } from '../components/actions'
 import { timestampToDateTime, regexHtmlTag, convertStringToBoolean } from '../components/functions'
 import Modal from '../components/modals'
 import QuestionForm from '../components/fragments/question/questionForm'
-import ViewCategoryQuestion from '../components/fragments/question/viewCategoryQuestion'
+import DetailBankQuestion from '../components/fragments/question/detailBankQuestion'
 import { createMemoryHistory } from 'history'
 
-class QuestionBank extends React.Component {
+class ListQuestionBank extends React.Component {
 
 	static async getInitialProps({ store }) {
 		let props = { showHeader: true, showFooter: true, transanctionPage: 0, transactionMaxLen: 10 }
@@ -20,6 +20,7 @@ class QuestionBank extends React.Component {
 			// Scope List Transaction
 			if(!stores.listBankQuestion) await store.dispatch(getListBankQuestion(props.transanctionPage, props.transactionMaxLen))
 
+			// if(!stores.detailBankQuestion) await store.dispatch(getDetailBankQuestion())
 		} catch (e) {
 			props.error = 'Unable to fetch AsyncData on server'
 		}
@@ -46,7 +47,7 @@ class QuestionBank extends React.Component {
 			totalBankQuestion: props.totalBankQuestion,
 
 			modalAddNewQuestion:false,
-			modalViewCategoryQuestion:false,
+			modalDetailBankQuestion:false,
 
 			fieldZone: 0,
 			fieldQuestionType: 1,
@@ -60,12 +61,15 @@ class QuestionBank extends React.Component {
 			fieldChoiceAnswerD: "",
 			fieldCheckboxChoiceAnswerD: false,
 			fieldAnswerEssay:"",
-			fieldVideoLink:""
+			fieldVideoLink:"",
+
+			detailBankQuestion: props.detailBankQuestion,
+			dataDetailBankQuestion: null
 		}
 
 		this.toogleModalsNewQuestion = this.toogleModalsNewQuestion.bind(this);
 
-		this.toogleModalsViewCategoryQuestion = this.toogleModalsViewCategoryQuestion.bind(this);
+		this.toogleModalsDetailBankQuestion = this.toogleModalsDetailBankQuestion.bind(this);
 
 		this.history = createMemoryHistory();
 	}
@@ -74,19 +78,23 @@ class QuestionBank extends React.Component {
 		this.setState({
 			navIsOpen: nextProps.navIsOpen,
 			listBankQuestion: nextProps.listBankQuestion,
+			detailBankQuestion: nextProps.detailBankQuestion,
 			totalBankQuestion: nextProps.totalBankQuestion
 		})
 	}
 
-	toogleModalsNewQuestion() {
+	toogleModalsNewQuestion(id) {
+		console.log('%c 🥒 id: ', 'font-size:20px;background-color: #ED9EC7;color:#fff;', id);
 		this.setState(prevState => ({
 			modalAddNewQuestion: !prevState.modalAddNewQuestion
 		}));
 	}
 
-	toogleModalsViewCategoryQuestion() {
+	toogleModalsDetailBankQuestion(data) {
+		console.dir(data)
 		this.setState(prevState => ({
-			modalViewCategoryQuestion: !prevState.modalViewCategoryQuestion
+			modalDetailBankQuestion: !prevState.modalDetailBankQuestion,
+			dataDetailBankQuestion: data
 		}));
 	}
 
@@ -154,9 +162,7 @@ class QuestionBank extends React.Component {
 		const { 
 			showHeader, headerHeight, navIsOpen, navMinWidth, navMaxWidth,
 			listBankQuestion, totalBankQuestion, transactionPage, transactionFetchLen, transactionSortBy
-		} = this.state
-
-			
+		} = this.state			
 		
 		return (
 				<div 
@@ -222,8 +228,8 @@ class QuestionBank extends React.Component {
 												</td>
 												<td>{data.education}</td>
 												<td>
-													<Button size="sm" color="info" className="mr-2 px-2 font-14" style={{marginTop: "5px", height: "31px"}} onClick={this.toogleModalsNewQuestion}><i className="mr-1 icon-plus"></i>Soal</Button>
-													<Button size="sm" color="secondary" className="mr-2 px-2 font-14" style={{marginTop: "5px", height: "31px"}} onClick={this.toogleModalsViewCategoryQuestion}><i className="icon-eye"></i></Button>
+													<Button size="sm" color="info" className="mr-2 px-2 font-14" style={{marginTop: "5px", height: "31px"}} onClick={(e) => this.toogleModalsNewQuestion(data.id)}><i className="mr-1 icon-plus"></i>Soal</Button>
+													<Button size="sm" color="secondary" className="mr-2 px-2 font-14" style={{marginTop: "5px", height: "31px"}} onClick={(e) => this.toogleModalsDetailBankQuestion(data)}><i className="icon-eye"></i></Button>
 													<Button size="sm" color="warning" className="mr-2 px-2 font-14" style={{marginTop: "5px", height: "31px"}}><i className="icon-edit"></i></Button>
 													<Button size="sm" color="danger" className="mr-2 px-2 font-14" style={{marginTop: "5px", height: "31px"}}><i className="icon-trash"></i></Button>
 												</td>
@@ -274,18 +280,17 @@ class QuestionBank extends React.Component {
 						/>
 					</Modal>
 					<Modal 
-						modalIsOpen={this.state.modalViewCategoryQuestion}
-						toggleModal={this.toogleModalsViewCategoryQuestion}
+						modalIsOpen={this.state.modalDetailBankQuestion}
+						toggleModal={this.toogleModalsDetailBankQuestion}
 						classNameModal={this.props.className}
 						titleModalHeader="View Category Question"
 						sizeModal="lg"
 						centeredModal={true}
 					>
-						<ViewCategoryQuestion 
-							category="Test Category"
-							questionType="Gamification"
-							createdDate="05-06-2019 02:13"
-							education="All" 
+						<DetailBankQuestion 
+							questionSortBy="zona"
+							dataBankQuestion={this.state.dataDetailBankQuestion}
+							// totalQuestions={this.state.dataDetailBankQuestion ? this.state.dataDetailBankQuestion.questions.length : 0}
 						/>
 					</Modal> 
 				</div>
@@ -295,7 +300,8 @@ class QuestionBank extends React.Component {
 
 const mapDispatchToProps = dispatch => {
 	return {
-		getListBankQuestion: bindActionCreators(getListBankQuestion, dispatch)
+		getListBankQuestion: bindActionCreators(getListBankQuestion, dispatch),
+		getDetailBankQuestion: bindActionCreators(getDetailBankQuestion, dispatch)
 	}
 }
-export default connect(state => state, mapDispatchToProps)(QuestionBank)
+export default connect(state => state, mapDispatchToProps)(ListQuestionBank)
