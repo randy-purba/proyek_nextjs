@@ -16,12 +16,13 @@ export default (props) => {
                     width: navMaxWidth
                 }} 
             >
-                <NavMenu link="/dashboard" href="/dashboard" width={navMinWidth} title="Dashboard" iconName="icon-trello" className="pt-2" />
+                {/* <NavMenu link="/dashboard" href="/dashboard" width={navMinWidth} title="Dashboard" iconName="icon-trello" className="pt-2" />
                 <NavMenu link="/statistic" href="/statistic" width={navMinWidth} title="Statistic" iconName="icon-trending-up" />
                 <NavMenu link="/sample-form" href="/sampleForm" width={navMinWidth} title="Sample Form" iconName="icon-hash" />
-                <NavMenu link="/sample-banner" href="/sampleBanner" width={navMinWidth} title="Sample Banner" iconName="icon-image" />
+                <NavMenu link="/sample-banner" href="/sampleBanner" width={navMinWidth} title="Sample Banner" iconName="icon-image" /> */}
                 <NavMenu link="/management-users" href="/managementUser" width={navMinWidth} title="Management User" iconName="icon-users" />
                 <NavMenu link="/bank-soal" href="/listBankQuestion" width={navMinWidth} title="Bank Soal" iconName="icon-database" />
+                <NavMenu link="/report-interview" href="/reportInterview" width={navMinWidth} title="Report Interview" iconName="icon-headphones" />
                 <div className="navListItem d-inline-block w-100">
                     <div 
                         className="navItem animate-all position-relative d-inline-block w-100"

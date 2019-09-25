@@ -1,5 +1,6 @@
 import { Label, Row, Col, Button } from 'reactstrap'
 import { timestampToDateTime } from '../../functions'
+import Pagination from '../../cards/PaginationCard'
 import TableBox from '../../tables'
 
 
@@ -58,9 +59,8 @@ export default (props) => {
             </Row>
             <Row>
                 <Col xs="12" sm="12" md="12">
-                    <Label className="font-16 text-primary">List Question</Label>
                     <TableBox 
-                        title="Bank Soal" 
+                        title="List Question" 
                         isResponsive={false} 
                         tHead={["#", "Zona", "Question Type", "Question","Action"]}
                         sortItems={[
@@ -78,7 +78,7 @@ export default (props) => {
                         exportFileName={`Category_Bank_Soal_${(new Date()).getTime()}`}
                         // onFilterClick={this.onFilterInit}
                         // onKeySearch={this.onSearchKeyword}
-                        noResult={dataBankQuestion.questions.length === 0}
+                        // noResult={dataBankQuestion.questions.length === 0}
                         // pagination={
                         //     <Pagination 
                         //         ariaLabel="Page navigation"

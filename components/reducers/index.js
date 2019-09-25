@@ -13,7 +13,9 @@ import BrushBarChartReducer from './BrushBarChartReducers';
 import ListBankQuestionReducer from './ListBankQuestionReducers';
 import TotalBankQuestionReducer from './TotalBankQuestionReducers';
 import ListUsersReducer from './ListUsersReducers';
-import DetailBankQuestionReducer from './DetailBankQuestionReducers'
+import DetailBankQuestionReducer from './DetailBankQuestionReducers';
+import ListReportInterviewReducer from './ListReportInterviewReducers';
+import TotalListReportInterviewReducer from './TotalListReportInterviewReducers';
 
 export default combineReducers({
     listBanner: BannerReducer,
@@ -30,5 +32,7 @@ export default combineReducers({
     listBankQuestion: ListBankQuestionReducer,
     totalBankQuestion: TotalBankQuestionReducer,
     listUser: ListUsersReducer,
-    detailBankQuestion: DetailBankQuestionReducer
+    detailBankQuestion: DetailBankQuestionReducer,
+    totalListReportInterview: TotalListReportInterviewReducer,
+    listReportInterview: ListReportInterviewReducer
 })

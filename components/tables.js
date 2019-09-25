@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Table, Row, Col, Button } from 'reactstrap'
+import { Table, Row, Col, Button, Label } from 'reactstrap'
 import DatePicker from 'react-datepicker'
 import FormSelect from './form/selectForm'
 import FormInput from './form/inputForm'
@@ -12,7 +12,8 @@ export default (props) => {
         title, tHead, children, pagination, noResult, 
         deepSearch, onFilterClick, onKeySearch, 
         exportToFile, exportData, exportFileName,
-        sortItems, sortValue, onSortClick, maxRangeDateFilter
+        sortItems, sortValue, onSortClick, maxRangeDateFilter,
+        showButtonHeader,titleButtonHeader, onClickButtonHeader
     } = props
 
     const [startDate, setStartDate] = useState(new Date())
@@ -33,8 +34,11 @@ export default (props) => {
     
     return (
         <div className="bg-white rounded shadow-sm p-3 mb-3 overflow-visible">
-            {title ? <h5 className="font-16 text-primary mb-3">{title}</h5> : ""}
             <Row>
+                <Col xs="12" md="12">
+                    {title ? <Label className="font-24 text-primary mb-3">{title}</Label> : ""}
+                    {showButtonHeader ? <Button className="float-right px-lg-2" size="sm" color="info" onClick={onClickButtonHeader}>{titleButtonHeader}</Button> : ""}
+                </Col>
                 {
                     onKeySearch ?
                         <Col xs="12" md="6">

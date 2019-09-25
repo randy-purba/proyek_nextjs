@@ -5,7 +5,10 @@ import { Container, Row, Col,Button } from 'reactstrap'
 import TableBox from '../components/tables'
 import Pagination from '../components/cards/PaginationCard'
 import { getListUser } from '../components/actions'
-import { timestampToDateTime, numberToCurrency, numberWithDot } from '../components/functions'
+import { timestampToDateTime, regexHtmlTag, numberWithDot } from '../components/functions'
+import Modal from '../components/modals'
+import UserForm from '../components/fragments/user/userForm'
+
 
 class ManagementUser extends React.Component {
 	static async getInitialProps({ store }) {
@@ -38,8 +41,42 @@ class ManagementUser extends React.Component {
 			usersDateTo: undefined,
 			usersSortBy: "created_date",
 			usersSearchKey: "",
-			listUser: props.listUser
+			listUser: props.listUser,
+			modalAddNewUserForm: false,
+			modalUpdateUserForm: false,
+			dataName: "", 
+			dataPassword: "", 
+			dataEmail: "", 
+			dataNoTelp: "", 
+			dataRole: 0
 		}
+
+		this.toggleModalsAddNewUserForm = this.toggleModalsAddNewUserForm.bind(this);
+
+		this.toggleModalsUpdateUserForm = this.toggleModalsUpdateUserForm.bind(this);
+	}
+
+	toggleModalsAddNewUserForm() {
+		this.setState(prevState => ({
+			modalAddNewUserForm: !prevState.modalAddNewUserForm,
+			dataName: "", 
+			dataPassword: "", 
+			dataEmail: "", 
+			dataNoTelp: "", 
+			dataRole: 0
+		}))
+	}
+
+	toggleModalsUpdateUserForm(data) {
+		console.dir(data)
+		this.setState(prevState => ({
+			modalUpdateUserForm: !prevState.modalUpdateUserForm,
+			dataName: data.name, 
+			dataPassword: data.password, 
+			dataEmail: data.email, 
+			dataNoTelp: data.no_hp, 
+			dataRole: data.role
+		}))
 	}
 
 	UNSAFE_componentWillReceiveProps(nextProps) {
@@ -75,10 +112,88 @@ class ManagementUser extends React.Component {
 		this.setState({usersSearchKey: keywords})
 	}
 
+	handleChange = (e) => {
+		const target = e.target, value = target.value, name = target.name, related = target.getAttribute('related')
+		this.setState({ [name]: regexHtmlTag(value) })
+		if(related) this.setState({ [related]: regexHtmlTag(value) })
+	}
+
+	handleSelectOption = (e) => {
+		const target = e.target, value = target.value, name = target.name, related = target.getAttribute('related')
+		this.setState({ [name]: Number(value) })
+		if(related) this.setState({ [related]: 0 })
+	}
+
+	handleSubmitAdd = (e) => {
+		console.log("handleSubmitAdd")
+		console.log('%c 🌰 this.state.dataName: ', 'font-size:20px;background-color: #93C0A4;color:#fff;', this.state.dataName);
+		console.log('%c 🌰 this.state.dataPassword: ', 'font-size:20px;background-color: #93C0A4;color:#fff;', this.state.dataPassword);
+		console.log('%c 🌰 this.state.dataEmail: ', 'font-size:20px;background-color: #93C0A4;color:#fff;', this.state.dataEmail);
+		console.log('%c 🌰 this.state.dataNoTelp: ', 'font-size:20px;background-color: #93C0A4;color:#fff;', this.state.dataNoTelp);
+		console.log('%c 🌰 this.state.dataRole: ', 'font-size:20px;background-color: #93C0A4;color:#fff;', this.state.dataRole);
+	}
+
+	handleSubmitUpdate = (e) => {
+		console.log("handleSubmitUpdate")
+		console.log('%c 🌰 this.state.dataName: ', 'font-size:20px;background-color: #93C0A4;color:#fff;', this.state.dataName);
+		console.log('%c 🌰 this.state.dataPassword: ', 'font-size:20px;background-color: #93C0A4;color:#fff;', this.state.dataPassword);
+		console.log('%c 🌰 this.state.dataEmail: ', 'font-size:20px;background-color: #93C0A4;color:#fff;', this.state.dataEmail);
+		console.log('%c 🌰 this.state.dataNoTelp: ', 'font-size:20px;background-color: #93C0A4;color:#fff;', this.state.dataNoTelp);
+		console.log('%c 🌰 this.state.dataRole: ', 'font-size:20px;background-color: #93C0A4;color:#fff;', this.state.dataRole);
+	}
+
 	render() {
 		const { 
 			showHeader, headerHeight, navIsOpen, navMinWidth, navMaxWidth, listUser, usersPage, usersFetchLen, usersSortBy
 		} = this.state
+
+		const showModalAddNewUser = ( 
+			<Modal 
+				modalIsOpen={this.state.modalAddNewUserForm}
+				toggleModal={this.toggleModalsAddNewUserForm}
+				classNameModal={this.props.className}
+				titleModalHeader="Add New User"
+				sizeModal="lg"
+				centeredModal={true}
+			>
+				<UserForm 
+					listRole={[
+						{ "id": 2, "role": "user", "name": "User"},
+						{ "id": 1, "role": "admin", "name": "Admin"}
+					]}	
+					onHandleChange={this.handleChange}			
+					onHandleSelectOption={this.handleSelectOption}	
+					onHandleSubmit={this.handleSubmitAdd}	
+					statusForm="add"																														
+				/>
+			</Modal> 
+		)
+		const showModalUpdateUser = ( 
+			<Modal 
+				modalIsOpen={this.state.modalUpdateUserForm}
+				toggleModal={this.toggleModalsUpdateUserForm}
+				classNameModal={this.props.className}
+				titleModalHeader="Update User"
+				sizeModal="lg"
+				centeredModal={true}
+			>
+				<UserForm 
+					listRole={[
+						{ "id": 2, "role": "user", "name": "User"},
+						{ "id": 1, "role": "admin", "name": "Admin"}
+					]}							
+					onHandleChange={this.handleChange}		
+					onHandleSelectOption={this.handleSelectOption}
+					onHandleSubmit={this.handleSubmitUpdate}	
+					dataName={this.state.dataName} 
+					dataPassword={this.state.dataPassword}
+					dataEmail={this.state.dataEmail}
+					dataNoTelp={this.state.dataNoTelp}
+					dataRole={this.state.dataRole}					
+					statusForm="update"																				
+				/>
+			</Modal> 
+		)
 
 		return (
 			<div 
@@ -103,10 +218,10 @@ class ManagementUser extends React.Component {
 							<TableBox 
 								title="List User" 
 								isResponsive={true} 
-								tHead={["#", "Name", "Username", "No HP", "Created Date", "Updated Date", "Actions"]}
+								tHead={["#", "Name", "Email", "No HP", "Created Date", "Updated Date", "Actions"]}
 								sortItems={[
 									{ id: "name", name: "Name"}, 
-									{ id: "username", name: "username" }, 
+									{ id: "username", name: "Email" }, 
 									{ id: "no_hp", name: "No.HP" }, 
 									{ id: "created_date", name: "Created Date"}, 
 									{ id: "updated_date", name: "Updated Date" }
@@ -132,6 +247,9 @@ class ManagementUser extends React.Component {
 										onClick={this.onPaginationClick}
 									/>
 								}
+								showButtonHeader={true}
+								titleButtonHeader="Add New User"
+								onClickButtonHeader={this.toggleModalsAddNewUserForm}
 							>
 								{
 									listUser.map((data, key) => (
@@ -140,7 +258,7 @@ class ManagementUser extends React.Component {
 												{(key + 1) +  (usersPage * usersFetchLen)}
 											</th>
 											<td>{data.name}</td>
-											<td>{data.username}</td>
+											<td>{data.email}</td>
 											<td>{data.no_hp}</td>
 											<td>
 												{timestampToDateTime(data.created_date, false)}
@@ -150,7 +268,7 @@ class ManagementUser extends React.Component {
 											</td>
 											<td>
 												<Button size="sm" color="secondary" className="mr-2 px-2 font-14" style={{marginTop: "5px", height: "31px"}}><i className="icon-eye"></i></Button>
-												<Button size="sm" color="warning" className="mr-2 px-2 font-14" style={{marginTop: "5px", height: "31px"}}><i className="icon-edit"></i></Button>
+												<Button size="sm" color="warning" className="mr-2 px-2 font-14" style={{marginTop: "5px", height: "31px"}} onClick={(e) => this.toggleModalsUpdateUserForm(data)}><i className="icon-edit"></i></Button>
 												<Button size="sm" color="danger" className="mr-2 px-2 font-14" style={{marginTop: "5px", height: "31px"}}><i className="icon-trash"></i></Button>
 											</td>
 										</tr>
@@ -160,6 +278,8 @@ class ManagementUser extends React.Component {
 						</Col>
 					</Row>
 				</Container>
+				 { showModalAddNewUser }
+				 { showModalUpdateUser }
 			</div>
 		)
 	}

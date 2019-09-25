@@ -243,31 +243,90 @@
         {
             "id": 1,
             "name": "apul",
+            "password": "apul 123",
             "no_hp": 1234567890,
-            "username": "apul@mail.com",
-            "created_date": 1565567610234,
-            "updated_date": 1565567610234
+            "email": "apul@mail.com",
+            "created_date": 1573700520,
+            "updated_date": 1565567610234,
+            "role": 1
         }, {
             "id": 2,
             "name": "ujang",
+            "password": "ujang123",
             "no_hp": 678923450,
-            "username": "ujang@mail.com",
-            "created_date": 1565567610123,
-            "updated_date": 1565567610234
+            "email": "ujang@mail.com",
+            "created_date": 1573959720,
+            "updated_date": 1565567610234,
+            "role": 2
         },{
             "id": 3,
             "name": "jankrik boss",
+            "password": "jankrik123",
             "no_hp": 56789123,
-            "username": "jangkrik.boss@mail.com",
-            "created_date": 1565567610567,
-            "updated_date": 1565567610234
+            "email": "jangkrik.boss@mail.com",
+            "created_date": 1565999610567,
+            "updated_date": 1565567610234,
+            "role": 1
         }, {
             "id": 4,
             "name": "boss kadal",
+            "password": "kadal123",
             "no_hp": 6789456123,
-            "username": "kadal@mail.com",
-            "created_date": 1565567610789,
-            "updated_date": 1565567610234
+            "email": "kadal@mail.com",
+            "created_date": 1568887610789,
+            "updated_date": 1565567610234,
+            "role": 2
+        }
+    ],
+    "listReportInterview":[
+        {
+            "id": 1,
+            "name": "Andre",
+            "phone_number": 85304350390,
+            "team": "Kelompok 1",
+            "test_date": 1568887610789,
+            "detail_result": {
+                "pre_test": {
+                    "type": "Pre Test",
+                    "user_answer": [
+                        {"id" : 1, "question":"1+5 = ", "answer": "7"},
+                        {"id" : 2, "question":"1+7 = ", "answer": "3"},
+                        {"id" : 3, "question":"2+5 = ", "answer": "9"}
+                    ],
+                    "score":50
+                },
+                "video_1": {
+                    "type": "Video",
+                    "user_answer": "Jawaban Video 1",
+                    "score": 70
+                },
+                "video_2": {
+                    "type": "Video",
+                    "user_answer": "Jawaban Video 2",
+                    "score": 80
+                },
+                "video_3": {
+                    "type": "Video",
+                    "user_answer": "Jawaban Video 3",
+                    "score": 90
+                },
+                "video_4": {
+                    "type": "Video",
+                    "user_answer": "Jawaban Video 4",
+                    "score": 95
+                },
+                "video_5": {
+                    "type": "Video",
+                    "user_answer": "Jawaban Video 5",
+                    "score": 100
+                },
+                "video_6": {
+                    "type": "Video",
+                    "user_answer": "Jawaban Video 6",
+                    "score": 110
+                }
+            },
+            "total_score": 350
         }
     ]
 }

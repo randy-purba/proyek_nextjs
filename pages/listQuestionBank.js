@@ -8,7 +8,7 @@ import { getListBankQuestion, getDetailBankQuestion } from '../components/action
 import { timestampToDateTime, regexHtmlTag, convertStringToBoolean } from '../components/functions'
 import Modal from '../components/modals'
 import QuestionForm from '../components/fragments/question/questionForm'
-import DetailBankQuestion from '../components/fragments/question/detailBankQuestion'
+import DetailBankQuestion from '../components/fragments/bank_soal/detailBankQuestion'
 import { createMemoryHistory } from 'history'
 
 class ListQuestionBank extends React.Component {
@@ -67,9 +67,9 @@ class ListQuestionBank extends React.Component {
 			dataDetailBankQuestion: null
 		}
 
-		this.toogleModalsNewQuestion = this.toogleModalsNewQuestion.bind(this);
+		this.toggleModalsNewQuestion = this.toggleModalsNewQuestion.bind(this);
 
-		this.toogleModalsDetailBankQuestion = this.toogleModalsDetailBankQuestion.bind(this);
+		this.toggleModalsDetailBankQuestion = this.toggleModalsDetailBankQuestion.bind(this);
 
 		this.history = createMemoryHistory();
 	}
@@ -83,14 +83,14 @@ class ListQuestionBank extends React.Component {
 		})
 	}
 
-	toogleModalsNewQuestion(id) {
+	toggleModalsNewQuestion(id) {
 		console.log('%c 🥒 id: ', 'font-size:20px;background-color: #ED9EC7;color:#fff;', id);
 		this.setState(prevState => ({
 			modalAddNewQuestion: !prevState.modalAddNewQuestion
 		}));
 	}
 
-	toogleModalsDetailBankQuestion(data) {
+	toggleModalsDetailBankQuestion(data) {
 		console.dir(data)
 		this.setState(prevState => ({
 			modalDetailBankQuestion: !prevState.modalDetailBankQuestion,
@@ -160,7 +160,7 @@ class ListQuestionBank extends React.Component {
 
 	render() {
 		const { 
-			showHeader, headerHeight, navIsOpen, navMinWidth, navMaxWidth,
+			showHeader, headerHeight, navIsOpen, navMinWidth, navMaxWidth, 
 			listBankQuestion, totalBankQuestion, transactionPage, transactionFetchLen, transactionSortBy
 		} = this.state			
 		
@@ -214,6 +214,9 @@ class ListQuestionBank extends React.Component {
 											onClick={this.onPaginationClick}
 										/>
 									}
+									showButtonHeader={true}
+									titleButtonHeader="Add New Bank Soal"
+									// onClickButtonHeader={this.toggleModalsAddNewUserForm}
 								>
 									{
 										listBankQuestion.map((data, key) => (
@@ -228,8 +231,8 @@ class ListQuestionBank extends React.Component {
 												</td>
 												<td>{data.education}</td>
 												<td>
-													<Button size="sm" color="info" className="mr-2 px-2 font-14" style={{marginTop: "5px", height: "31px"}} onClick={(e) => this.toogleModalsNewQuestion(data.id)}><i className="mr-1 icon-plus"></i>Soal</Button>
-													<Button size="sm" color="secondary" className="mr-2 px-2 font-14" style={{marginTop: "5px", height: "31px"}} onClick={(e) => this.toogleModalsDetailBankQuestion(data)}><i className="icon-eye"></i></Button>
+													<Button size="sm" color="info" className="mr-2 px-2 font-14" style={{marginTop: "5px", height: "31px"}} onClick={(e) => this.toggleModalsNewQuestion(data.id)}><i className="mr-1 icon-plus"></i>Soal</Button>
+													<Button size="sm" color="secondary" className="mr-2 px-2 font-14" style={{marginTop: "5px", height: "31px"}} onClick={(e) => this.toggleModalsDetailBankQuestion(data)}><i className="icon-eye"></i></Button>
 													<Button size="sm" color="warning" className="mr-2 px-2 font-14" style={{marginTop: "5px", height: "31px"}}><i className="icon-edit"></i></Button>
 													<Button size="sm" color="danger" className="mr-2 px-2 font-14" style={{marginTop: "5px", height: "31px"}}><i className="icon-trash"></i></Button>
 												</td>
@@ -243,7 +246,7 @@ class ListQuestionBank extends React.Component {
 
 					<Modal 
 						modalIsOpen={this.state.modalAddNewQuestion}
-						toggleModal={this.toogleModalsNewQuestion}
+						toggleModal={this.toggleModalsNewQuestion}
 						classNameModal={this.props.className}
 						titleModalHeader="Add New Question"
 						sizeModal="lg"
@@ -281,7 +284,7 @@ class ListQuestionBank extends React.Component {
 					</Modal>
 					<Modal 
 						modalIsOpen={this.state.modalDetailBankQuestion}
-						toggleModal={this.toogleModalsDetailBankQuestion}
+						toggleModal={this.toggleModalsDetailBankQuestion}
 						classNameModal={this.props.className}
 						titleModalHeader="View Category Question"
 						sizeModal="lg"
