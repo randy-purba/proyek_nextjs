@@ -278,6 +278,9 @@
             "role": 2
         }
     ],
+    "listQuestion":[
+        {"id": "", "question_title":"", "answer_type":1, "zone":1,}
+    ],
     "listReportInterview":[
         {
             "id": 1,
