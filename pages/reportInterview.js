@@ -144,7 +144,8 @@ class ReportInterview extends React.Component {
 
 	render() {
 		const { 
-			showHeader, headerHeight, navIsOpen, navMinWidth, navMaxWidth, listReportInterview, reportInterviewPage, reportInterviewFetchLen, reportInterviewSortBy
+			showHeader, headerHeight, navIsOpen, navMinWidth, navMaxWidth, listReportInterview, 
+			reportInterviewPage, reportInterviewFetchLen, reportInterviewSortBy
 		} = this.state
 
 		const showModalDetailResultReportInterview = ( 

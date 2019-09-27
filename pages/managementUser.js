@@ -44,38 +44,50 @@ class ManagementUser extends React.Component {
 			listUser: props.listUser,
 			modalAddNewUserForm: false,
 			modalUpdateUserForm: false,
+			modalConfirmation: false,
 			dataName: "", 
-			dataPassword: "", 
 			dataEmail: "", 
-			dataNoTelp: "", 
-			dataRole: 0
+			dataPhoneNumber: "",
+			dataIdUser: 0
 		}
 
-		this.toggleModalsAddNewUserForm = this.toggleModalsAddNewUserForm.bind(this);
+		this.toggleModalsAddNewUserForm = this.toggleModalsAddNewUserForm.bind(this)
 
-		this.toggleModalsUpdateUserForm = this.toggleModalsUpdateUserForm.bind(this);
+		this.toggleModalsUpdateUserForm = this.toggleModalsUpdateUserForm.bind(this)
+
+		this.toggleDeleteUser = this.toggleDeleteUser.bind(this)
+
+		this.toggleModalsConfirmation = this.toggleModalsConfirmation.bind(this)
 	}
 
 	toggleModalsAddNewUserForm() {
 		this.setState(prevState => ({
 			modalAddNewUserForm: !prevState.modalAddNewUserForm,
 			dataName: "", 
-			dataPassword: "", 
 			dataEmail: "", 
-			dataNoTelp: "", 
-			dataRole: 0
+			dataPhoneNumber: ""
 		}))
 	}
 
 	toggleModalsUpdateUserForm(data) {
-		console.dir(data)
 		this.setState(prevState => ({
 			modalUpdateUserForm: !prevState.modalUpdateUserForm,
-			dataName: data.name, 
-			dataPassword: data.password, 
-			dataEmail: data.email, 
-			dataNoTelp: data.no_hp, 
-			dataRole: data.role
+			dataName: data ? data.name : "", 
+			dataEmail: data ? data.email : "", 
+			dataPhoneNumber: data ? data.no_hp : ""
+		}))
+	}
+
+	toggleDeleteUser(data) {
+		this.setState({
+			dataIdUser: data ? data.id : 0
+		})
+		this.toggleModalsConfirmation()
+	}
+
+	toggleModalsConfirmation() {
+		this.setState(prevState => ({
+			modalConfirmation: !prevState.modalConfirmation,
 		}))
 	}
 
@@ -127,19 +139,24 @@ class ManagementUser extends React.Component {
 	handleSubmitAdd = (e) => {
 		console.log("handleSubmitAdd")
 		console.log('%c 🌰 this.state.dataName: ', 'font-size:20px;background-color: #93C0A4;color:#fff;', this.state.dataName);
-		console.log('%c 🌰 this.state.dataPassword: ', 'font-size:20px;background-color: #93C0A4;color:#fff;', this.state.dataPassword);
 		console.log('%c 🌰 this.state.dataEmail: ', 'font-size:20px;background-color: #93C0A4;color:#fff;', this.state.dataEmail);
-		console.log('%c 🌰 this.state.dataNoTelp: ', 'font-size:20px;background-color: #93C0A4;color:#fff;', this.state.dataNoTelp);
-		console.log('%c 🌰 this.state.dataRole: ', 'font-size:20px;background-color: #93C0A4;color:#fff;', this.state.dataRole);
+		console.log('%c 🌰 this.state.dataPhoneNumber: ', 'font-size:20px;background-color: #93C0A4;color:#fff;', this.state.dataPhoneNumber);
+		this.toggleModalsConfirmation()
+		this.toggleModalsAddNewUserForm()
 	}
 
 	handleSubmitUpdate = (e) => {
 		console.log("handleSubmitUpdate")
 		console.log('%c 🌰 this.state.dataName: ', 'font-size:20px;background-color: #93C0A4;color:#fff;', this.state.dataName);
-		console.log('%c 🌰 this.state.dataPassword: ', 'font-size:20px;background-color: #93C0A4;color:#fff;', this.state.dataPassword);
 		console.log('%c 🌰 this.state.dataEmail: ', 'font-size:20px;background-color: #93C0A4;color:#fff;', this.state.dataEmail);
-		console.log('%c 🌰 this.state.dataNoTelp: ', 'font-size:20px;background-color: #93C0A4;color:#fff;', this.state.dataNoTelp);
-		console.log('%c 🌰 this.state.dataRole: ', 'font-size:20px;background-color: #93C0A4;color:#fff;', this.state.dataRole);
+		console.log('%c 🌰 this.state.dataPhoneNumber: ', 'font-size:20px;background-color: #93C0A4;color:#fff;', this.state.dataPhoneNumber);
+		this.toggleModalsConfirmation()
+		this.toggleModalsUpdateUserForm()
+	}
+
+	handleSubmitDelete = (e) => {
+		console.log("user with id_user:" + this.state.dataIdUser + " has been deleted.");
+		this.toggleModalsConfirmation()
 	}
 
 	render() {
@@ -157,17 +174,13 @@ class ManagementUser extends React.Component {
 				centeredModal={true}
 			>
 				<UserForm 
-					listRole={[
-						{ "id": 2, "role": "user", "name": "User"},
-						{ "id": 1, "role": "admin", "name": "Admin"}
-					]}	
 					onHandleChange={this.handleChange}			
-					onHandleSelectOption={this.handleSelectOption}	
-					onHandleSubmit={this.handleSubmitAdd}	
+					onHandleSubmit={this.toggleModalsConfirmation}	
 					statusForm="add"																														
 				/>
 			</Modal> 
 		)
+
 		const showModalUpdateUser = ( 
 			<Modal 
 				modalIsOpen={this.state.modalUpdateUserForm}
@@ -177,21 +190,29 @@ class ManagementUser extends React.Component {
 				sizeModal="lg"
 				centeredModal={true}
 			>
-				<UserForm 
-					listRole={[
-						{ "id": 2, "role": "user", "name": "User"},
-						{ "id": 1, "role": "admin", "name": "Admin"}
-					]}							
-					onHandleChange={this.handleChange}		
-					onHandleSelectOption={this.handleSelectOption}
-					onHandleSubmit={this.handleSubmitUpdate}	
+				<UserForm 					
+					onHandleChange={this.handleChange}
+					onHandleSubmit={this.toggleModalsConfirmation}	
 					dataName={this.state.dataName} 
-					dataPassword={this.state.dataPassword}
 					dataEmail={this.state.dataEmail}
-					dataNoTelp={this.state.dataNoTelp}
-					dataRole={this.state.dataRole}					
+					dataPhoneNumber={this.state.dataPhoneNumber}
 					statusForm="update"																				
 				/>
+			</Modal> 
+		)
+
+		const showModalsConfirmation = (title, message, action) => (
+			<Modal 
+				modalIsOpen={this.state.modalConfirmation}
+				toggleModal={this.toggleModalsConfirmation}
+				classNameModal={this.props.className}
+				titleModalHeader={title}
+				sizeModal="md"
+				centeredModal={true}
+				showModalFooter={true}
+				onClickButtonSubmit={action}
+			>
+				{message}
 			</Modal> 
 		)
 
@@ -218,13 +239,12 @@ class ManagementUser extends React.Component {
 							<TableBox 
 								title="List User" 
 								isResponsive={true} 
-								tHead={["#", "Name", "Email", "No HP", "Created Date", "Updated Date", "Actions"]}
+								tHead={["#", "Name", "Email", "No HP", "Registered Date", "Actions"]}
 								sortItems={[
 									{ id: "name", name: "Name"}, 
 									{ id: "username", name: "Email" }, 
 									{ id: "no_hp", name: "No.HP" }, 
-									{ id: "created_date", name: "Created Date"}, 
-									{ id: "updated_date", name: "Updated Date" }
+									{ id: "created_date", name: "Registered Date"}, 
 								]}
 								onSortClick={this.onSortInit}
 								sortValue={usersSortBy}
@@ -264,12 +284,8 @@ class ManagementUser extends React.Component {
 												{timestampToDateTime(data.created_date, false)}
 											</td>
 											<td>
-												{timestampToDateTime(data.updated_date, false)}
-											</td>
-											<td>
-												<Button size="sm" color="secondary" className="mr-2 px-2 font-14" style={{marginTop: "5px", height: "31px"}}><i className="icon-eye"></i></Button>
 												<Button size="sm" color="warning" className="mr-2 px-2 font-14" style={{marginTop: "5px", height: "31px"}} onClick={(e) => this.toggleModalsUpdateUserForm(data)}><i className="icon-edit"></i></Button>
-												<Button size="sm" color="danger" className="mr-2 px-2 font-14" style={{marginTop: "5px", height: "31px"}}><i className="icon-trash"></i></Button>
+												<Button size="sm" color="danger" className="mr-2 px-2 font-14" style={{marginTop: "5px", height: "31px"}} onClick={(e) => this.toggleDeleteUser(data)}><i className="icon-trash"></i></Button>
 											</td>
 										</tr>
 									))
@@ -280,6 +296,9 @@ class ManagementUser extends React.Component {
 				</Container>
 				 { showModalAddNewUser }
 				 { showModalUpdateUser }
+				 { showModalsConfirmation("Add User Confirmation", "are you sure to add this user ? ", this.handleSubmitAdd)}
+				 { showModalsConfirmation("Update User Confirmation", "are you sure to update this user ? ", this.handleSubmitUpdate)}
+				 { showModalsConfirmation("Delete User Confirmation", "are you sure to delete this user ? ", this.handleSubmitDelete)}
 			</div>
 		)
 	}

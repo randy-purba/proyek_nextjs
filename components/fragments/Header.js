@@ -8,7 +8,18 @@ export default class Header extends React.Component {
         this.state = {
             navLogo: props.companyName
         }
+        this.handleClick = this.handleClick.bind(this)
     }
+
+    handleClick(name) {
+        this.setState(prevState => {
+          const isOpen = prevState[`isOpen${name}`];
+    
+          return {
+            [`isOpen${name}`]: !isOpen,
+          };
+        });
+      };
 
     render() {
         const { showHeader, companyName, headerHeight, onClick, navIsOpen, navMaxWidth, navMinWidth } = this.props
@@ -54,7 +65,7 @@ export default class Header extends React.Component {
                             </div>
                         </Container>
                     </div>
-                    <Navigation {...this.props} />
+                    <Navigation {...this.props} stateParent={this.state} onHandleClick={this.handleClick}/>
                 </div> : ""
         )
     }

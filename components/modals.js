@@ -1,11 +1,11 @@
 
-import { Modal, ModalHeader, ModalBody } from 'reactstrap'
+import { Modal, ModalHeader, ModalBody, ModalFooter, Button} from 'reactstrap'
 
 export default (props) => {
 
     const { 
       modalIsOpen, toggleModal, children, classNameModal, styleModal, 
-      sizeModal,titleModalHeader, centeredModal
+      sizeModal,titleModalHeader, centeredModal, showModalFooter, onClickButtonCancel, onClickButtonSubmit
     } = props
 
     return (
@@ -15,6 +15,12 @@ export default (props) => {
           <ModalBody>
             {children}
           </ModalBody>
+          { showModalFooter ? 
+            <ModalFooter>
+              <Button color="secondary" onClick={toggleModal}>Cancel</Button>
+              <Button color="primary" onClick={onClickButtonSubmit}>Submit</Button>
+            </ModalFooter> : ""
+          }
         </Modal>
     )
 }

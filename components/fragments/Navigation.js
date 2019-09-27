@@ -1,8 +1,10 @@
 import React from 'react'
 import NavMenu from '../cards/NavMenuCard'
+import NavSubMenu from '../cards/NavItemMenuCard'
 
 export default (props) => {
-    const { headerHeight, navIsOpen, navMaxWidth, navMinWidth } = props
+    const { headerHeight, navIsOpen, navMaxWidth, navMinWidth, stateParent, onHandleClick } = props
+
     return (
         <div 
             className="navList position-fixed d-block overflow-hidden border-right animate-width fast" 
@@ -16,11 +18,18 @@ export default (props) => {
                     width: navMaxWidth
                 }} 
             >
-                {/* <NavMenu link="/dashboard" href="/dashboard" width={navMinWidth} title="Dashboard" iconName="icon-trello" className="pt-2" />
-                <NavMenu link="/statistic" href="/statistic" width={navMinWidth} title="Statistic" iconName="icon-trending-up" />
-                <NavMenu link="/sample-form" href="/sampleForm" width={navMinWidth} title="Sample Form" iconName="icon-hash" />
-                <NavMenu link="/sample-banner" href="/sampleBanner" width={navMinWidth} title="Sample Banner" iconName="icon-image" /> */}
-                <NavMenu link="/management-users" href="/managementUser" width={navMinWidth} title="Management User" iconName="icon-users" />
+
+                {/* To create menu that have sub menu, NavSubMenu must have isOpenMenu that combination stateParent.isOpen + data of menuId */}
+                <NavSubMenu width={navMinWidth} menuId="UserRole"  title="User Role" iconName="icon-user" isOpenMenu={stateParent.isOpenUserRole} onHandleClick={onHandleClick}>
+                    <NavMenu link="" href="" width={navMinWidth} title="Add User" iconName="icon-plus-circle" />
+                    <NavMenu link="/management-users" href="/managementUser" width={navMinWidth} title="List User" iconName="icon-list" />
+                </NavSubMenu>
+
+                <NavSubMenu width={navMinWidth} menuId="Question" title="Question" iconName="icon-database" isOpenMenu={stateParent.isOpenQuestion} onHandleClick={onHandleClick}>
+                    <NavMenu link="/add-question" href="/addQuestion" width={navMinWidth} title="Add Question" iconName="icon-plus-square" />
+                    <NavMenu link="" href="" width={navMinWidth} title="List Question" iconName="icon-list" />
+                </NavSubMenu>
+
                 <NavMenu link="/bank-soal" href="/listBankQuestion" width={navMinWidth} title="Bank Soal" iconName="icon-database" />
                 <NavMenu link="/report-interview" href="/reportInterview" width={navMinWidth} title="Report Interview" iconName="icon-headphones" />
                 <div className="navListItem d-inline-block w-100">
