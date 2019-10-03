@@ -16,6 +16,10 @@ import ListUsersReducer from './ListUsersReducers';
 import DetailBankQuestionReducer from './DetailBankQuestionReducers';
 import ListReportInterviewReducer from './ListReportInterviewReducers';
 import TotalListReportInterviewReducer from './TotalListReportInterviewReducers';
+import ListQuestionReducer from './ListQuestionReducers';
+import TotalListQuestionReducer from './TotalListQuestionReducers';
+import ListAnswerTypeReducer from './AnswerTypeReducers'
+import DetailQuestionReducer from './DetailQuestionReducers'
 
 export default combineReducers({
     listBanner: BannerReducer,
@@ -34,5 +38,9 @@ export default combineReducers({
     listUser: ListUsersReducer,
     detailBankQuestion: DetailBankQuestionReducer,
     totalListReportInterview: TotalListReportInterviewReducer,
-    listReportInterview: ListReportInterviewReducer
+    listReportInterview: ListReportInterviewReducer,
+    listQuestion: ListQuestionReducer,
+    totalListQuestion: TotalListQuestionReducer,
+    listAnswerType: ListAnswerTypeReducer,
+    detailQuestion: DetailQuestionReducer,
 })

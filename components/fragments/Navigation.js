@@ -26,12 +26,15 @@ export default (props) => {
                 </NavSubMenu>
 
                 <NavSubMenu width={navMinWidth} menuId="Question" title="Question" iconName="icon-database" isOpenMenu={stateParent.isOpenQuestion} onHandleClick={onHandleClick}>
-                    <NavMenu link="/add-question" href="/addQuestion" width={navMinWidth} title="Add Question" iconName="icon-plus-square" />
-                    <NavMenu link="" href="" width={navMinWidth} title="List Question" iconName="icon-list" />
+                    <NavMenu link="/add-question" href="/question/addQuestion" width={navMinWidth} title="Add Question" iconName="icon-plus-square" />
+                    <NavMenu link="/list-question" href="/question/listQuestion" width={navMinWidth} title="List Question" iconName="icon-list" />
+                </NavSubMenu>
+
+                <NavSubMenu width={navMinWidth} menuId="ReportInterview" title="Report Interview Video" iconName="icon-help-circle" isOpenMenu={stateParent.isOpenReportInterview} onHandleClick={onHandleClick}>
+                    <NavMenu link="/report-interview" href="/reportInterview" width={navMinWidth} title="List Report Interview" iconName="icon-list" />
                 </NavSubMenu>
 
                 <NavMenu link="/bank-soal" href="/listBankQuestion" width={navMinWidth} title="Bank Soal" iconName="icon-database" />
-                <NavMenu link="/report-interview" href="/reportInterview" width={navMinWidth} title="Report Interview" iconName="icon-headphones" />
                 <div className="navListItem d-inline-block w-100">
                     <div 
                         className="navItem animate-all position-relative d-inline-block w-100"

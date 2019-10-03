@@ -12,19 +12,23 @@ export default (props) => {
         title, valueQuestionTitle, valueAnswerOption, valueZone, valueMarker, valueScore, 
         valueAnswerChoiceA, valueAnswerChoiceB, valueAnswerChoiceC, valueAnswerChoiceD,
         valueCheckboxChoiceA, valueCheckboxChoiceB, valueCheckboxChoiceC, valueCheckboxChoiceD,
-        valueAnswerSingleChoiceA, valueAnswerSingleChoiceB, valueCheckboxSingleChoiceA, valueCheckboxSingleChoiceB,
+        valueAnswerSingleChoiceA, valueAnswerSingleChoiceB, valueCheckboxSingleChoiceA, valueCheckboxSingleChoiceB, valueAnswerEssay,
         listAnswerOption, listZone, onHandleChange, onHandleSelectOption, onHandleSubmit, onHandleCheckbox
     } = props
+
+    console.log(valueCheckboxChoiceA)
+    console.dir(valueCheckboxChoiceD)
+
 
     const listMarker = listZone.filter(data => data.id === valueZone)[0].provinsi
     
     return (
         <Row>
-            <Col lg="12">
+            <Col lg="12">   
                 <ContentBox 
                     title={title}
                     className="bg-white rounded shadow-sm p-3 mb-4 overflow-auto">
-                    <AvForm onValidSubmit={onHandleSubmit} method="post" autoComplete="off" >
+                    <AvForm onValidSubmit={(e) => onHandleSubmit("Save")} method="post" autoComplete="off" >
                         <FormInputValidation 
                             withLabel={true}
                             labelName="Question Title - Validated"
@@ -88,7 +92,21 @@ export default (props) => {
                                 />) : (null)
                         } {valueAnswerOption == 3 ? 
                             (
-                                <div></div>
+                                <FormInputValidation 
+                                    withLabel={true}
+                                    labelName="Answer Essay - Validated"
+                                    labelClassName="inputLabel position-absolute font-12 text-primary bg-white"
+                                    formClassName="py-4 px-2 bg-white mb-0"
+                                    formId="idValueAnswerEssay" 
+                                    formType="textarea" 
+                                    formName="valueAnswerEssay"
+                                    formPlaceholder="Input Answer Essay" 
+                                    formValue={valueAnswerEssay}
+                                    onChange={onHandleChange} 
+                                    formValidate={{
+                                        required: { value: true, errorMessage: "Answer essay can't be empty"}
+                                    }} 
+                                />
                             )
                         : (null)}
                         <FormSelectValidation 
@@ -133,7 +151,10 @@ export default (props) => {
                                 required: { value: true, errorMessage: 'Alamat email tidak boleh kosong' }
                             }} 
                         />
-                        <Button size="lg" color="primary" type="submit" className="float-right mt-3 mb-2 px-5 text-uppercase font-12">Kirim</Button>
+                        <Button size="lg" color="primary" type="submit" className="float-right mt-3 mb-2 px-5 mx-1 text-uppercase font-12">Save</Button>
+                        <Button size="lg" color="secondary" onClick={(e) => onHandleSubmit("Cancel")} className="float-right mt-3 mb-2 px-5 mx-1 text-uppercase font-12">Cancel</Button>
+                        <Button size="lg" color="warning" onClick={(e) => onHandleSubmit("Publish")} className="float-right mt-3 mb-2 px-5 mx-1 text-uppercase font-12">Publish</Button>
+                    
                     </AvForm>
                 </ContentBox>
             </Col>

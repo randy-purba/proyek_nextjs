@@ -2,9 +2,10 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { Container, Row, Col, Button } from 'reactstrap'
-import { regexHtmlTag, convertStringToBoolean } from '../components/functions'
-import { getListCities } from '../components/actions'
-import FormQuestion from '../components/fragments/question/questionFormNew'
+import { regexHtmlTag, convertStringToBoolean } from '../../components/functions'
+import { getListCities } from '../../components/actions'
+import FormQuestion from '../../components/fragments/question/questionFormNew'
+import Modal from '../../components/modals'
 
 class AddQuestion extends React.Component {
 	static async getInitialProps({ store }) {
@@ -41,8 +42,31 @@ class AddQuestion extends React.Component {
 			valueCheckboxChoiceB:false, 
 			valueCheckboxChoiceC:false, 
 			valueCheckboxChoiceD:false,
-			listCity: props.listCity
+			valueAnswerEssay:"",
+			valueAnswerSingleChoiceA:"",
+			valueAnswerSingleChoiceB:"",
+			valueCheckboxSingleChoiceA:false,
+			valueCheckboxSingleChoiceB:false,
+			listCity: props.listCity,
+			modalConfirmationSave: false
 		}
+		this.toggleModalsConfirmation = this.toggleModalsConfirmation.bind(this)
+	}
+
+	handleClick(name) {
+        this.setState(prevState => {
+          const isOpen = prevState[`isOpen${name}`]
+          return {
+            [`isOpen${name}`]: !isOpen,
+          }
+        })
+	}
+	
+	toggleModalsConfirmation (status) {
+		console.log(status)
+		this.setState(prevState => ({
+			[`modalConfirmation${status}`]: !prevState[`modalConfirmation${status}`]
+		}))
 	}
 
 	UNSAFE_componentWillReceiveProps(nextProps) {
@@ -70,13 +94,22 @@ class AddQuestion extends React.Component {
 		if(related) this.setState({ [related]: 0 })
 	}
 
-	handleSubmit = (e) => {
+	handleCancelAddQuestion = (e) => {
+		console.log("handleCancelAddQuestion")
+		this.toggleModalsConfirmation("Cancel")
+	}
 
+	handlePublishAddQuestion = (e) => {
+		console.log("handlePublishAddQuestion")
+		this.toggleModalsConfirmation("Publish")
+	}
+
+	handleSubmit = (e) => {
 		console.log('%c 🦀 valueQuestionTitle: ', 'font-size:20px;background-color: #7F2B82;color:#fff;', this.state.valueQuestionTitle);
-		console.log('%c 🥛 valueAnswerOption: ', 'font-size:20px;background-color: #4b4b4b;color:#fff;', this.state.valueAnswerOption);
 		console.log('%c 🍿 valueZone: ', 'font-size:20px;background-color: #3F7CFF;color:#fff;', this.state.valueZone);
 		console.log('%c 🥐 valueMarker: ', 'font-size:20px;background-color: #33A5FF;color:#fff;', this.state.valueMarker);
 		console.log('%c 🍾 valueScore: ', 'font-size:20px;background-color: #FCA650;color:#fff;', this.state.valueScore);
+		console.log('%c 🥛 valueAnswerOption: ', 'font-size:20px;background-color: #4b4b4b;color:#fff;', this.state.valueAnswerOption);
 		console.log('%c 🥨 valueAnswerChoiceA: ', 'font-size:20px;background-color: #FFDD4D;color:#fff;', this.state.valueAnswerChoiceA);
 		console.log('%c 🥖 valueAnswerChoiceB: ', 'font-size:20px;background-color: #42b983;color:#fff;', this.state.valueAnswerChoiceB);
 		console.log('%c 🍮 valueAnswerChoiceC: ', 'font-size:20px;background-color: #33A5FF;color:#fff;', this.state.valueAnswerChoiceC);
@@ -85,7 +118,12 @@ class AddQuestion extends React.Component {
 		console.log('%c 🥟 valueCheckboxChoiceB: ', 'font-size:20px;background-color: #33A5FF;color:#fff;', this.state.valueCheckboxChoiceB);
 		console.log('%c 🥪 valueCheckboxChoiceC: ', 'font-size:20px;background-color: #FCA650;color:#fff;', this.state.valueCheckboxChoiceC);
 		console.log('%c 🍠 valueCheckboxChoiceD: ', 'font-size:20px;background-color: #2EAFB0;color:#fff;', this.state.valueCheckboxChoiceD);
-	
+		console.log('%c 🥔 valueAnswerEssay: ', 'font-size:20px;background-color: #B03734;color:#fff;', this.state.valueAnswerEssay);
+		console.log('%c 🍋 valueAnswerSingleChoiceA: ', 'font-size:20px;background-color: #2EAFB0;color:#fff;', this.state.valueAnswerSingleChoiceA);
+		console.log('%c 🍱 valueAnswerSingleChoiceB: ', 'font-size:20px;background-color: #FFDD4D;color:#fff;', this.state.valueAnswerSingleChoiceB);
+		console.log('%c 🍰 valueCheckboxSingleChoiceA: ', 'font-size:20px;background-color: #93C0A4;color:#fff;', this.state.valueCheckboxSingleChoiceA);
+		console.log('%c 🍬 valueCheckboxSingleChoiceB: ', 'font-size:20px;background-color: #ED9EC7;color:#fff;', this.state.valueCheckboxSingleChoiceB);
+		this.toggleModalsConfirmation("Save")
 	}
  
 	render() {
@@ -93,7 +131,55 @@ class AddQuestion extends React.Component {
 				valueQuestionTitle, valueAnswerOption, valueZone, valueMarker, valueScore,
 				valueAnswerChoiceA, valueAnswerChoiceB, valueAnswerChoiceC, valueAnswerChoiceD,
 				valueCheckboxChoiceA, valueCheckboxChoiceB, valueCheckboxChoiceC, valueCheckboxChoiceD,
+				valueAnswerSingleChoiceA, valueAnswerSingleChoiceB, valueCheckboxSingleChoiceA, valueCheckboxSingleChoiceB, 
+				valueAnswerEssay
 		} = this.state
+
+		const showModalConfirmationSave = (
+			<Modal 
+				modalIsOpen={this.state.modalConfirmationSave}
+				toggleModal={this.toggleModalsConfirmation}
+				classNameModal={this.props.className}
+				titleModalHeader="Save Question Confirmation"
+				sizeModal="md"
+				centeredModal={true}
+				showModalFooter={true}
+				onClickButtonSubmit={this.handleSubmit}
+			>
+				are you sure to save this question ?
+			</Modal> 
+		)
+
+		const showModalConfirmationPublish = (
+			<Modal 
+				modalIsOpen={this.state.modalConfirmationPublish}
+				toggleModal={this.toggleModalsConfirmation}
+				classNameModal={this.props.className}
+				titleModalHeader="Publish Question Confirmation"
+				sizeModal="md"
+				centeredModal={true}
+				showModalFooter={true}
+				onClickButtonSubmit={this.handlePublishAddQuestion}
+			>
+				are you sure to publish this question ?
+			</Modal> 
+		)
+
+		const showModalConfirmationCancel = (
+			<Modal 
+				modalIsOpen={this.state.modalConfirmationCancel}
+				toggleModal={this.toggleModalsConfirmation}
+				classNameModal={this.props.className}
+				titleModalHeader="Cancel Question Confirmation"
+				sizeModal="md"
+				centeredModal={true}
+				showModalFooter={true}
+				onClickButtonSubmit={this.handleCancelAddQuestion}
+			>
+				are you sure to cancel this question ?
+			</Modal> 
+		)
+
 		return (
 			<div 
 				role="main" 
@@ -125,6 +211,11 @@ class AddQuestion extends React.Component {
 						valueCheckboxChoiceB={valueCheckboxChoiceB} 
 						valueCheckboxChoiceC={valueCheckboxChoiceC} 
 						valueCheckboxChoiceD={valueCheckboxChoiceD}
+						valueAnswerSingleChoiceA={valueAnswerSingleChoiceA}
+						valueAnswerSingleChoiceB={valueAnswerSingleChoiceB}
+						valueCheckboxSingleChoiceA={valueCheckboxSingleChoiceA}
+						valueCheckboxSingleChoiceB={valueCheckboxSingleChoiceB}
+						valueAnswerEssay={valueAnswerEssay}
 						listAnswerOption={[
 							{"id": 1, "name": "Single Choice", "value": "single_choice"},
 							{"id": 2, "name": "Multiple Choice", "value": "multiple_choice"},
@@ -134,9 +225,12 @@ class AddQuestion extends React.Component {
 						onHandleChange={this.handleChange} 
 						onHandleCheckbox={this.handleCheckbox}
 						onHandleSelectOption={this.handleSelectOption}
-						onHandleSubmit={this.handleSubmit}
+						onHandleSubmit={this.toggleModalsConfirmation}
 					/>
 				</Container>
+				{ showModalConfirmationSave }
+				{ showModalConfirmationPublish }
+				{ showModalConfirmationCancel }
 			</div>
 		)
 	}

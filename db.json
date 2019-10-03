@@ -279,7 +279,71 @@
         }
     ],
     "listQuestion":[
-        {"id": "", "question_title":"", "answer_type":1, "zone":1,}
+        {  
+            "id": 1, 
+            "question_title":"10 x 2 = ", 
+            "answer_type": {"id": 1, "name": "Single Choice", "value": "single_choice"}, 
+            "zone":{ 
+                "id": 1, 
+                "value": "island"
+            }, 
+            "score": 50, 
+            "marker": {
+                "id": 2, 
+                "value": "wanokuri"
+            },
+            "updated_date": 1565567610234,
+            "created_date": 1561237610789,
+            "published_date": 1461237610789,
+            "published": true,
+            "answer": [
+                { "id": 1, "answer": "20", "is_answer": true },
+                { "id": 2, "answer": "15", "is_answer": false }
+            ]
+        }, {  
+            "id": 2, 
+            "question_title":"10 : 2 = ", 
+            "answer_type": {"id": 2, "name": "Multiple Choice", "value": "multiple_choice"},
+            "zone":{ 
+                "id": 2, 
+                "value": "jungle"
+            }, 
+            "score": 75, 
+            "marker": {
+                "id": 3, 
+                "value": "Goat Island"
+            },
+            "updated_date": 1562267610234,
+            "created_date": 1561447610789,
+            "published_date": null,
+            "published": false,
+            "answer": [
+                { "id": 3, "answer": "20", "is_answer": false },
+                { "id": 4, "answer": "15", "is_answer": false },
+                { "id": 5, "answer": "10", "is_answer": false },
+                { "id": 6, "answer": "5", "is_answer": true }
+            ]
+        }, {  
+            "id": 3, 
+            "question_title":"15 : 3 = ", 
+            "answer_type": {"id": 3, "name": "Essay", "value": "essay"},
+            "zone":{ 
+                "id": 3, 
+                "value": "sea"
+            }, 
+            "score": 175, 
+            "marker": {
+                "id": 3, 
+                "value": "Loguetown"
+            },
+            "updated_date": 1562267610234,
+            "created_date": 1561447610789,
+            "published_date": 1567747610789,
+            "published": true,
+            "answer": [
+                { "id": 7, "answer": "5", "is_answer": true }
+            ]
+        }
     ],
     "listReportInterview":[
         {
@@ -331,5 +395,10 @@
             },
             "total_score": 350
         }
+    ],
+    "listAnswerType":[
+        {"id": 1, "name": "Single Choice", "value": "single_choice"},
+        {"id": 2, "name": "Multiple Choice", "value": "multiple_choice"},
+        {"id": 3, "name": "Essay", "value": "essay"}
     ]
 }

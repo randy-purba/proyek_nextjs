@@ -10,6 +10,8 @@ export default (props) => {
         onHandleChange, onHandleCheckbox
     } = props
 
+    console.log(valueAnswerChoiceD)
+
     return (
         <FormGroup 
             className={`mb-3 position-relative ${containerClassName ? containerClassName : ''}`}

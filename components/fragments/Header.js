@@ -13,13 +13,12 @@ export default class Header extends React.Component {
 
     handleClick(name) {
         this.setState(prevState => {
-          const isOpen = prevState[`isOpen${name}`];
-    
+          const isOpen = prevState[`isOpen${name}`]
           return {
             [`isOpen${name}`]: !isOpen,
-          };
-        });
-      };
+          }
+        })
+    }
 
     render() {
         const { showHeader, companyName, headerHeight, onClick, navIsOpen, navMaxWidth, navMinWidth } = this.props

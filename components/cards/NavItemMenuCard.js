@@ -20,7 +20,7 @@ export default (props) => {
                   <i className={`${props.iconName ? props.iconName : 'icon-plus-square'} font-22 absolute-center`} />
                 </span>
 
-                <Label className="info m-0 font-16">{props.title}</Label>
+                <Label className="info m-0 font-16" style={{display: "contents"}}>{props.title}</Label>
 
                 <i className="icon-chevron-right font-22 float-right mx-3"
                   style={{

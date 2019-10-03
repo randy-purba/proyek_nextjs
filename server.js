@@ -74,8 +74,19 @@ app.prepare().then(() => {
   })
 
   server.get('/add-question', (req, res) => {
-    const actualPage = '/addQuestion'
+    const actualPage = '/question/addQuestion'
     return app.render(req, res, actualPage)
+  })
+
+  server.get('/list-question', (req, res) => {
+    const actualPage = '/question/listQuestion'
+    return app.render(req, res, actualPage)
+  })
+
+  server.get('/edit-question/:id', (req, res) => {
+    const actualPage = "/question/editQuestion"
+    const queryParams = { id: req.params.id }
+    return app.render(req, res, actualPage, queryParams)
   })
 
   // server.get('/banner/:id/:slug', (req, res) => {

@@ -44,7 +44,9 @@ class ManagementUser extends React.Component {
 			listUser: props.listUser,
 			modalAddNewUserForm: false,
 			modalUpdateUserForm: false,
-			modalConfirmation: false,
+			modalConfirmationInsert: false,
+			modalConfirmationUpdate: false,
+			modalConfirmationDelete: false,
 			dataName: "", 
 			dataEmail: "", 
 			dataPhoneNumber: "",
@@ -57,7 +59,9 @@ class ManagementUser extends React.Component {
 
 		this.toggleDeleteUser = this.toggleDeleteUser.bind(this)
 
-		this.toggleModalsConfirmation = this.toggleModalsConfirmation.bind(this)
+		this.toggleModalsConfirmationInsert = this.toggleModalsConfirmationInsert.bind(this)
+		this.toggleModalsConfirmationUpdate = this.toggleModalsConfirmationUpdate.bind(this)
+		this.toggleModalsConfirmationDelete = this.toggleModalsConfirmationDelete.bind(this)
 	}
 
 	toggleModalsAddNewUserForm() {
@@ -82,12 +86,24 @@ class ManagementUser extends React.Component {
 		this.setState({
 			dataIdUser: data ? data.id : 0
 		})
-		this.toggleModalsConfirmation()
+		this.toggleModalsConfirmationDelete()
 	}
 
-	toggleModalsConfirmation() {
+	toggleModalsConfirmationInsert() {
 		this.setState(prevState => ({
-			modalConfirmation: !prevState.modalConfirmation,
+			modalConfirmationInsert: !prevState.modalConfirmationInsert,
+		}))
+	}
+
+	toggleModalsConfirmationUpdate() {
+		this.setState(prevState => ({
+			modalConfirmationUpdate: !prevState.modalConfirmationUpdate,
+		}))
+	}
+
+	toggleModalsConfirmationDelete() {
+		this.setState(prevState => ({
+			modalConfirmationDelete: !prevState.modalConfirmationDelete,
 		}))
 	}
 
@@ -141,7 +157,7 @@ class ManagementUser extends React.Component {
 		console.log('%c 🌰 this.state.dataName: ', 'font-size:20px;background-color: #93C0A4;color:#fff;', this.state.dataName);
 		console.log('%c 🌰 this.state.dataEmail: ', 'font-size:20px;background-color: #93C0A4;color:#fff;', this.state.dataEmail);
 		console.log('%c 🌰 this.state.dataPhoneNumber: ', 'font-size:20px;background-color: #93C0A4;color:#fff;', this.state.dataPhoneNumber);
-		this.toggleModalsConfirmation()
+		this.toggleModalsConfirmationInsert()
 		this.toggleModalsAddNewUserForm()
 	}
 
@@ -150,13 +166,13 @@ class ManagementUser extends React.Component {
 		console.log('%c 🌰 this.state.dataName: ', 'font-size:20px;background-color: #93C0A4;color:#fff;', this.state.dataName);
 		console.log('%c 🌰 this.state.dataEmail: ', 'font-size:20px;background-color: #93C0A4;color:#fff;', this.state.dataEmail);
 		console.log('%c 🌰 this.state.dataPhoneNumber: ', 'font-size:20px;background-color: #93C0A4;color:#fff;', this.state.dataPhoneNumber);
-		this.toggleModalsConfirmation()
+		this.toggleModalsConfirmationUpdate()
 		this.toggleModalsUpdateUserForm()
 	}
 
 	handleSubmitDelete = (e) => {
 		console.log("user with id_user:" + this.state.dataIdUser + " has been deleted.");
-		this.toggleModalsConfirmation()
+		this.toggleModalsConfirmationDelete()
 	}
 
 	render() {
@@ -175,7 +191,7 @@ class ManagementUser extends React.Component {
 			>
 				<UserForm 
 					onHandleChange={this.handleChange}			
-					onHandleSubmit={this.toggleModalsConfirmation}	
+					onHandleSubmit={this.toggleModalsConfirmationInsert}	
 					statusForm="add"																														
 				/>
 			</Modal> 
@@ -192,7 +208,7 @@ class ManagementUser extends React.Component {
 			>
 				<UserForm 					
 					onHandleChange={this.handleChange}
-					onHandleSubmit={this.toggleModalsConfirmation}	
+					onHandleSubmit={this.toggleModalsConfirmationUpdate}	
 					dataName={this.state.dataName} 
 					dataEmail={this.state.dataEmail}
 					dataPhoneNumber={this.state.dataPhoneNumber}
@@ -201,18 +217,48 @@ class ManagementUser extends React.Component {
 			</Modal> 
 		)
 
-		const showModalsConfirmation = (title, message, action) => (
+		const showModalsConfirmationInsert = (
 			<Modal 
-				modalIsOpen={this.state.modalConfirmation}
-				toggleModal={this.toggleModalsConfirmation}
+				modalIsOpen={this.state.modalConfirmationInsert}
+				toggleModal={this.toggleModalsConfirmationInsert}
 				classNameModal={this.props.className}
-				titleModalHeader={title}
+				titleModalHeader="Add User Confirmation"
 				sizeModal="md"
 				centeredModal={true}
 				showModalFooter={true}
-				onClickButtonSubmit={action}
+				onClickButtonSubmit={this.handleSubmitAdd}
 			>
-				{message}
+				are you sure to add this user ?
+			</Modal> 
+		)
+
+		const showModalsConfirmationUpdate = (
+			<Modal 
+				modalIsOpen={this.state.modalConfirmationUpdate}
+				toggleModal={this.toggleModalsConfirmationUpdate}
+				classNameModal={this.props.className}
+				titleModalHeader="Update User Confirmation"
+				sizeModal="md"
+				centeredModal={true}
+				showModalFooter={true}
+				onClickButtonSubmit={this.handleSubmitUpdate}
+			>
+				are you sure to update this user ?
+			</Modal> 
+		)
+
+		const showModalsConfirmationDelete =  (
+			<Modal 
+				modalIsOpen={this.state.modalConfirmationDelete}
+				toggleModal={this.toggleModalsConfirmationDelete}
+				classNameModal={this.props.className}
+				titleModalHeader="Delete User Confirmation"
+				sizeModal="md"
+				centeredModal={true}
+				showModalFooter={true}
+				onClickButtonSubmit={this.handleSubmitDelete}
+			>
+				are you sure to delete this user ?
 			</Modal> 
 		)
 
@@ -244,7 +290,7 @@ class ManagementUser extends React.Component {
 									{ id: "name", name: "Name"}, 
 									{ id: "username", name: "Email" }, 
 									{ id: "no_hp", name: "No.HP" }, 
-									{ id: "created_date", name: "Registered Date"}, 
+									{ id: "created_date", name: "Registered Date"}
 								]}
 								onSortClick={this.onSortInit}
 								sortValue={usersSortBy}
@@ -296,9 +342,9 @@ class ManagementUser extends React.Component {
 				</Container>
 				 { showModalAddNewUser }
 				 { showModalUpdateUser }
-				 { showModalsConfirmation("Add User Confirmation", "are you sure to add this user ? ", this.handleSubmitAdd)}
-				 { showModalsConfirmation("Update User Confirmation", "are you sure to update this user ? ", this.handleSubmitUpdate)}
-				 { showModalsConfirmation("Delete User Confirmation", "are you sure to delete this user ? ", this.handleSubmitDelete)}
+				 { showModalsConfirmationInsert }
+				 { showModalsConfirmationUpdate }
+				 { showModalsConfirmationDelete }
 			</div>
 		)
 	}
