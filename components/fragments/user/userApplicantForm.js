@@ -2,15 +2,15 @@
 import { AvForm } from 'availity-reactstrap-validation'
 import { Label, Row, Col, Button } from 'reactstrap'
 import FormInputValidation from '../../form/validateInputForm'
-import FormSelectValidation from '../../form/validateSelectForm'
 import FormCheckboxValidation from '../../form/validateCheckboxForm'
 
 export default (props) => {
 
     const { 
-        title, dataName, dataEmail, dataPassword, dataUserRole, onHandleChange, 
-        onHandleSubmit, statusForm, onHandleSelectOption
+        title, dataName, dataPhoneNumber, dataCheckboxUserMode, onHandleChange, onHandleCheckboxChange, onHandleSubmit, statusForm
     } = props
+
+    console.dir(dataCheckboxUserMode)
     
     return (
         <div className="bg-white rounded shadow-sm p-3 mb-3 overflow-visible">
@@ -20,7 +20,7 @@ export default (props) => {
                     <Col xs="12" sm="12" md="12">
                         <FormInputValidation 
                             withLabel={true}
-                            labelName="Name - Validated"
+                            labelName="Name - Validasi"
                             labelClassName="inputLabel position-absolute font-12 text-primary bg-white"
                             formClassName="py-4 px-2 bg-white mb-0"
                             formId="idFieldName" 
@@ -37,54 +37,36 @@ export default (props) => {
                     <Col xs="12" sm="12" md="12">
                         <FormInputValidation 
                             withLabel={true}
-                            labelName="Email - Validated"
+                            labelName="Phone Number - Validated"
                             labelClassName="inputLabel position-absolute font-12 text-primary bg-white"
                             formClassName="py-4 px-2 bg-white mb-0"
-                            formId="idFieldEmail" 
-                            formType="email" 
-                            formName="dataEmail" 
-                            formPlaceholder="Input Email" 
-                            formValue={dataEmail}
+                            formId="idFieldPhoneNumber" 
+                            formType="number" 
+                            formName="dataPhoneNumber" 
+                            formPlaceholder="Input Phone Number" 
+                            formValue={dataPhoneNumber}
                             onChange={onHandleChange}
                             formValidate={{
-                                required: { value: true, errorMessage: "Email can't be empty" },
-                                email: true
-                            }} 
-                        />
-                    </Col>
-                    <Col xs="12" sm="12" md="12">
-                        <FormInputValidation 
-                            withLabel={true}
-                            labelName="Password - Validated"
-                            labelClassName="inputLabel position-absolute font-12 text-primary bg-white"
-                            formClassName="py-4 px-2 bg-white mb-0"
-                            formId="idFieldPassword" 
-                            formType="password" 
-                            formName="dataPassword" 
-                            formPlaceholder="Input Password" 
-                            formValue={dataPassword}
-                            onChange={onHandleChange}
-                            formValidate={{
-                                required: { value: true, errorMessage: "Password can't be empty" }
+                                required: { value: true, errorMessage: "Phone number can't be empty" }
                             }} 
                         />
                     </Col>
                     <Col xs="12" sm="12" md="12" >
-                        <FormSelectValidation 
+                        <FormCheckboxValidation 
                             withLabel={true}
-                            labelName="User Role - Validate"
+                            labelName="User Mode - Validated"
                             labelClassName="inputLabel position-absolute font-12 text-primary bg-white"
-                            formClassName="py-2 px-2 bg-white mb-0"
-                            formId="idFieldUserRole" 
-                            formName="dataUserRole" 
-                            formValue={dataUserRole}
-                            formPlaceholder="Select User Role"
-                            formOptionData={[
-                                { 'id': "1", 'name': "Super Admin" },
-                                { 'id': "2", 'name': "Admin" }
+                            formClassName="py-4 px-2 bg-white mb-0"
+                            formName="dataCheckboxUserMode"
+                            formValue={dataCheckboxUserMode}
+                            onChange={onHandleCheckboxChange}
+                            data={[
+                                { 'label': "Interview", 'value': "interview" },
+                                { 'label': "Game", 'value': "game" }
                             ]}
-                            onChange={onHandleSelectOption}
-                            formErrorMessage="Please select user role" 
+                            formValidate={{
+                                required: { value: true, errorMessage: "Choice User Mode" }
+                            }} 
                         />
                     </Col>
                     <Col xs="12" sm="12" md="12">

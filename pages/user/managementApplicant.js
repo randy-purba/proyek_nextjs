@@ -1,24 +1,24 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
-import { Container, Row, Col, Button, Badge } from 'reactstrap'
+import { Container, Row, Col,Button } from 'reactstrap'
 import TableBox from '../../components/tables'
 import Pagination from '../../components/cards/PaginationCard'
-import { getListUser, getDetailUserAdministrator } from '../../components/actions'
+import { getListUser } from '../../components/actions'
 import { timestampToDateTime, regexHtmlTag, numberWithDot } from '../../components/functions'
 import Modal from '../../components/modals'
-import UserForm from '../../components/fragments/user/userForm'
+import UserForm from '../../components/fragments/user/userApplicantForm'
 
 
-class ManagementUser extends React.Component {
+class ManagementApplicant extends React.Component {
 	static async getInitialProps({ store }) {
 		let props = { showHeader: true, showFooter: true, usersPage: 0, usersMaxLen: 10 }
 		let stores = await store.getState()
 		
 		try {
 
-			if(!stores.listUser) await store.dispatch(getListUser(props.usersPage, props.usersMaxLen))
-
+            if(!stores.listUser) await store.dispatch(getListUser(props.usersPage, props.usersMaxLen))
+            
 		} catch (e) {
 			props.error = 'Unable to fetch AsyncData on server'
 		}
@@ -42,16 +42,15 @@ class ManagementUser extends React.Component {
 			usersSortBy: "created_date",
 			usersSearchKey: "",
 			listUser: props.listUser,
-			detailUserAdministrator: props.detailUserAdministrator,
 			modalAddNewUserForm: false,
 			modalUpdateUserForm: false,
 			modalConfirmationInsert: false,
 			modalConfirmationUpdate: false,
 			modalConfirmationDelete: false,
 			dataName: "", 
-			dataEmail: "", 
-			dataPassword: "",
-			dataUserRole: ""
+			dataPhoneNumber: "",
+			dataCheckboxUserMode: ["interview"],
+			dataIdUser: 0
 		}
 
 		this.toggleModalsAddNewUserForm = this.toggleModalsAddNewUserForm.bind(this)
@@ -69,16 +68,16 @@ class ManagementUser extends React.Component {
 		this.setState(prevState => ({
 			modalAddNewUserForm: !prevState.modalAddNewUserForm,
 			dataName: "", 
-			dataEmail: "", 
-			dataPassword: "",
-			dataUserRole: ""
+			dataPhoneNumber: "",
+			dataCheckboxUserMode: ["interview", "game"]
 		}))
 	}
 
-	toggleModalsUpdateUserForm(id) {
-		if(!this.state.modalUpdateUserForm) this.props.getDetailUserAdministrator(id)
+	toggleModalsUpdateUserForm(data) {
 		this.setState(prevState => ({
 			modalUpdateUserForm: !prevState.modalUpdateUserForm,
+			dataName: data ? data.name : "", 
+			dataPhoneNumber: data ? data.no_hp : ""
 		}))
 	}
 
@@ -110,12 +109,7 @@ class ManagementUser extends React.Component {
 	UNSAFE_componentWillReceiveProps(nextProps) {
 		this.setState({
 			navIsOpen: nextProps.navIsOpen,
-			listUser: nextProps.listUser,
-			detailUserAdministrator: nextProps.detailUserAdministrator,
-			dataName: nextProps.detailUserAdministrator ? nextProps.detailUserAdministrator.name : "", 
-			dataEmail: nextProps.detailUserAdministrator ? nextProps.detailUserAdministrator.email : "", 
-			dataPassword: nextProps.detailUserAdministrator ? nextProps.detailUserAdministrator.password : "",
-			dataUserRole: nextProps.detailUserAdministrator ? nextProps.detailUserAdministrator.role : ""
+			listUser: nextProps.listUser
 		})
 	}
 
@@ -147,13 +141,22 @@ class ManagementUser extends React.Component {
 
 	handleChange = (e) => {
 		const target = e.target, value = target.value, name = target.name, related = target.getAttribute('related')
+		console.dir(this.state[name])
 		this.setState({ [name]: regexHtmlTag(value) })
 		if(related) this.setState({ [related]: regexHtmlTag(value) })
 	}
 
+	handleCheckboxChange = (e) => {
+		const target = e.target, value = target.value, name = target.name
+		console.dir(target)
+		console.dir(value)
+		console.dir(name)
+		// this.setState({ [name]: regexHtmlTag(value) })
+		// if(related) this.setState({ [related]: regexHtmlTag(value) })
+	}
+
 	handleSelectOption = (e) => {
 		const target = e.target, value = target.value, name = target.name, related = target.getAttribute('related')
-		console.log(name +  ' / ' + value)
 		this.setState({ [name]: Number(value) })
 		if(related) this.setState({ [related]: 0 })
 	}
@@ -161,9 +164,7 @@ class ManagementUser extends React.Component {
 	handleSubmitAdd = (e) => {
 		console.log("handleSubmitAdd")
 		console.log('%c 🌰 this.state.dataName: ', 'font-size:20px;background-color: #93C0A4;color:#fff;', this.state.dataName);
-		console.log('%c 🌰 this.state.dataEmail: ', 'font-size:20px;background-color: #93C0A4;color:#fff;', this.state.dataEmail);
-		console.log('%c 🍹 dataPassword: ', 'font-size:20px;background-color: #42b983;color:#fff;', this.state.dataPassword);
-		console.log('%c 🍎 dataUserRole: ', 'font-size:20px;background-color: #465975;color:#fff;', this.state.dataUserRole);
+		console.log('%c 🌰 this.state.dataPhoneNumber: ', 'font-size:20px;background-color: #93C0A4;color:#fff;', this.state.dataPhoneNumber);
 		this.toggleModalsConfirmationInsert()
 		this.toggleModalsAddNewUserForm()
 	}
@@ -171,9 +172,7 @@ class ManagementUser extends React.Component {
 	handleSubmitUpdate = (e) => {
 		console.log("handleSubmitUpdate")
 		console.log('%c 🌰 this.state.dataName: ', 'font-size:20px;background-color: #93C0A4;color:#fff;', this.state.dataName);
-		console.log('%c 🌰 this.state.dataEmail: ', 'font-size:20px;background-color: #93C0A4;color:#fff;', this.state.dataEmail);
-		console.log('%c 🍹 dataPassword: ', 'font-size:20px;background-color: #42b983;color:#fff;', this.state.dataPassword);
-		console.log('%c 🍎 dataUserRole: ', 'font-size:20px;background-color: #465975;color:#fff;', this.state.dataUserRole);
+		console.log('%c 🌰 this.state.dataPhoneNumber: ', 'font-size:20px;background-color: #93C0A4;color:#fff;', this.state.dataPhoneNumber);
 		this.toggleModalsConfirmationUpdate()
 		this.toggleModalsUpdateUserForm()
 	}
@@ -185,8 +184,7 @@ class ManagementUser extends React.Component {
 
 	render() {
 		const { 
-			showHeader, headerHeight, navIsOpen, navMinWidth, navMaxWidth, listUser, 
-			usersPage, usersFetchLen, usersSortBy, detailUserAdministrator
+			showHeader, headerHeight, navIsOpen, navMinWidth, navMaxWidth, listUser, usersPage, usersFetchLen, usersSortBy
 		} = this.state
 
 		const showModalAddNewUser = ( 
@@ -199,13 +197,10 @@ class ManagementUser extends React.Component {
 				centeredModal={true}
 			>
 				<UserForm 
-					onHandleChange={this.handleChange}			
-					onHandleSelectOption={this.handleSelectOption}					
+					onHandleChange={this.handleChange}	
+					onHandleCheckboxChange={this.handleCheckboxChange}		
+					dataCheckboxUserMode={this.state.dataCheckboxUserMode}
 					onHandleSubmit={this.toggleModalsConfirmationInsert}	
-					dataName={this.state.dataName} 
-					dataEmail={this.state.dataEmail} 
-					dataPassword={this.state.dataPassword} 
-					dataUserRole={this.state.dataUserRole}
 					statusForm="add"																														
 				/>
 			</Modal> 
@@ -222,12 +217,9 @@ class ManagementUser extends React.Component {
 			>
 				<UserForm 					
 					onHandleChange={this.handleChange}
-					onHandleSelectOption={this.handleSelectOption}
 					onHandleSubmit={this.toggleModalsConfirmationUpdate}	
 					dataName={this.state.dataName} 
-					dataEmail={this.state.dataEmail} 
-					dataPassword={this.state.dataPassword} 
-					dataUserRole={this.state.dataUserRole}
+					dataPhoneNumber={this.state.dataPhoneNumber}
 					statusForm="update"																				
 				/>
 			</Modal> 
@@ -299,14 +291,13 @@ class ManagementUser extends React.Component {
 					<Row>
 						<Col xs="12">
 							<TableBox 
-								title="List User Administrator" 
+								title="List Applicant" 
 								isResponsive={true} 
-								tHead={["#", "Name", "Email", "Registered Date", "Role", "Actions"]}
+								tHead={["#", "Name", "No HP", "Registered Date", "Actions"]}
 								sortItems={[
-									{ id: "name", name: "Name"}, 
-									{ id: "email", name: "Email" },
-									{ id: "created_date", name: "Registered Date"}, 
-									{ id: "role", name: "Role"}
+									{ id: "name", name: "Name"},
+									{ id: "no_hp", name: "No.HP" }, 
+									{ id: "created_date", name: "Registered Date"}
 								]}
 								onSortClick={this.onSortInit}
 								sortValue={usersSortBy}
@@ -340,17 +331,12 @@ class ManagementUser extends React.Component {
 												{(key + 1) +  (usersPage * usersFetchLen)}
 											</th>
 											<td>{data.name}</td>
-											<td>{data.email}</td>
+											<td>{data.no_hp}</td>
 											<td>
 												{timestampToDateTime(data.created_date, false)}
 											</td>
-											<td>{
-													data.role == 1 ? <Badge color="primary">Super Admin</Badge> 
-													: <Badge color="info">Admin</Badge>
-												}
-											</td>
 											<td>
-												<Button size="sm" color="warning" className="mr-2 px-2 font-14" style={{marginTop: "5px", height: "31px"}} onClick={(e) => this.toggleModalsUpdateUserForm(data.id)}><i className="icon-edit"></i></Button>
+												<Button size="sm" color="warning" className="mr-2 px-2 font-14" style={{marginTop: "5px", height: "31px"}} onClick={(e) => this.toggleModalsUpdateUserForm(data)}><i className="icon-edit"></i></Button>
 												<Button size="sm" color="danger" className="mr-2 px-2 font-14" style={{marginTop: "5px", height: "31px"}} onClick={(e) => this.toggleDeleteUser(data)}><i className="icon-trash"></i></Button>
 											</td>
 										</tr>
@@ -372,9 +358,8 @@ class ManagementUser extends React.Component {
 
 const mapDispatchToProps = dispatch => {
 	return {
-		getListUser: bindActionCreators(getListUser, dispatch),
-		getDetailUserAdministrator: bindActionCreators(getDetailUserAdministrator, dispatch)
+		getListUser: bindActionCreators(getListUser, dispatch)
 	}
 }
 
-export default connect(state => state, mapDispatchToProps)(ManagementUser)
+export default connect(state => state, mapDispatchToProps)(ManagementApplicant)

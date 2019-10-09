@@ -17,6 +17,7 @@ export default (props) => {
                 label={props.formLabel} 
                 validate={props.formValidate} 
                 value={props.formValue}
+                onChange={props.onChange} 
             >
                 { props.data ? 
                         props.data.map((data, index) => (

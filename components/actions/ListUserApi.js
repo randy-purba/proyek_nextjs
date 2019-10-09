@@ -13,7 +13,6 @@ export const getListUser = (page, len, dateFrom, dateTo, sortBy, nameVal) => asy
     const keywords = nameVal ? `name_like=${nameVal}&` : ''
     const params = `${keywords}_start=${page*len}&_limit=${len}${from}${to}&_sort=${sortBy}&_order=desc`
     const url = `${API_DUMMY_URL}/listUser?${params}`
-    console.log(url)
     const responses = await fetch(url)
 
     // const access_token = JSON.parse(token).access_token 

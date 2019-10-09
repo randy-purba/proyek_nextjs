@@ -69,7 +69,12 @@ app.prepare().then(() => {
   })
 
   server.get('/add-user',(req, res) => {
-    const actualPage='/user/addUser'
+    const actualPage = '/user/addUser'
+    return app.render(req, res, actualPage)
+  })
+
+  server.get('/applicants', (req, res) => {
+    const actualPage = '/user/managementApplicant'
     return app.render(req, res, actualPage)
   })
 

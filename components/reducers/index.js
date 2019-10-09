@@ -23,6 +23,7 @@ import DetailQuestionReducer from './DetailQuestionReducers'
 import ListInterviewVideoReducer from './ListInterviewVideoReducers'
 import TotalListInterviewVideoReducer from './TotalListInterviewVideoReducers'
 import DetailInterviewVideoReducer from './DetailInterviewVideoReducers'
+import DetailUserAdministratorReducer from './DetailUserAdministratorReducers'
 
 export default combineReducers({
     listBanner: BannerReducer,
@@ -48,5 +49,6 @@ export default combineReducers({
     detailQuestion: DetailQuestionReducer,
     listInterviewVideo: ListInterviewVideoReducer,
     totalListInterviewVideo: TotalListInterviewVideoReducer,
-    detailInterviewVideo: DetailInterviewVideoReducer
+    detailInterviewVideo: DetailInterviewVideoReducer,
+    detailUserAdministrator: DetailUserAdministratorReducer
 })

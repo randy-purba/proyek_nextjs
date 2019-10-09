@@ -20,9 +20,10 @@ export default (props) => {
             >
 
                 {/* To create menu that have sub menu, NavSubMenu must have isOpenMenu that combination stateParent.isOpen + data of menuId */}
-                <NavSubMenu width={navMinWidth} menuId="UserRole"  title="User Role" iconName="icon-user" isOpenMenu={stateParent.isOpenUserRole} onHandleClick={onHandleClick}>
-                    <NavMenu link="/add-user" href="/user/addUser" width={navMinWidth} title="Add User" iconName="icon-plus-square" />
-                    <NavMenu link="/list-users" href="/user/managementUser" width={navMinWidth} title="List User" iconName="icon-list1" />
+                <NavSubMenu width={navMinWidth} menuId="ManagementUser"  title="User Admin Management" iconName="icon-user" isOpenMenu={stateParent.isOpenManagementUser} onHandleClick={onHandleClick}>
+                    {/* <NavMenu link="/add-user" href="/user/addUser" width={navMinWidth} title="Add User" iconName="icon-plus-square" /> */}
+                    <NavMenu link="/list-users" href="/user/managementUser" width={navMinWidth} title="Administrator" iconName="icon-list1" />
+                    <NavMenu link="/applicants" href="/user/managementApplicant" width={navMinWidth} title="Applicant" iconName="icon-list1" />
                 </NavSubMenu>
 
                 <NavSubMenu width={navMinWidth} menuId="Question" title="Question" iconName="icon-database" isOpenMenu={stateParent.isOpenQuestion} onHandleClick={onHandleClick}>
