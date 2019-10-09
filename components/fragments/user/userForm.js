@@ -2,12 +2,12 @@
 import { AvForm } from 'availity-reactstrap-validation'
 import { Label, Row, Col, Button } from 'reactstrap'
 import FormInputValidation from '../../form/validateInputForm'
-import FormInput from '../../form/inputForm'
+import FormCheckboxValidation from '../../form/validateCheckboxForm'
 
 export default (props) => {
 
     const { 
-        title, dataName, dataEmail, dataPhoneNumber, onHandleChange, onHandleSubmit, statusForm
+        title, dataName, dataPhoneNumber, dataCheckboxUserMode, onHandleChange, onHandleSubmit, statusForm
     } = props
     
     return (
@@ -18,55 +18,56 @@ export default (props) => {
                     <Col xs="12" sm="12" md="12">
                         <FormInputValidation 
                             withLabel={true}
-                            labelName="Nama - Validasi"
+                            labelName="Name - Validasi"
                             labelClassName="inputLabel position-absolute font-12 text-primary bg-white"
                             formClassName="py-4 px-2 bg-white mb-0"
                             formId="idFieldName" 
                             formType="text" 
                             formName="dataName" 
                             formValue={dataName}
-                            formPlaceholder="Masukkan nama"
+                            formPlaceholder="Input Name"
                             onChange={onHandleChange} 
                             formValidate={{
-                                required: { value: true, errorMessage: 'Nama tidak boleh kosong' }
+                                required: { value: true, errorMessage: "Name can't be empty" }
                             }}
                         />
                     </Col>
                     <Col xs="12" sm="12" md="12">
                         <FormInputValidation 
                             withLabel={true}
-                            labelName="Alamat Email - Validasi"
-                            labelClassName="inputLabel position-absolute font-12 text-primary bg-white"
-                            formClassName="py-4 px-2 bg-white mb-0"
-                            formId="idFieldEmail" 
-                            formType="email" 
-                            formName="dataEmail" 
-                            formPlaceholder="Masukan alamat email" 
-                            formErrorMessage="Alamat email salah" 
-                            onChange={onHandleChange} 
-                            formValue={dataEmail}
-                            formValidate={{
-                                required: { value: true, errorMessage: 'Alamat email tidak boleh kosong' },
-                                email: true
-                            }} 
-                        />
-                    </Col>
-                    <Col xs="12" sm="12" md="12">
-                        <FormInput 
-                            withLabel={true}
-                            labelName="Nomor Telpon - Tanpa Validasi"
+                            labelName="Phone Number - Validated"
                             labelClassName="inputLabel position-absolute font-12 text-primary bg-white"
                             formClassName="py-4 px-2 bg-white mb-0"
                             formId="idFieldPhoneNumber" 
                             formType="number" 
                             formName="dataPhoneNumber" 
-                            formPlaceholder="Masukan Nomor Telpon" 
+                            formPlaceholder="Input Phone Number" 
                             formValue={dataPhoneNumber}
                             onChange={onHandleChange}
+                            formValidate={{
+                                required: { value: true, errorMessage: "Phone number can't be empty" }
+                            }} 
+                        />
+                    </Col>
+                    <Col xs="12" sm="12" md="12" >
+                        <FormCheckboxValidation 
+                            withLabel={true}
+                            labelName="User Mode - Validated"
+                            labelClassName="inputLabel position-absolute font-12 text-primary bg-white"
+                            formClassName="py-4 px-2 bg-white mb-0"
+                            formName="dataCheckboxUserMode"
+                            formValue={dataCheckboxUserMode}
+                            data={[
+                                { 'label': "Interview", 'value': "interview" },
+                                { 'label': "Game", 'value': "game" }
+                            ]}
+                            formValidate={{
+                                required: { value: true, errorMessage: "Choice User Mode" }
+                            }} 
                         />
                     </Col>
                     <Col xs="12" sm="12" md="12">
-                        <Button size="lg" color={statusForm == "add" ? "primary" : "info"}  type="submit" className="float-right mt-3 mb-2 px-5 text-uppercase font-12">{statusForm == "add" ? "Simpan" : "Update"}</Button>
+                        <Button size="lg" color={statusForm == "add" ? "primary" : "info"}  type="submit" className="float-right mt-3 mb-2 px-5 text-uppercase font-12">{statusForm == "add" ? "Save" : "Update"}</Button>
                     </Col>
                 </Row>
             </AvForm>

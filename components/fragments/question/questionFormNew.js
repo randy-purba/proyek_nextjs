@@ -13,12 +13,9 @@ export default (props) => {
         valueAnswerChoiceA, valueAnswerChoiceB, valueAnswerChoiceC, valueAnswerChoiceD,
         valueCheckboxChoiceA, valueCheckboxChoiceB, valueCheckboxChoiceC, valueCheckboxChoiceD,
         valueAnswerSingleChoiceA, valueAnswerSingleChoiceB, valueCheckboxSingleChoiceA, valueCheckboxSingleChoiceB, valueAnswerEssay,
-        listAnswerOption, listZone, onHandleChange, onHandleSelectOption, onHandleSubmit, onHandleCheckbox
+        listAnswerOption, listZone, onHandleChange, onHandleSelectOption, onHandleSubmit, onHandleCheckbox,
+        showButtonPublish
     } = props
-
-    console.log(valueCheckboxChoiceA)
-    console.dir(valueCheckboxChoiceD)
-
 
     const listMarker = listZone.filter(data => data.id === valueZone)[0].provinsi
     
@@ -153,8 +150,11 @@ export default (props) => {
                         />
                         <Button size="lg" color="primary" type="submit" className="float-right mt-3 mb-2 px-5 mx-1 text-uppercase font-12">Save</Button>
                         <Button size="lg" color="secondary" onClick={(e) => onHandleSubmit("Cancel")} className="float-right mt-3 mb-2 px-5 mx-1 text-uppercase font-12">Cancel</Button>
-                        <Button size="lg" color="warning" onClick={(e) => onHandleSubmit("Publish")} className="float-right mt-3 mb-2 px-5 mx-1 text-uppercase font-12">Publish</Button>
-                    
+                        {
+                            showButtonPublish ?
+                                <Button size="lg" color="warning" onClick={(e) => onHandleSubmit("Publish")} className="float-right mt-3 mb-2 px-5 mx-1 text-uppercase font-12">Publish</Button>
+                            : (null)
+                        }
                     </AvForm>
                 </ContentBox>
             </Col>

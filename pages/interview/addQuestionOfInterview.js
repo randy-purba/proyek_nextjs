@@ -1,4 +1,5 @@
 import React from 'react'
+import Router from 'next/router'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { Container, Row, Col, Button } from 'reactstrap'
@@ -7,9 +8,9 @@ import { getListCities } from '../../components/actions'
 import FormQuestion from '../../components/fragments/question/questionFormNew'
 import Modal from '../../components/modals'
 
-class AddQuestion extends React.Component {
-	static async getInitialProps({ store }) {
-		let props = { showHeader: true, showFooter: true }
+class AddQuestionOfInterview extends React.Component {
+	static async getInitialProps({ store, req }) {
+		let props = { showHeader: true, showFooter: true, idInterview: req.params.id }
 		let stores = await store.getState()
 		try {
 			if(!stores.listCity) await store.dispatch(getListCities())
@@ -26,6 +27,7 @@ class AddQuestion extends React.Component {
 			subTitle: "Content Management System",
 			showHeader: props.showHeader,
 			headerHeight: props.headerHeight,
+			idInterview: props.idInterview,
 			navIsOpen: props.navIsOpen,
 			navMaxWidth: props.showHeader ? props.navMaxWidth : "0px",
 			navMinWidth: props.showHeader ? props.navMinWidth : "0px",
@@ -97,11 +99,16 @@ class AddQuestion extends React.Component {
 	handleCancelAddQuestion = (e) => {
 		console.log("handleCancelAddQuestion")
 		this.toggleModalsConfirmation("Cancel")
+		redirectToListInterview()
 	}
 
 	handlePublishAddQuestion = (e) => {
 		console.log("handlePublishAddQuestion")
 		this.toggleModalsConfirmation("Publish")
+	}
+
+	redirectToListInterview () {
+		Router.push("/list-interview/")
 	}
 
 	handleSubmit = (e) => {
@@ -197,7 +204,7 @@ class AddQuestion extends React.Component {
 						width: navIsOpen ? `calc(100% - ${navMaxWidth-navMinWidth}px)` : '100%'
 					}}>
 					<FormQuestion
-						title="Add New Question"
+						title="Add New Question of Interview"
 						valueQuestionTitle={valueQuestionTitle}
 						valueAnswerOption={valueAnswerOption}
 						valueZone={valueZone}
@@ -225,8 +232,8 @@ class AddQuestion extends React.Component {
 						onHandleChange={this.handleChange} 
 						onHandleCheckbox={this.handleCheckbox}
 						onHandleSelectOption={this.handleSelectOption}
-						onHandleSubmit={this.toggleModalsConfirmation}
-						showButtonPublish={true}
+                        onHandleSubmit={this.toggleModalsConfirmation}
+                        showButtonPublish={false}
 					/>
 				</Container>
 				{ showModalConfirmationSave }
@@ -242,4 +249,4 @@ const mapDispatchToProps = dispatch => {
 		getListCities: bindActionCreators(getListCities, dispatch)
 	}
 }
-export default connect(state => state, mapDispatchToProps)(AddQuestion)
+export default connect(state => state, mapDispatchToProps)(AddQuestionOfInterview)

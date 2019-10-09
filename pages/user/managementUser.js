@@ -2,12 +2,12 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { Container, Row, Col,Button } from 'reactstrap'
-import TableBox from '../components/tables'
-import Pagination from '../components/cards/PaginationCard'
-import { getListUser } from '../components/actions'
-import { timestampToDateTime, regexHtmlTag, numberWithDot } from '../components/functions'
-import Modal from '../components/modals'
-import UserForm from '../components/fragments/user/userForm'
+import TableBox from '../../components/tables'
+import Pagination from '../../components/cards/PaginationCard'
+import { getListUser } from '../../components/actions'
+import { timestampToDateTime, regexHtmlTag, numberWithDot } from '../../components/functions'
+import Modal from '../../components/modals'
+import UserForm from '../../components/fragments/user/userForm'
 
 
 class ManagementUser extends React.Component {

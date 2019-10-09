@@ -7,7 +7,6 @@ const token = cookie.get('token')
 // const API_URL = process.env.API_URL
 const API_DUMMY_URL = process.env.API_DUMMY_URL
 
-
 export const getListUser = (page, len, dateFrom, dateTo, sortBy, nameVal) => async (dispatch) => {
     const from = dateFrom ? `&created_date_gte=${dateFrom}` : ''
     const to = dateTo ? `&created_date_lte=${dateTo}` : ''
@@ -23,6 +22,7 @@ export const getListUser = (page, len, dateFrom, dateTo, sortBy, nameVal) => asy
     //     method: 'GET',
     //     headers: { Authorization: 'Bearer ' + access_token }
     // })
+
     const data = await responses.json()
     return dispatch({ type: actionTypes.LIST_USER, payload: data })
 }

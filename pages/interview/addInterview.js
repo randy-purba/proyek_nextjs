@@ -5,6 +5,7 @@ import { Container, Row, Col, Button } from 'reactstrap'
 import { regexHtmlTag, convertStringToBoolean } from '../../components/functions'
 import { getListCities } from '../../components/actions'
 import FormQuestion from '../../components/fragments/question/questionFormNew'
+import FormAddVideoInterview from '../../components/fragments/interview/interviewForm'
 import Modal from '../../components/modals'
 
 class AddQuestion extends React.Component {
@@ -29,25 +30,9 @@ class AddQuestion extends React.Component {
 			navIsOpen: props.navIsOpen,
 			navMaxWidth: props.showHeader ? props.navMaxWidth : "0px",
 			navMinWidth: props.showHeader ? props.navMinWidth : "0px",
-			valueQuestionTitle:"", 
-			valueAnswerOption:2,
-			valueZone:1,
-			valueMarker:0,
-			valueScore:0,
-			valueAnswerChoiceA:"",
-			valueAnswerChoiceB:"",
-			valueAnswerChoiceC:"",
-			valueAnswerChoiceD:"",
-			valueCheckboxChoiceA:false, 
-			valueCheckboxChoiceB:false, 
-			valueCheckboxChoiceC:false, 
-			valueCheckboxChoiceD:false,
-			valueAnswerEssay:"",
-			valueAnswerSingleChoiceA:"",
-			valueAnswerSingleChoiceB:"",
-			valueCheckboxSingleChoiceA:false,
-			valueCheckboxSingleChoiceB:false,
-			listCity: props.listCity,
+			valueTitleVideo: "",
+			valueFileVideo: "",
+			valueFileCoverVideo: "",
 			modalConfirmationSave: false
 		}
 		this.toggleModalsConfirmation = this.toggleModalsConfirmation.bind(this)
@@ -83,9 +68,21 @@ class AddQuestion extends React.Component {
 	}
 
 	handleChange = (e) => {
+		console.log("handleChange")
 		const target = e.target, value = target.value, name = target.name, related = target.getAttribute('related')
 		this.setState({ [name]: regexHtmlTag(value) })
 		if(related) this.setState({ [related]: regexHtmlTag(value) })
+	}
+
+	handleFileInputChange = (e) => {
+		console.log("handleFileInputChange")
+		const target = e.target, value = target.value, name = target.name, file = target.files[0]
+		this.setState({ [name]: URL.createObjectURL(file)})
+		console.dir(target)
+		console.dir(value)
+		console.dir(name)
+		console.dir(URL.createObjectURL(file))
+		console.log(typeof file)	
 	}
 
 	handleSelectOption = (e) => {
@@ -105,34 +102,12 @@ class AddQuestion extends React.Component {
 	}
 
 	handleSubmit = (e) => {
-		console.log('%c 🦀 valueQuestionTitle: ', 'font-size:20px;background-color: #7F2B82;color:#fff;', this.state.valueQuestionTitle);
-		console.log('%c 🍿 valueZone: ', 'font-size:20px;background-color: #3F7CFF;color:#fff;', this.state.valueZone);
-		console.log('%c 🥐 valueMarker: ', 'font-size:20px;background-color: #33A5FF;color:#fff;', this.state.valueMarker);
-		console.log('%c 🍾 valueScore: ', 'font-size:20px;background-color: #FCA650;color:#fff;', this.state.valueScore);
-		console.log('%c 🥛 valueAnswerOption: ', 'font-size:20px;background-color: #4b4b4b;color:#fff;', this.state.valueAnswerOption);
-		console.log('%c 🥨 valueAnswerChoiceA: ', 'font-size:20px;background-color: #FFDD4D;color:#fff;', this.state.valueAnswerChoiceA);
-		console.log('%c 🥖 valueAnswerChoiceB: ', 'font-size:20px;background-color: #42b983;color:#fff;', this.state.valueAnswerChoiceB);
-		console.log('%c 🍮 valueAnswerChoiceC: ', 'font-size:20px;background-color: #33A5FF;color:#fff;', this.state.valueAnswerChoiceC);
-		console.log('%c 🥟 valueAnswerChoiceD: ', 'font-size:20px;background-color: #6EC1C2;color:#fff;', this.state.valueAnswerChoiceD);
-		console.log('%c 🍋 valueCheckboxChoiceA: ', 'font-size:20px;background-color: #B03734;color:#fff;', this.state.valueCheckboxChoiceA);
-		console.log('%c 🥟 valueCheckboxChoiceB: ', 'font-size:20px;background-color: #33A5FF;color:#fff;', this.state.valueCheckboxChoiceB);
-		console.log('%c 🥪 valueCheckboxChoiceC: ', 'font-size:20px;background-color: #FCA650;color:#fff;', this.state.valueCheckboxChoiceC);
-		console.log('%c 🍠 valueCheckboxChoiceD: ', 'font-size:20px;background-color: #2EAFB0;color:#fff;', this.state.valueCheckboxChoiceD);
-		console.log('%c 🥔 valueAnswerEssay: ', 'font-size:20px;background-color: #B03734;color:#fff;', this.state.valueAnswerEssay);
-		console.log('%c 🍋 valueAnswerSingleChoiceA: ', 'font-size:20px;background-color: #2EAFB0;color:#fff;', this.state.valueAnswerSingleChoiceA);
-		console.log('%c 🍱 valueAnswerSingleChoiceB: ', 'font-size:20px;background-color: #FFDD4D;color:#fff;', this.state.valueAnswerSingleChoiceB);
-		console.log('%c 🍰 valueCheckboxSingleChoiceA: ', 'font-size:20px;background-color: #93C0A4;color:#fff;', this.state.valueCheckboxSingleChoiceA);
-		console.log('%c 🍬 valueCheckboxSingleChoiceB: ', 'font-size:20px;background-color: #ED9EC7;color:#fff;', this.state.valueCheckboxSingleChoiceB);
 		this.toggleModalsConfirmation("Save")
 	}
  
 	render() {
-		const { showHeader, headerHeight, navIsOpen, navMinWidth, navMaxWidth, listCity,
-				valueQuestionTitle, valueAnswerOption, valueZone, valueMarker, valueScore,
-				valueAnswerChoiceA, valueAnswerChoiceB, valueAnswerChoiceC, valueAnswerChoiceD,
-				valueCheckboxChoiceA, valueCheckboxChoiceB, valueCheckboxChoiceC, valueCheckboxChoiceD,
-				valueAnswerSingleChoiceA, valueAnswerSingleChoiceB, valueCheckboxSingleChoiceA, valueCheckboxSingleChoiceB, 
-				valueAnswerEssay
+		const { showHeader, headerHeight, navIsOpen, navMinWidth, navMaxWidth, 
+			valueTitleVideo, valueFileVideo, valueFileCoverVideo
 		} = this.state
 
 		const showModalConfirmationSave = (
@@ -196,37 +171,16 @@ class AddQuestion extends React.Component {
 						marginLeft: navIsOpen ? navMaxWidth-navMinWidth : 0,
 						width: navIsOpen ? `calc(100% - ${navMaxWidth-navMinWidth}px)` : '100%'
 					}}>
-					<FormQuestion
-						title="Add New Question"
-						valueQuestionTitle={valueQuestionTitle}
-						valueAnswerOption={valueAnswerOption}
-						valueZone={valueZone}
-						valueMarker={valueMarker}
-						valueScore={valueScore}
-						valueAnswerChoiceA={valueAnswerChoiceA} 
-						valueAnswerChoiceB={valueAnswerChoiceB} 
-						valueAnswerChoiceC={valueAnswerChoiceC} 
-						valueAnswerChoiceD={valueAnswerChoiceD}
-						valueCheckboxChoiceA={valueCheckboxChoiceA} 
-						valueCheckboxChoiceB={valueCheckboxChoiceB} 
-						valueCheckboxChoiceC={valueCheckboxChoiceC} 
-						valueCheckboxChoiceD={valueCheckboxChoiceD}
-						valueAnswerSingleChoiceA={valueAnswerSingleChoiceA}
-						valueAnswerSingleChoiceB={valueAnswerSingleChoiceB}
-						valueCheckboxSingleChoiceA={valueCheckboxSingleChoiceA}
-						valueCheckboxSingleChoiceB={valueCheckboxSingleChoiceB}
-						valueAnswerEssay={valueAnswerEssay}
-						listAnswerOption={[
-							{"id": 1, "name": "Single Choice", "value": "single_choice"},
-							{"id": 2, "name": "Multiple Choice", "value": "multiple_choice"},
-							{"id": 3, "name": "Essay", "value": "essay"},
-						]} 
-						listZone={listCity}
+					<FormAddVideoInterview 
+						title="Add Video Interview"
+						dataTitleVideo={valueTitleVideo}
+						dataFileVideo={valueFileVideo}
+						dataFileCoverVideo={valueFileCoverVideo}
 						onHandleChange={this.handleChange} 
+						onHandleFileInputChange={this.handleFileInputChange}
 						onHandleCheckbox={this.handleCheckbox}
 						onHandleSelectOption={this.handleSelectOption}
 						onHandleSubmit={this.toggleModalsConfirmation}
-						showButtonPublish={true}
 					/>
 				</Container>
 				{ showModalConfirmationSave }

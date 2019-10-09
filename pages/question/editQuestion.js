@@ -11,14 +11,11 @@ import { isThisISOWeek } from 'date-fns'
 class EditQuestion extends React.Component {
 
 	static async getInitialProps({ store, req }) {
-		console.dir(req.params.id)
 		let props = { showHeader: true, showFooter: true }
 		let stores = await store.getState()
 		try {
 			if(!stores.listCity) await store.dispatch(getListCities())
 			if(!stores.detailQuestion) await store.dispatch(getDetailQuestion(req.params.id))
-
-			console.log(this.setDataQuestion(detailQuestion))
 		} catch (e) {
 			props.error = 'Unable to fetch AsyncData on server'
 		}
@@ -26,7 +23,6 @@ class EditQuestion extends React.Component {
 	}
 
 	constructor(props) {
-		console.log("constructor(props)")
 		super(props)
 		this.state = {
 			title: props.companyName,
@@ -36,53 +32,29 @@ class EditQuestion extends React.Component {
 			navIsOpen: props.navIsOpen,
 			navMaxWidth: props.showHeader ? props.navMaxWidth : "0px",
 			navMinWidth: props.showHeader ? props.navMinWidth : "0px",
-			valueQuestionTitle:"", 
-			valueAnswerOption:2,
-			valueZone:1,
-			valueMarker:0,
-			valueScore:0,
-			valueAnswerChoiceA:"",
-			valueAnswerChoiceB:"",
-			valueAnswerChoiceC:"",
-			valueAnswerChoiceD:"",
-			valueCheckboxChoiceA:false, 
-			valueCheckboxChoiceB:false, 
-			valueCheckboxChoiceC:false, 
-			valueCheckboxChoiceD:false,
-			valueAnswerEssay:"",
-			valueAnswerSingleChoiceA:"",
-			valueAnswerSingleChoiceB:"",
-			valueCheckboxSingleChoiceA:false,
-			valueCheckboxSingleChoiceB:false,
+			valueQuestionTitle:props.detailQuestion.question_title, 
+			valueAnswerOption:props.detailQuestion.answer_type.id,
+			valueZone:props.detailQuestion.zone.id,
+			valueMarker:props.detailQuestion.marker.id,
+			valueScore:props.detailQuestion.score,
+			valueAnswerChoiceA: props.detailQuestion.answer_type.id == 2 ? props.detailQuestion.answer[0].answer : "",
+			valueAnswerChoiceB: props.detailQuestion.answer_type.id == 2 ? props.detailQuestion.answer[1].answer : "",
+			valueAnswerChoiceC: props.detailQuestion.answer_type.id == 2 ? props.detailQuestion.answer[2].answer : "",
+			valueAnswerChoiceD: props.detailQuestion.answer_type.id == 2 ? props.detailQuestion.answer[3].answer : "",
+			valueCheckboxChoiceA:  props.detailQuestion.answer_type.id == 2 ? props.detailQuestion.answer[0].is_answer : false, 
+			valueCheckboxChoiceB:  props.detailQuestion.answer_type.id == 2 ? props.detailQuestion.answer[1].is_answer : false, 
+			valueCheckboxChoiceC:  props.detailQuestion.answer_type.id == 2 ? props.detailQuestion.answer[2].is_answer : false, 
+			valueCheckboxChoiceD:  props.detailQuestion.answer_type.id == 2 ? props.detailQuestion.answer[3].is_answer : false, 
+			valueAnswerEssay: props.detailQuestion.answer_type.id == 3 ? props.detailQuestion.answer[0].answer : "",
+			valueAnswerSingleChoiceA: props.detailQuestion.answer_type.id == 1 ? props.detailQuestion.answer[0].answer : "",
+			valueAnswerSingleChoiceB: props.detailQuestion.answer_type.id == 1 ? props.detailQuestion.answer[1].answer : "",
+			valueCheckboxSingleChoiceA: props.detailQuestion.answer_type.id == 1 ? props.detailQuestion.answer[0].is_answer : false,
+			valueCheckboxSingleChoiceB: props.detailQuestion.answer_type.id == 1 ? props.detailQuestion.answer[1].is_answer : false,
 			listCity: props.listCity,
 			detailQuestion: props.detailQuestion,
 			modalConfirmationSave: false
 		}
 		this.toggleModalsConfirmation = this.toggleModalsConfirmation.bind(this)
-	}
-
-	setDataQuestion(data) {
-		console.log("setDataQuestion")
-		this.setState({
-			valueQuestionTitle: data.question_title,  
-			valueAnswerOption: data.answer_type.id,
-			valueZone:data.zone.id,
-			valueMarker:data.marker.id,
-			valueScore:data.score,
-			valueAnswerChoiceA: data.answer_type.id == 2 ? data.answer[0].answer: "",
-			valueAnswerChoiceB: data.answer_type.id == 2 ? data.answer[1].answer: "",
-			valueAnswerChoiceC: data.answer_type.id == 2 ? data.answer[2].answer: "",
-			valueAnswerChoiceD: data.answer_type.id == 2 ? data.answer[3].answer: "",
-			valueCheckboxChoiceA: data.answer_type.id == 2 ? data.answer[0].is_answer : false, 
-			valueCheckboxChoiceB: data.answer_type.id == 2 ? data.answer[1].is_answer : false, 
-			valueCheckboxChoiceC: data.answer_type.id == 2 ? data.answer[2].is_answer : false, 
-			valueCheckboxChoiceD: data.answer_type.id == 2 ? data.answer[3].is_answer : false,
-			valueAnswerEssay:"",
-			valueAnswerSingleChoiceA:"",
-			valueAnswerSingleChoiceB:"",
-			valueCheckboxSingleChoiceA:false,
-			valueCheckboxSingleChoiceB:false
-		})
 	}
 
 	handleClick(name) {
@@ -106,7 +78,6 @@ class EditQuestion extends React.Component {
 			detailQuestion: nextProps.detailQuestion,
 			navIsOpen: nextProps.navIsOpen
 		})
-		this.setDataQuestion(nextProps.detailQuestion)
 	}
 
 	handleCheckbox = (e) => {

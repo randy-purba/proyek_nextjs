@@ -400,5 +400,58 @@
         {"id": 1, "name": "Single Choice", "value": "single_choice"},
         {"id": 2, "name": "Multiple Choice", "value": "multiple_choice"},
         {"id": 3, "name": "Essay", "value": "essay"}
+    ], 
+    "listQuestionVideo":[
+        {
+            "id": 1,
+            "title":"Interview I",
+            "video_url":"http://www.html5videoplayer.net/videos/toystory.mp4",
+            "cover_video": "https://images.careerbuilder.vn/content/talent_community/20190226.png",
+            "total_question":3,
+            "questions" : [
+                { "id":1, "zona": 1, "question_type": 2, "question": "1+5 = "},
+                { "id":2, "zona": 2, "question_type": 1, "question": "1+7 = "},
+                { "id":3, "zona": 3, "question_type": 2, "question": "2+5 = "}
+            ],
+            "created_by": {
+                "id": 1,
+                "username": "admin"
+            },
+            "created_date": 1561237610789
+        },
+        {
+            "id": 2,
+            "title":"Interview II",
+            "video_url":"http://www.html5videoplayer.net/videos/toystory.mp4",
+            "cover_video": "https://www.elegantthemes.com/blog/wp-content/uploads/2015/09/How-to-Interview-Thumbnail-shutterstock_265460366.png",
+            "total_question":3,
+            "questions" : [
+                { "id":1, "zona": 1, "question_type": 2, "question": "1+5 = "},
+                { "id":2, "zona": 2, "question_type": 1, "question": "1+7 = "},
+                { "id":3, "zona": 3, "question_type": 2, "question": "2+5 = "}
+            ],
+            "created_by": {
+                "id": 1,
+                "username": "admin"
+            },
+            "created_date": 1561237610789
+        },
+        {
+            "id": 3,
+            "title":"Interview III",
+            "video_url":"http://www.html5videoplayer.net/videos/toystory.mp4",
+            "cover_video": "https://www.iibmindia.in/wp-content/uploads/2019/03/HR-Interview-questions-and-answers-1-1-600x477.png",
+            "total_question":3,
+            "questions" : [
+                { "id":1, "zona": 1, "question_type": 2, "question": "1+5 = "},
+                { "id":2, "zona": 2, "question_type": 1, "question": "1+7 = "},
+                { "id":3, "zona": 3, "question_type": 2, "question": "2+5 = "}
+            ],
+            "created_by": {
+                "id": 1,
+                "username": "admin"
+            },
+            "created_date": 1561237610789
+        }
     ]
 }

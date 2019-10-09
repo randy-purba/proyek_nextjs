@@ -63,8 +63,13 @@ app.prepare().then(() => {
     return app.render(req, res, actualPage)
   })
 
-  server.get('/management-users', (req, res) => {
-    const actualPage = '/managementUser'
+  server.get('/list-users', (req, res) => {
+    const actualPage = '/user/managementUser'
+    return app.render(req, res, actualPage)
+  })
+
+  server.get('/add-user',(req, res) => {
+    const actualPage='/user/addUser'
     return app.render(req, res, actualPage)
   })
 
@@ -85,6 +90,28 @@ app.prepare().then(() => {
 
   server.get('/edit-question/:id', (req, res) => {
     const actualPage = "/question/editQuestion"
+    const queryParams = { id: req.params.id }
+    return app.render(req, res, actualPage, queryParams)
+  })
+
+  server.get('/add-interview', (req, res) => {
+    const actualPage = '/interview/addInterview'
+    return app.render(req, res, actualPage)
+  })
+
+  server.get('/list-interview', (req, res) => {
+    const actualPage = '/interview/listInterview'
+    return app.render(req, res, actualPage)
+  })
+
+  server.get('/edit-interview/:id', (req, res) => {
+    const actualPage = '/interview/editInterview'
+    const queryParams = { id: req.params.id }
+    return app.render(req,res, actualPage, queryParams)
+  })
+
+  server.get('/add-question-interview/:id', (req, res) => {
+    const actualPage = "/interview/addQuestionOfInterview"
     const queryParams = { id: req.params.id }
     return app.render(req, res, actualPage, queryParams)
   })
