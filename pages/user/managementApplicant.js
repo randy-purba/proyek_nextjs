@@ -4,7 +4,7 @@ import { bindActionCreators } from 'redux'
 import { Container, Row, Col,Button } from 'reactstrap'
 import TableBox from '../../components/tables'
 import Pagination from '../../components/cards/PaginationCard'
-import { getListUser } from '../../components/actions'
+import { getListUser, getDetailUserAdministrator } from '../../components/actions'
 import { timestampToDateTime, regexHtmlTag, numberWithDot } from '../../components/functions'
 import Modal from '../../components/modals'
 import UserForm from '../../components/fragments/user/userApplicantForm'
@@ -47,9 +47,11 @@ class ManagementApplicant extends React.Component {
 			modalConfirmationInsert: false,
 			modalConfirmationUpdate: false,
 			modalConfirmationDelete: false,
-			dataName: "", 
-			dataPhoneNumber: "",
-			dataCheckboxUserMode: ["interview"],
+			modelUserApplicant: {
+				dataName: "", 
+				dataPhoneNumber: "",
+				dataCheckboxUserMode: []
+			},
 			dataIdUser: 0
 		}
 
@@ -67,13 +69,16 @@ class ManagementApplicant extends React.Component {
 	toggleModalsAddNewUserForm() {
 		this.setState(prevState => ({
 			modalAddNewUserForm: !prevState.modalAddNewUserForm,
-			dataName: "", 
-			dataPhoneNumber: "",
-			dataCheckboxUserMode: ["interview", "game"]
+			modelUserApplicant: {
+				dataName: "", 
+				dataPhoneNumber: "",
+				dataCheckboxUserMode: []
+			}
 		}))
 	}
 
-	toggleModalsUpdateUserForm(data) {
+	toggleModalsUpdateUserForm(id) {
+		console.dir(id)
 		this.setState(prevState => ({
 			modalUpdateUserForm: !prevState.modalUpdateUserForm,
 			dataName: data ? data.name : "", 
@@ -88,9 +93,16 @@ class ManagementApplicant extends React.Component {
 		this.toggleModalsConfirmationDelete()
 	}
 
-	toggleModalsConfirmationInsert() {
+	toggleModalsConfirmationInsert(event, values) {
+		if(typeof values !== 'undefined') {
+			let tempModelUserApplicant = this.state.modelUserApplicant
+			tempModelUserApplicant.dataCheckboxUserMode = values.dataCheckboxUserMode
+			this.setState(prevState => ({
+				modelUserApplicant: tempModelUserApplicant
+			}))
+		}
 		this.setState(prevState => ({
-			modalConfirmationInsert: !prevState.modalConfirmationInsert,
+			modalConfirmationInsert: !prevState.modalConfirmationInsert
 		}))
 	}
 
@@ -109,7 +121,8 @@ class ManagementApplicant extends React.Component {
 	UNSAFE_componentWillReceiveProps(nextProps) {
 		this.setState({
 			navIsOpen: nextProps.navIsOpen,
-			listUser: nextProps.listUser
+			listUser: nextProps.listUser,
+			detailUserAdministrator: nextProps.detailUserAdministrator
 		})
 	}
 
@@ -140,19 +153,15 @@ class ManagementApplicant extends React.Component {
 	}
 
 	handleChange = (e) => {
-		const target = e.target, value = target.value, name = target.name, related = target.getAttribute('related')
-		console.dir(this.state[name])
-		this.setState({ [name]: regexHtmlTag(value) })
-		if(related) this.setState({ [related]: regexHtmlTag(value) })
-	}
-
-	handleCheckboxChange = (e) => {
-		const target = e.target, value = target.value, name = target.name
-		console.dir(target)
-		console.dir(value)
-		console.dir(name)
-		// this.setState({ [name]: regexHtmlTag(value) })
-		// if(related) this.setState({ [related]: regexHtmlTag(value) })
+		const target = e.target
+		const value = target.value 
+		const name = target.name
+		const type = target.type
+		if(type !== 'checkbox'){
+			let prevModelUserApplicant = this.state.modelUserApplicant
+			prevModelUserApplicant[name] = regexHtmlTag(value)
+			this.setState({modelUserApplicant: prevModelUserApplicant})
+		}
 	}
 
 	handleSelectOption = (e) => {
@@ -162,11 +171,10 @@ class ManagementApplicant extends React.Component {
 	}
 
 	handleSubmitAdd = (e) => {
-		console.log("handleSubmitAdd")
-		console.log('%c 🌰 this.state.dataName: ', 'font-size:20px;background-color: #93C0A4;color:#fff;', this.state.dataName);
-		console.log('%c 🌰 this.state.dataPhoneNumber: ', 'font-size:20px;background-color: #93C0A4;color:#fff;', this.state.dataPhoneNumber);
-		this.toggleModalsConfirmationInsert()
-		this.toggleModalsAddNewUserForm()
+		this.setState(prevState => ({
+			modalConfirmationInsert: !prevState.modalConfirmationInsert,
+			modalAddNewUserForm: !prevState.modalAddNewUserForm
+		}))
 	}
 
 	handleSubmitUpdate = (e) => {
@@ -198,8 +206,7 @@ class ManagementApplicant extends React.Component {
 			>
 				<UserForm 
 					onHandleChange={this.handleChange}	
-					onHandleCheckboxChange={this.handleCheckboxChange}		
-					dataCheckboxUserMode={this.state.dataCheckboxUserMode}
+					modelUserApplicant={this.state.modelUserApplicant}
 					onHandleSubmit={this.toggleModalsConfirmationInsert}	
 					statusForm="add"																														
 				/>
@@ -336,7 +343,7 @@ class ManagementApplicant extends React.Component {
 												{timestampToDateTime(data.created_date, false)}
 											</td>
 											<td>
-												<Button size="sm" color="warning" className="mr-2 px-2 font-14" style={{marginTop: "5px", height: "31px"}} onClick={(e) => this.toggleModalsUpdateUserForm(data)}><i className="icon-edit"></i></Button>
+												<Button size="sm" color="warning" className="mr-2 px-2 font-14" style={{marginTop: "5px", height: "31px"}} onClick={(e) => this.toggleModalsUpdateUserForm(data.id)}><i className="icon-edit"></i></Button>
 												<Button size="sm" color="danger" className="mr-2 px-2 font-14" style={{marginTop: "5px", height: "31px"}} onClick={(e) => this.toggleDeleteUser(data)}><i className="icon-trash"></i></Button>
 											</td>
 										</tr>
@@ -358,7 +365,8 @@ class ManagementApplicant extends React.Component {
 
 const mapDispatchToProps = dispatch => {
 	return {
-		getListUser: bindActionCreators(getListUser, dispatch)
+		getListUser: bindActionCreators(getListUser, dispatch),
+		getDetailUserAdministrator: bindActionCreators(getDetailUserAdministrator, dispatch)
 	}
 }
 

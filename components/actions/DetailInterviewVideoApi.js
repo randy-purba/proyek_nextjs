@@ -16,13 +16,15 @@ export const getDetailInterviewVideo = (id) => async (dispatch) => {
     // return dispatch({ type: actionTypes.DETAIL_INTERVIEW_VIDEO, payload: data[0] })
 
     const access_token = JSON.parse(token).access_token
+    console.log(access_token)
     const params = `page=1&size=10`
-    const url = `${API_URL}/v1/video/get/video/page?${params}`
+    const url = `${API_URL}/v1/video/get/video/1`
     const responses = await fetch(url, {
         method: "GET",
-        // headers: { 
-        //     Authorization: 'Bearer ' + access_token
-        // },
+        headers: { 
+            'Content-Type': 'application/x-www-form-urlencoded',
+            'Authorization': 'Bearer ' + access_token
+        },
     })
     const data = await responses.json()
     return data.object

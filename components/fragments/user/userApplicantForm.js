@@ -7,15 +7,13 @@ import FormCheckboxValidation from '../../form/validateCheckboxForm'
 export default (props) => {
 
     const { 
-        title, dataName, dataPhoneNumber, dataCheckboxUserMode, onHandleChange, onHandleCheckboxChange, onHandleSubmit, statusForm
+        title, modelUserApplicant, onHandleChange, onHandleSubmit, statusForm
     } = props
 
-    console.dir(dataCheckboxUserMode)
-    
     return (
         <div className="bg-white rounded shadow-sm p-3 mb-3 overflow-visible">
             {title ? <h5 className="font-16 text-primary mb-3">{title}</h5> : ""}
-            <AvForm onValidSubmit={onHandleSubmit} method="post" autoComplete="off" >		
+            <AvForm onValidSubmit={onHandleSubmit} onChange={onHandleChange} method="post" autoComplete="off" model={modelUserApplicant}>		
                 <Row>		    
                     <Col xs="12" sm="12" md="12">
                         <FormInputValidation 
@@ -26,9 +24,8 @@ export default (props) => {
                             formId="idFieldName" 
                             formType="text" 
                             formName="dataName" 
-                            formValue={dataName}
+                            formValue={ modelUserApplicant ? modelUserApplicant.dataName : "" }
                             formPlaceholder="Input Name"
-                            onChange={onHandleChange} 
                             formValidate={{
                                 required: { value: true, errorMessage: "Name can't be empty" }
                             }}
@@ -44,8 +41,7 @@ export default (props) => {
                             formType="number" 
                             formName="dataPhoneNumber" 
                             formPlaceholder="Input Phone Number" 
-                            formValue={dataPhoneNumber}
-                            onChange={onHandleChange}
+                            formValue={ modelUserApplicant ? modelUserApplicant.dataPhoneNumber : "" }
                             formValidate={{
                                 required: { value: true, errorMessage: "Phone number can't be empty" }
                             }} 
@@ -58,8 +54,7 @@ export default (props) => {
                             labelClassName="inputLabel position-absolute font-12 text-primary bg-white"
                             formClassName="py-4 px-2 bg-white mb-0"
                             formName="dataCheckboxUserMode"
-                            formValue={dataCheckboxUserMode}
-                            onChange={onHandleCheckboxChange}
+                            formValue={ modelUserApplicant ? modelUserApplicant.dataCheckboxUserMode : [] }
                             data={[
                                 { 'label': "Interview", 'value': "interview" },
                                 { 'label': "Game", 'value': "game" }
