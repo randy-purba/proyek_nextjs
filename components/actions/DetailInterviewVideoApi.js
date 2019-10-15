@@ -11,22 +11,21 @@ const API_DUMMY_URL = process.env.API_DUMMY_URL
 
 export const getDetailInterviewVideo = (id) => async (dispatch) => {
     // const params = `id=${id}`
-    // const responses = await fetch(url)
-    // const data = await responses.json()
-    // return dispatch({ type: actionTypes.DETAIL_INTERVIEW_VIDEO, payload: data[0] })
-
-    const access_token = JSON.parse(token).access_token
-    console.log(access_token)
-    const params = `page=1&size=10`
-    const url = `${API_URL}/v1/video/get/video/1`
-    const responses = await fetch(url, {
-        method: "GET",
-        headers: { 
-            'Content-Type': 'application/x-www-form-urlencoded',
-            'Authorization': 'Bearer ' + access_token
-        },
-    })
+    const url = `${API_DUMMY_URL}/listQuestionVideo?id=${id}`
+    const responses = await fetch(url)
     const data = await responses.json()
-    return data.object
+    return dispatch({ type: actionTypes.DETAIL_INTERVIEW_VIDEO, payload: data[0] })
+
+    // const params = `page=1&size=10`
+    // const url = `${API_URL}/tesaku/1`
+    // const responses = await fetch(url, {
+    //     method: "GET",
+    //     headers: { 
+    //         'Content-Type': 'application/json',
+    //         'Authorization': 'Bearer ' + access_token
+    //     },
+    // })
+    // const data = await responses.json()
+    // return data.object
     
 }

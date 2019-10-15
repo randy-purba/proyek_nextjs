@@ -1,4 +1,5 @@
 import React from 'react'
+import Router from 'next/router'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { Container, Row, Col, Button } from 'reactstrap'
@@ -31,6 +32,7 @@ class EditQuestion extends React.Component {
 			navIsOpen: props.navIsOpen,
 			navMaxWidth: props.showHeader ? props.navMaxWidth : "0px",
 			navMinWidth: props.showHeader ? props.navMinWidth : "0px",
+			detailInterviewVideo: props.detailInterviewVideo,
 			valueTitleVideo: props.detailInterviewVideo.title,
 			valueFileVideo: props.detailInterviewVideo.video_url,
 			valueFileCoverVideo: props.detailInterviewVideo.cover_video,
@@ -92,33 +94,35 @@ class EditQuestion extends React.Component {
 		if(related) this.setState({ [related]: 0 })
 	}
 
-	handleCancelAddQuestion = (e) => {
-		console.log("handleCancelAddQuestion")
+	handleCancelEdit = (e) => {
+		console.log("handleCancelEdit")
 		this.toggleModalsConfirmation("Cancel")
-	}
-
-	handlePublishAddQuestion = (e) => {
-		console.log("handlePublishAddQuestion")
-		this.toggleModalsConfirmation("Publish")
+		this.redirectToListVideoInterview()
 	}
 
 	handleSubmit = (e) => {
+		console.log('%c 🍸 valueTitleVideo: ', 'font-size:20px;background-color: #33A5FF;color:#fff;', this.state.valueTitleVideo);
+		console.log('%c 🥦 valueFileVideo: ', 'font-size:20px;background-color: #B03734;color:#fff;', this.state.valueFileVideo);
+		console.log('%c 🍸 valueFileCoverVideo: ', 'font-size:20px;background-color: #4b4b4b;color:#fff;', this.state.valueFileCoverVideo);
+
 		this.toggleModalsConfirmation("Save")
 	}
  
+	redirectToListVideoInterview(){
+		Router.push('/list-interview')
+	}
+
 	render() {
 		const { showHeader, headerHeight, navIsOpen, navMinWidth, navMaxWidth, 
-			valueTitleVideo, valueFileVideo, valueFileCoverVideo
+			valueTitleVideo, valueFileVideo, valueFileCoverVideo, detailInterviewVideo
 		} = this.state
 
-        console.dir(this.state.detailInterviewVideo)
-
-        console.log(this.state.idInterview)
+		console.dir(detailInterviewVideo)
 
 		const showModalConfirmationSave = (
 			<Modal 
 				modalIsOpen={this.state.modalConfirmationSave}
-				toggleModal={this.toggleModalsConfirmation}
+				toggleModal={(e) => this.toggleModalsConfirmation("Save")}
 				classNameModal={this.props.className}
 				titleModalHeader="Save Question Confirmation"
 				sizeModal="md"
@@ -130,31 +134,16 @@ class EditQuestion extends React.Component {
 			</Modal> 
 		)
 
-		const showModalConfirmationPublish = (
-			<Modal 
-				modalIsOpen={this.state.modalConfirmationPublish}
-				toggleModal={this.toggleModalsConfirmation}
-				classNameModal={this.props.className}
-				titleModalHeader="Publish Question Confirmation"
-				sizeModal="md"
-				centeredModal={true}
-				showModalFooter={true}
-				onClickButtonSubmit={this.handlePublishAddQuestion}
-			>
-				are you sure to publish this question ?
-			</Modal> 
-		)
-
 		const showModalConfirmationCancel = (
 			<Modal 
 				modalIsOpen={this.state.modalConfirmationCancel}
-				toggleModal={this.toggleModalsConfirmation}
+				toggleModal={(e) => this.toggleModalsConfirmation("Cancel")}
 				classNameModal={this.props.className}
 				titleModalHeader="Cancel Question Confirmation"
 				sizeModal="md"
 				centeredModal={true}
 				showModalFooter={true}
-				onClickButtonSubmit={this.handleCancelAddQuestion}
+				onClickButtonSubmit={this.handleCancelEdit}
 			>
 				are you sure to cancel this question ?
 			</Modal> 
@@ -189,7 +178,6 @@ class EditQuestion extends React.Component {
 					/>
 				</Container>
 				{ showModalConfirmationSave }
-				{ showModalConfirmationPublish }
 				{ showModalConfirmationCancel }
 			</div>
 		)

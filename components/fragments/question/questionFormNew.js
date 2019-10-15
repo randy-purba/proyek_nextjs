@@ -12,9 +12,8 @@ export default (props) => {
         title, valueQuestionTitle, valueAnswerOption, valueZone, valueMarker, valueScore, 
         valueAnswerChoiceA, valueAnswerChoiceB, valueAnswerChoiceC, valueAnswerChoiceD,
         valueCheckboxChoiceA, valueCheckboxChoiceB, valueCheckboxChoiceC, valueCheckboxChoiceD,
-        valueAnswerSingleChoiceA, valueAnswerSingleChoiceB, valueCheckboxSingleChoiceA, valueCheckboxSingleChoiceB, valueAnswerEssay,
         listAnswerOption, listZone, onHandleChange, onHandleSelectOption, onHandleSubmit, onHandleCheckbox,
-        showButtonPublish
+        showButtonPublish, statusForm
     } = props
 
     const listMarker = listZone.filter(data => data.id === valueZone)[0].provinsi
@@ -28,7 +27,7 @@ export default (props) => {
                     <AvForm onValidSubmit={(e) => onHandleSubmit("Save")} method="post" autoComplete="off" >
                         <FormInputValidation 
                             withLabel={true}
-                            labelName="Question Title - Validated"
+                            labelName="Question - Validated"
                             labelClassName="inputLabel position-absolute font-12 text-primary bg-white"
                             formClassName="py-4 px-2 bg-white mb-0"
                             formId="idQuestionTitle" 
@@ -53,6 +52,7 @@ export default (props) => {
                             formOptionData={listAnswerOption}
                             onChange={onHandleSelectOption}
                             formErrorMessage="Please select answer option" 
+                            disableThisField={statusForm == 'update'}
                         />
                         {
                             valueAnswerOption == 2 ?
@@ -73,39 +73,6 @@ export default (props) => {
                                     onHandleCheckbox={onHandleCheckbox}
                                 />) : (null)
                         }
-                        {
-                            valueAnswerOption == 1 ?
-                                (<FormSingleChoice 
-                                    withLabel={true}
-                                    labelName="Single Choice - Validated"
-                                    labelClassName="inputLabel position-absolute font-12 text-primary bg-white"
-                                    formClassName="py-2 px-2 bg-white mb-0"
-                                    valueAnswerSingleChoiceA={valueAnswerSingleChoiceA}
-                                    valueAnswerSingleChoiceB={valueAnswerSingleChoiceB}
-                                    valueCheckboxSingleChoiceA={valueCheckboxSingleChoiceA}
-                                    valueCheckboxSingleChoiceB={valueCheckboxSingleChoiceB}
-                                    onHandleChange={onHandleChange}
-                                    onHandleCheckbox={onHandleCheckbox}
-                                />) : (null)
-                        } {valueAnswerOption == 3 ? 
-                            (
-                                <FormInputValidation 
-                                    withLabel={true}
-                                    labelName="Answer Essay - Validated"
-                                    labelClassName="inputLabel position-absolute font-12 text-primary bg-white"
-                                    formClassName="py-4 px-2 bg-white mb-0"
-                                    formId="idValueAnswerEssay" 
-                                    formType="textarea" 
-                                    formName="valueAnswerEssay"
-                                    formPlaceholder="Input Answer Essay" 
-                                    formValue={valueAnswerEssay}
-                                    onChange={onHandleChange} 
-                                    formValidate={{
-                                        required: { value: true, errorMessage: "Answer essay can't be empty"}
-                                    }} 
-                                />
-                            )
-                        : (null)}
                         <FormSelectValidation 
                             withLabel={true}
                             labelName="Zone - Validated"
@@ -119,6 +86,7 @@ export default (props) => {
                             formOptionData={listZone}
                             onChange={onHandleSelectOption}
                             formErrorMessage="Please select zone" 
+                            
                         />
                         <FormSelectValidation 
                             withLabel={true}
@@ -145,7 +113,7 @@ export default (props) => {
                             onChange={onHandleChange} 
                             formValue={valueScore}
                             formValidate={{
-                                required: { value: true, errorMessage: 'Alamat email tidak boleh kosong' }
+                                required: { value: true, errorMessage: "Score can not empty" }
                             }} 
                         />
                         <Button size="lg" color="primary" type="submit" className="float-right mt-3 mb-2 px-5 mx-1 text-uppercase font-12">Save</Button>

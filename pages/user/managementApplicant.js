@@ -42,16 +42,12 @@ class ManagementApplicant extends React.Component {
 			usersSortBy: "created_date",
 			usersSearchKey: "",
 			listUser: props.listUser,
+			detailUserAdministrator: props.detailUserAdministrator,
 			modalAddNewUserForm: false,
 			modalUpdateUserForm: false,
 			modalConfirmationInsert: false,
 			modalConfirmationUpdate: false,
-			modalConfirmationDelete: false,
-			modelUserApplicant: {
-				dataName: "", 
-				dataPhoneNumber: "",
-				dataCheckboxUserMode: []
-			},
+			modalConfirmationDelete: false,	
 			dataIdUser: 0
 		}
 
@@ -78,16 +74,14 @@ class ManagementApplicant extends React.Component {
 	}
 
 	toggleModalsUpdateUserForm(id) {
-		console.dir(id)
+		if(!this.state.modalUpdateUserForm) this.props.getDetailUserAdministrator(id)
 		this.setState(prevState => ({
-			modalUpdateUserForm: !prevState.modalUpdateUserForm,
-			dataName: data ? data.name : "", 
-			dataPhoneNumber: data ? data.no_hp : ""
+			modalUpdateUserForm: !prevState.modalUpdateUserForm
 		}))
 	}
 
 	toggleDeleteUser(data) {
-		this.setState({
+		this.setState({	
 			dataIdUser: data ? data.id : 0
 		})
 		this.toggleModalsConfirmationDelete()
@@ -106,7 +100,14 @@ class ManagementApplicant extends React.Component {
 		}))
 	}
 
-	toggleModalsConfirmationUpdate() {
+	toggleModalsConfirmationUpdate(event, values) {
+		if(typeof values !== 'undefined') {
+			let tempModelUserApplicant = this.state.modelUserApplicant
+			tempModelUserApplicant.dataCheckboxUserMode = values.dataCheckboxUserMode
+			this.setState({
+				modelUserApplicant: tempModelUserApplicant
+			})
+		}
 		this.setState(prevState => ({
 			modalConfirmationUpdate: !prevState.modalConfirmationUpdate,
 		}))
@@ -122,7 +123,12 @@ class ManagementApplicant extends React.Component {
 		this.setState({
 			navIsOpen: nextProps.navIsOpen,
 			listUser: nextProps.listUser,
-			detailUserAdministrator: nextProps.detailUserAdministrator
+			detailUserAdministrator: nextProps.detailUserAdministrator,
+			modelUserApplicant: {
+				dataName: nextProps.detailUserAdministrator ? nextProps.detailUserAdministrator.name : "", 
+				dataPhoneNumber: nextProps.detailUserAdministrator ? nextProps.detailUserAdministrator.no_hp : "",
+				dataCheckboxUserMode: nextProps.detailUserAdministrator ? nextProps.detailUserAdministrator.user_mode : []
+			}
 		})
 	}
 
@@ -178,11 +184,10 @@ class ManagementApplicant extends React.Component {
 	}
 
 	handleSubmitUpdate = (e) => {
-		console.log("handleSubmitUpdate")
-		console.log('%c 🌰 this.state.dataName: ', 'font-size:20px;background-color: #93C0A4;color:#fff;', this.state.dataName);
-		console.log('%c 🌰 this.state.dataPhoneNumber: ', 'font-size:20px;background-color: #93C0A4;color:#fff;', this.state.dataPhoneNumber);
-		this.toggleModalsConfirmationUpdate()
-		this.toggleModalsUpdateUserForm()
+		this.setState(prevState => ({
+			modalConfirmationUpdate: !prevState.modalConfirmationUpdate,
+			modalUpdateUserForm: !prevState.modalUpdateUserForm
+		}))
 	}
 
 	handleSubmitDelete = (e) => {
@@ -206,8 +211,8 @@ class ManagementApplicant extends React.Component {
 			>
 				<UserForm 
 					onHandleChange={this.handleChange}	
-					modelUserApplicant={this.state.modelUserApplicant}
 					onHandleSubmit={this.toggleModalsConfirmationInsert}	
+					modelUserApplicant={this.state.modelUserApplicant}
 					statusForm="add"																														
 				/>
 			</Modal> 
@@ -225,8 +230,7 @@ class ManagementApplicant extends React.Component {
 				<UserForm 					
 					onHandleChange={this.handleChange}
 					onHandleSubmit={this.toggleModalsConfirmationUpdate}	
-					dataName={this.state.dataName} 
-					dataPhoneNumber={this.state.dataPhoneNumber}
+					modelUserApplicant={this.state.modelUserApplicant}
 					statusForm="update"																				
 				/>
 			</Modal> 
@@ -354,7 +358,7 @@ class ManagementApplicant extends React.Component {
 					</Row>
 				</Container>
 				 { showModalAddNewUser }
-				 { showModalUpdateUser }
+				 { showModalUpdateUser}
 				 { showModalsConfirmationInsert }
 				 { showModalsConfirmationUpdate }
 				 { showModalsConfirmationDelete }

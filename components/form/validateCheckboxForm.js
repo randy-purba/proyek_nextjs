@@ -2,6 +2,9 @@ import { AvCheckboxGroup, AvCheckbox } from 'availity-reactstrap-validation'
 import { FormGroup, Label } from 'reactstrap'
 
 export default (props) => {
+
+    console.dir(props.formValue)
+    
     return (
         <FormGroup 
             className={`mb-3 position-relative ${props.containerClassName ? props.containerClassName : ''}`}

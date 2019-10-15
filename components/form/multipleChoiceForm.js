@@ -10,9 +10,6 @@ export default (props) => {
         onHandleChange, onHandleCheckbox
     } = props
 
-    console.log(valueCheckboxChoiceD + ' => ' + typeof valueCheckboxChoiceD)
-    const checkboxChoiceD = valueCheckboxChoiceD
-
     return (
         <FormGroup 
             className={`mb-3 position-relative ${containerClassName ? containerClassName : ''}`}
@@ -86,7 +83,7 @@ export default (props) => {
                         formIdCheckbox="idCheckboxChoiceD"
                         formNameCheckbox="valueCheckboxChoiceD"
                         formValue={valueAnswerChoiceD}
-                        formValueCheckbox={checkboxChoiceD}
+                        formValueCheckbox={valueCheckboxChoiceD}
                         labelClassName="py-2 px-lg-4 font-16 text-primary bg-white"
                         formValidate={{
                             required: { value: true, errorMessage: "Answer Choice D can't empty" }

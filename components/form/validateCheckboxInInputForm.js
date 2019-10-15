@@ -43,7 +43,7 @@ export default (props) => {
                                 value={props.formValueCheckbox}
                                 bsSize={props.formSizeCheckbox}
                                 className="py-2"
-                                onChange={props.onChangeCheckbox} 
+                                onChange={props.onChangeCheckbox}
                             />
                         </AvGroup>
                     </Col >

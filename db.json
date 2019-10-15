@@ -248,7 +248,10 @@
             "email": "apul@mail.com",
             "created_date": 1573700520,
             "updated_date": 1565567610234,
-            "role": 1
+            "role": 1,
+            "user_mode": [
+                "game"
+            ]
         }, {
             "id": 2,
             "name": "ujang",
@@ -257,7 +260,10 @@
             "email": "ujang@mail.com",
             "created_date": 1573959720,
             "updated_date": 1565567610234,
-            "role": 2
+            "role": 2,
+            "user_mode": [
+                "interview"
+            ]
         },{
             "id": 3,
             "name": "jankrik boss",
@@ -266,7 +272,11 @@
             "email": "jangkrik.boss@mail.com",
             "created_date": 1565999610567,
             "updated_date": 1565567610234,
-            "role": 1
+            "role": 1,
+            "user_mode": [
+                "game",
+                "interview"
+            ]
         }, {
             "id": 4,
             "name": "boss kadal",
@@ -275,14 +285,15 @@
             "email": "kadal@mail.com",
             "created_date": 1568887610789,
             "updated_date": 1565567610234,
-            "role": 2
+            "role": 2,
+            "user_mode": []
         }
     ],
     "listQuestion":[
         {  
             "id": 1, 
             "question_title":"10 x 2 = ", 
-            "answer_type": {"id": 1, "name": "Single Choice", "value": "single_choice"}, 
+            "answer_type": {"id": 2, "name": "Multiple Choice", "value": "multiple_choice"},
             "zone":{ 
                 "id": 1, 
                 "value": "island"
@@ -298,19 +309,21 @@
             "published": true,
             "answer": [
                 { "id": 1, "answer": "20", "is_answer": true },
-                { "id": 2, "answer": "15", "is_answer": false }
+                { "id": 2, "answer": "15", "is_answer": false },
+                { "id": 3, "answer": "25", "is_answer": false },
+                { "id": 4, "answer": "35", "is_answer": false }
             ]
         }, {  
             "id": 2, 
             "question_title":"10 : 2 = ", 
             "answer_type": {"id": 2, "name": "Multiple Choice", "value": "multiple_choice"},
             "zone":{ 
-                "id": 2, 
+                "id": 1, 
                 "value": "jungle"
             }, 
             "score": 75, 
             "marker": {
-                "id": 3, 
+                "id": 2, 
                 "value": "Goat Island"
             },
             "updated_date": 1562267610234,
@@ -328,12 +341,12 @@
             "question_title":"15 : 3 = ", 
             "answer_type": {"id": 3, "name": "Essay", "value": "essay"},
             "zone":{ 
-                "id": 3, 
+                "id": 2, 
                 "value": "sea"
             }, 
             "score": 175, 
             "marker": {
-                "id": 3, 
+                "id": 1, 
                 "value": "Loguetown"
             },
             "updated_date": 1562267610234,
@@ -405,7 +418,7 @@
         {
             "id": 1,
             "title":"Interview I",
-            "video_url":"http://www.html5videoplayer.net/videos/toystory.mp4",
+            "video_url":"http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4",
             "cover_video": "https://images.careerbuilder.vn/content/talent_community/20190226.png",
             "total_question":3,
             "questions" : [
@@ -417,12 +430,13 @@
                 "id": 1,
                 "username": "admin"
             },
-            "created_date": 1561237610789
+            "created_date": 1561237610789, 
+            "status": 4
         },
         {
             "id": 2,
             "title":"Interview II",
-            "video_url":"http://www.html5videoplayer.net/videos/toystory.mp4",
+            "video_url":"http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4",
             "cover_video": "https://www.elegantthemes.com/blog/wp-content/uploads/2015/09/How-to-Interview-Thumbnail-shutterstock_265460366.png",
             "total_question":3,
             "questions" : [
@@ -434,12 +448,13 @@
                 "id": 1,
                 "username": "admin"
             },
-            "created_date": 1561237610789
+            "created_date": 1561237610789,
+            "status": 5
         },
         {
             "id": 3,
             "title":"Interview III",
-            "video_url":"http://www.html5videoplayer.net/videos/toystory.mp4",
+            "video_url":"http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4",
             "cover_video": "https://www.iibmindia.in/wp-content/uploads/2019/03/HR-Interview-questions-and-answers-1-1-600x477.png",
             "total_question":3,
             "questions" : [
@@ -451,7 +466,8 @@
                 "id": 1,
                 "username": "admin"
             },
-            "created_date": 1561237610789
+            "created_date": 1561237610789,
+            "status": 4
         }
     ]
 }

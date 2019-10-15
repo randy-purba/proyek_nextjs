@@ -5,7 +5,7 @@ import { bindActionCreators } from 'redux'
 import { Container, Row, Col, Button } from 'reactstrap'
 import TableBox from '../../components/tables'
 import Pagination from '../../components/cards/PaginationCard'
-import { getListInterviewVideo, getDetailInterviewVideo } from '../../components/actions'
+import { getListInterviewVideo, getDetailInterviewVideo, getListQuestion } from '../../components/actions'
 import { timestampToDateTime, numberToCurrency } from '../../components/functions'
 import Modal from '../../components/modals'
 import DetailInterview from '../../components/fragments/interview/detailInterview'
@@ -44,18 +44,46 @@ class ListInterview extends React.Component {
 			listInterviewVideo: props.listInterviewVideo,
 			totalListInterviewVideo:  props.totalListInterviewVideo,
 			detailInterviewVideo: props.detailInterviewVideo,
-			modalDetailInterview: false
+			modalDetailInterview: false,
+			//List Question on Detail Video Interview
+			questionPage: 0,
+			questionFetchLen:2,
+			listQuestion: props.listQuestion,
+			totalListQuestion: props.totalListQuestion
 		}
 
 		this.toggleModalsDetailQuestion = this.toggleModalsDetailQuestion.bind(this)
+		
+	}
+
+	toggleModalsConfirmation = (status) => {
+		this.setState(prevState => ({
+			[`modalVideoInterviewConfirmation${status}`]: !prevState[`modalVideoInterviewConfirmation${status}`]
+		}))
 	}
 
 	
 	toggleModalsDetailQuestion = (id) => {
+		this.onInitListQuestion()
 		this.props.getDetailInterviewVideo(id)
 		this.setState(prevState => ({
 			modalDetailInterview: !prevState.modalDetailInterview,
 		}))
+	}
+
+	toggleDeleteVideoInterview(id){
+		this.setState({
+			idVideoInterviewDeleted: id
+		})
+		this.toggleModalsConfirmation("Delete")
+	}
+
+	toogleChangeStatusVideoInterview(id, status){
+		this.setState({
+			idVideoInterviewChangedStatus: id,
+			statusVideoInterviewChanged: status
+		})
+		this.toggleModalsConfirmation("ChangeStatus")
 	}
 
 	UNSAFE_componentWillReceiveProps(nextProps) {
@@ -63,8 +91,21 @@ class ListInterview extends React.Component {
 			navIsOpen: nextProps.navIsOpen,
 			listInterviewVideo: nextProps.listInterviewVideo,
 			detailInterviewVideo:nextProps.detailInterviewVideo,
-			totalListInterviewVideo: nextProps.totalListInterviewVideo
+			totalListInterviewVideo: nextProps.totalListInterviewVideo,
+			listQuestion: nextProps.listQuestion,
+			totalListQuestion: nextProps.totalListQuestion
 		})
+	}
+
+	onInitListQuestion = () => {
+		const { questionPage, questionFetchLen } = this.state
+		this.props.getListQuestion(questionPage, questionFetchLen)
+	}
+
+	onPaginationClickListQuestion = (page) => {
+		const { questionFetchLen } = this.state
+		this.props.getListQuestion(page,questionFetchLen)
+		this.setState({questionPage: page})
 	}
 
 	onPaginationClick = (page) => {
@@ -72,6 +113,7 @@ class ListInterview extends React.Component {
 		this.props.getListInterviewVideo(page, interviewVideoFetchLen, interviewVideoDateFrom, interviewVideoDateTo, interviewVideoSortBy, interviewVideoSearchKey)
 		this.setState({interviewVideoPage: page})
 	}
+
 
 	onFilterInit = (dateFrom, dateTo) => {
 		const { interviewVideoFetchLen, interviewVideoSortBy, interviewVideoSearchKey } = this.state
@@ -101,14 +143,28 @@ class ListInterview extends React.Component {
 		console.log("redirectToAddQuestionOfInterviewPage : " + id)
 		Router.push("/add-question-interview/"+ id)
 	}
+
+	handleDelete = () => {
+		console.dir(this.state.idVideoInterviewDeleted)
+		console.log("handleDelete : ")
+		this.toggleModalsConfirmation("Delete")
+	}
+
+	handleChangeStatus = () => {
+		console.dir(this.state.idVideoInterviewChangedStatus)
+		console.log(this.state.statusVideoInterviewChanged)
+		this.toggleModalsConfirmation("ChangeStatus")
+	}
+
 	render() {
 		const { 
 			showHeader, headerHeight, navIsOpen, navMinWidth, navMaxWidth, listInterviewVideo, detailInterviewVideo,
-			interviewVideoPage, interviewVideoFetchLen, interviewVideoSortBy, totalListInterviewVideo
+			interviewVideoPage, interviewVideoFetchLen, interviewVideoSortBy, totalListInterviewVideo, listQuestion,
+			questionPage, questionFetchLen, totalListQuestion
 		} = this.state
 		
-		console.log("detailInterviewVideo : ")
-		console.dir(detailInterviewVideo)
+		console.dir(listInterviewVideo)
+
 
 		const modalDetailInterview = (
 			<Modal 
@@ -121,7 +177,45 @@ class ListInterview extends React.Component {
 			>
 				<DetailInterview
 					dataInterview={detailInterviewVideo}
+					dataQuestion={listQuestion}
+					questionPage={questionPage}
+					questionFetchLen={questionFetchLen}
+					totalListQuestion={totalListQuestion}
+					onPaginationClick={this.onPaginationClickListQuestion}
+					toggleToEditInterviewPage={this.redirectToEditInterviewPage}
+					toggleToAddQuestionPage={this.redirectToAddQuestionOfInterviewPage}
 				/>
+			</Modal> 
+		)
+
+
+		const showModalConfirmationDelete = (
+			<Modal 
+				modalIsOpen={this.state.modalVideoInterviewConfirmationDelete}
+				toggleModal={(e) => this.toggleModalsConfirmation("Delete")}
+				classNameModal={this.props.className}
+				titleModalHeader="Delete Video Interview Confirmation"
+				sizeModal="md"
+				centeredModal={true}
+				showModalFooter={true}
+				onClickButtonSubmit={this.handleDelete}
+			>
+				are you sure to delete this video interview ?
+			</Modal> 
+		)
+
+		const showModalConfirmationChangeStatus = (
+			<Modal 
+				modalIsOpen={this.state.modalVideoInterviewConfirmationChangeStatus}
+				toggleModal={(e) => this.toggleModalsConfirmation("ChangeStatus")}
+				classNameModal={this.props.className}
+				titleModalHeader={this.state.statusVideoInterviewChanged == 4 ? "Publish Video Interview Confirmation" : "Unpublish Video Interview Confirmation" }
+				sizeModal="md"
+				centeredModal={true}
+				showModalFooter={true}
+				onClickButtonSubmit={this.handleChangeStatus}
+			>
+				are you sure to {this.state.statusVideoInterviewChanged == 4 ? "publish" : "unpublish" } video interview ?
 			</Modal> 
 		)
 
@@ -192,11 +286,11 @@ class ListInterview extends React.Component {
 												{data.created_date ? timestampToDateTime(data.created_date, false) : (<i>-</i>)}
 											</td>
 											<td>
-												<Button size="sm" color="success" className="mr-2 px-2 font-14" style={{marginTop: "5px", height: "31px"}} onClick={(e) => this.redirectToAddQuestionOfInterviewPage(data.id)}><i className="icon-plus-square"></i> Question </Button>
 												<Button size="sm" color="secondary" className="mr-2 px-2 font-14" style={{marginTop: "5px", height: "31px"}} onClick={(e) => this.toggleModalsDetailQuestion(data.id)}><i className="icon-eye"></i></Button>
 												<Button size="sm" color="warning" className="mr-2 px-2 font-14" style={{marginTop: "5px", height: "31px"}} onClick={(e) => this.redirectToEditInterviewPage(data.id)}><i className="icon-edit"></i></Button>
-												<Button size="sm" color="danger" className="mr-2 px-2 font-14" style={{marginTop: "5px", height: "31px"}}><i className="icon-trash"></i></Button>
-												<Button size="sm" color={data.published ? "info" : "primary" } className="mr-2 px-2 font-14" style={{marginTop: "5px", height: "31px"}}><i className="mr-1 icon-plus"></i>{data.published ? "Unpublish" : "Publish" }</Button>
+												<Button size="sm" color="danger" className="mr-2 px-2 font-14" style={{marginTop: "5px", height: "31px"}} onClick={(e) => this.toggleDeleteVideoInterview(data.id)}><i className="icon-trash"></i></Button>
+												<Button size="sm" color="success" className="mr-2 px-2 font-14" style={{marginTop: "5px", height: "31px"}} onClick={(e) => this.redirectToAddQuestionOfInterviewPage(data.id)}><i className="icon-plus-square"></i> Question </Button>
+												<Button size="sm" color={data.status == 5 ? "info" : "primary" } className="mr-2 px-2 font-14" style={{marginTop: "5px", height: "31px"}} onClick={(e) => this.toogleChangeStatusVideoInterview(data.id, data.status)}>{data.status == 5 ? "Unpublish" : "Publish" }</Button>
 											</td>
 										</tr>
 									))
@@ -205,6 +299,8 @@ class ListInterview extends React.Component {
 						</Col>
 					</Row>
 					{ modalDetailInterview }
+					{ showModalConfirmationDelete }
+					{ showModalConfirmationChangeStatus }
 				</Container>
 			</div>
 		)
@@ -214,7 +310,8 @@ class ListInterview extends React.Component {
 const mapDispatchToProps = dispatch => {
 	return {
 		getListInterviewVideo: bindActionCreators(getListInterviewVideo, dispatch),
-		getDetailInterviewVideo: bindActionCreators(getDetailInterviewVideo, dispatch)
+		getDetailInterviewVideo: bindActionCreators(getDetailInterviewVideo, dispatch),
+		getListQuestion: bindActionCreators(getListQuestion, dispatch)
 	}
 }
 export default connect(state => state, mapDispatchToProps)(ListInterview)

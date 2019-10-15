@@ -102,6 +102,11 @@ class AddQuestion extends React.Component {
 	}
 
 	handleSubmit = (e) => {
+
+		console.log('%c 🍸 valueTitleVideo: ', 'font-size:20px;background-color: #33A5FF;color:#fff;', this.state.valueTitleVideo);
+		console.log('%c 🥦 valueFileVideo: ', 'font-size:20px;background-color: #B03734;color:#fff;', this.state.valueFileVideo);
+		console.log('%c 🍸 valueFileCoverVideo: ', 'font-size:20px;background-color: #4b4b4b;color:#fff;', this.state.valueFileCoverVideo);
+
 		this.toggleModalsConfirmation("Save")
 	}
  
@@ -113,7 +118,7 @@ class AddQuestion extends React.Component {
 		const showModalConfirmationSave = (
 			<Modal 
 				modalIsOpen={this.state.modalConfirmationSave}
-				toggleModal={this.toggleModalsConfirmation}
+				toggleModal={(e) => this.toggleModalsConfirmation("Save")}
 				classNameModal={this.props.className}
 				titleModalHeader="Save Question Confirmation"
 				sizeModal="md"
@@ -121,29 +126,14 @@ class AddQuestion extends React.Component {
 				showModalFooter={true}
 				onClickButtonSubmit={this.handleSubmit}
 			>
-				are you sure to save this question ?
-			</Modal> 
-		)
-
-		const showModalConfirmationPublish = (
-			<Modal 
-				modalIsOpen={this.state.modalConfirmationPublish}
-				toggleModal={this.toggleModalsConfirmation}
-				classNameModal={this.props.className}
-				titleModalHeader="Publish Question Confirmation"
-				sizeModal="md"
-				centeredModal={true}
-				showModalFooter={true}
-				onClickButtonSubmit={this.handlePublishAddQuestion}
-			>
-				are you sure to publish this question ?
+				are you sure to save this video interview ?
 			</Modal> 
 		)
 
 		const showModalConfirmationCancel = (
 			<Modal 
 				modalIsOpen={this.state.modalConfirmationCancel}
-				toggleModal={this.toggleModalsConfirmation}
+				toggleModal={(e) => this.toggleModalsConfirmation("Cancel")}
 				classNameModal={this.props.className}
 				titleModalHeader="Cancel Question Confirmation"
 				sizeModal="md"
@@ -151,7 +141,7 @@ class AddQuestion extends React.Component {
 				showModalFooter={true}
 				onClickButtonSubmit={this.handleCancelAddQuestion}
 			>
-				are you sure to cancel this question ?
+				are you sure to cancel this video interview ?
 			</Modal> 
 		)
 
@@ -184,7 +174,6 @@ class AddQuestion extends React.Component {
 					/>
 				</Container>
 				{ showModalConfirmationSave }
-				{ showModalConfirmationPublish }
 				{ showModalConfirmationCancel }
 			</div>
 		)

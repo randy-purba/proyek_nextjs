@@ -9,13 +9,15 @@ export default (props) => {
 
     const { 
         title, onHandleChange, onHandleSelectOption, onHandleSubmit, dataTitleVideo,
-        dataFileVideo, dataFileCoverVideo, onHandleFileInputChange
+        dataFileVideo, dataFileCoverVideo, onHandleFileInputChange, onHandleCancel
     } = props
+    
+    console.dir(dataFileVideo)
     
     return (
         <div className="bg-white rounded shadow-sm p-3 mb-3 overflow-visible">
             {title ? <h5 className="font-16 text-primary mb-3">{title}</h5> : ""}
-            <AvForm onValidSubmit={onHandleSubmit} method="post" autoComplete="off" >		
+            <AvForm onValidSubmit={(e) => onHandleSubmit("Save")} method="post" autoComplete="off" >		
                 <Row>
                     <Col xs="12" sm="12" md="12">
                         <FormInputValidation 
@@ -72,7 +74,8 @@ export default (props) => {
                         />
                     </Col>
                     <Col xs="12" sm="12" md="12">
-                        <Button size="lg" color="primary" type="submit" className="float-right mt-3 mb-2 px-5 text-uppercase font-12">Save</Button>
+                        <Button size="lg" color="primary" type="submit" className="float-right mt-3 mb-2 px-5 mx-1 text-uppercase font-12">Save</Button>
+                        <Button size="lg" color="secondary" onClick={(e) => onHandleSubmit("Cancel")} className="float-right mt-3 mb-2 px-5 text-uppercase font-12">Cancel</Button>
                     </Col>
                 </Row>
             </AvForm>

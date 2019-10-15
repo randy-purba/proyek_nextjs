@@ -24,6 +24,8 @@ import ListInterviewVideoReducer from './ListInterviewVideoReducers'
 import TotalListInterviewVideoReducer from './TotalListInterviewVideoReducers'
 import DetailInterviewVideoReducer from './DetailInterviewVideoReducers'
 import DetailUserAdministratorReducer from './DetailUserAdministratorReducers'
+import TotalListUserAdministratorReducer from './TotalListUserAdministratorReducers'
+import AddUserAdministratorReducer from './AddUserAdministratorReducers'
 
 export default combineReducers({
     listBanner: BannerReducer,
@@ -50,5 +52,7 @@ export default combineReducers({
     listInterviewVideo: ListInterviewVideoReducer,
     totalListInterviewVideo: TotalListInterviewVideoReducer,
     detailInterviewVideo: DetailInterviewVideoReducer,
-    detailUserAdministrator: DetailUserAdministratorReducer
+    detailUserAdministrator: DetailUserAdministratorReducer,
+    totalUserAdministrator: TotalListUserAdministratorReducer,
+    responsePostAddUserAdmin: AddUserAdministratorReducer
 })

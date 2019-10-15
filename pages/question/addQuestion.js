@@ -1,4 +1,5 @@
 import React from 'react'
+import Router from 'next/router'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { Container, Row, Col, Button } from 'reactstrap'
@@ -42,11 +43,6 @@ class AddQuestion extends React.Component {
 			valueCheckboxChoiceB:false, 
 			valueCheckboxChoiceC:false, 
 			valueCheckboxChoiceD:false,
-			valueAnswerEssay:"",
-			valueAnswerSingleChoiceA:"",
-			valueAnswerSingleChoiceB:"",
-			valueCheckboxSingleChoiceA:false,
-			valueCheckboxSingleChoiceB:false,
 			listCity: props.listCity,
 			modalConfirmationSave: false
 		}
@@ -63,7 +59,6 @@ class AddQuestion extends React.Component {
 	}
 	
 	toggleModalsConfirmation (status) {
-		console.log(status)
 		this.setState(prevState => ({
 			[`modalConfirmation${status}`]: !prevState[`modalConfirmation${status}`]
 		}))
@@ -97,6 +92,7 @@ class AddQuestion extends React.Component {
 	handleCancelAddQuestion = (e) => {
 		console.log("handleCancelAddQuestion")
 		this.toggleModalsConfirmation("Cancel")
+		this.redirectToListQuestionOfTreasureHunt()
 	}
 
 	handlePublishAddQuestion = (e) => {
@@ -118,11 +114,22 @@ class AddQuestion extends React.Component {
 		console.log('%c 🥟 valueCheckboxChoiceB: ', 'font-size:20px;background-color: #33A5FF;color:#fff;', this.state.valueCheckboxChoiceB);
 		console.log('%c 🥪 valueCheckboxChoiceC: ', 'font-size:20px;background-color: #FCA650;color:#fff;', this.state.valueCheckboxChoiceC);
 		console.log('%c 🍠 valueCheckboxChoiceD: ', 'font-size:20px;background-color: #2EAFB0;color:#fff;', this.state.valueCheckboxChoiceD);
-		console.log('%c 🥔 valueAnswerEssay: ', 'font-size:20px;background-color: #B03734;color:#fff;', this.state.valueAnswerEssay);
-		console.log('%c 🍋 valueAnswerSingleChoiceA: ', 'font-size:20px;background-color: #2EAFB0;color:#fff;', this.state.valueAnswerSingleChoiceA);
-		console.log('%c 🍱 valueAnswerSingleChoiceB: ', 'font-size:20px;background-color: #FFDD4D;color:#fff;', this.state.valueAnswerSingleChoiceB);
-		console.log('%c 🍰 valueCheckboxSingleChoiceA: ', 'font-size:20px;background-color: #93C0A4;color:#fff;', this.state.valueCheckboxSingleChoiceA);
-		console.log('%c 🍬 valueCheckboxSingleChoiceB: ', 'font-size:20px;background-color: #ED9EC7;color:#fff;', this.state.valueCheckboxSingleChoiceB);
+		this.toggleModalsConfirmation("Save")
+	}
+
+	redirectToListQuestionOfTreasureHunt(){
+		Router.push('/list-question');
+	}
+
+	toggleButtonCancelModalsCancel = () => {
+		this.toggleModalsConfirmation("Cancel")
+	}
+
+	toggleButtonCancelModalsPublish = () => {
+		this.toggleModalsConfirmation("Publish")
+	}
+
+	toggleButtonCancelModalsSave = () => {
 		this.toggleModalsConfirmation("Save")
 	}
  
@@ -130,15 +137,13 @@ class AddQuestion extends React.Component {
 		const { showHeader, headerHeight, navIsOpen, navMinWidth, navMaxWidth, listCity,
 				valueQuestionTitle, valueAnswerOption, valueZone, valueMarker, valueScore,
 				valueAnswerChoiceA, valueAnswerChoiceB, valueAnswerChoiceC, valueAnswerChoiceD,
-				valueCheckboxChoiceA, valueCheckboxChoiceB, valueCheckboxChoiceC, valueCheckboxChoiceD,
-				valueAnswerSingleChoiceA, valueAnswerSingleChoiceB, valueCheckboxSingleChoiceA, valueCheckboxSingleChoiceB, 
-				valueAnswerEssay
+				valueCheckboxChoiceA, valueCheckboxChoiceB, valueCheckboxChoiceC, valueCheckboxChoiceD
 		} = this.state
 
 		const showModalConfirmationSave = (
 			<Modal 
 				modalIsOpen={this.state.modalConfirmationSave}
-				toggleModal={this.toggleModalsConfirmation}
+				toggleModal={this.toggleButtonCancelModalsSave}
 				classNameModal={this.props.className}
 				titleModalHeader="Save Question Confirmation"
 				sizeModal="md"
@@ -150,25 +155,10 @@ class AddQuestion extends React.Component {
 			</Modal> 
 		)
 
-		const showModalConfirmationPublish = (
-			<Modal 
-				modalIsOpen={this.state.modalConfirmationPublish}
-				toggleModal={this.toggleModalsConfirmation}
-				classNameModal={this.props.className}
-				titleModalHeader="Publish Question Confirmation"
-				sizeModal="md"
-				centeredModal={true}
-				showModalFooter={true}
-				onClickButtonSubmit={this.handlePublishAddQuestion}
-			>
-				are you sure to publish this question ?
-			</Modal> 
-		)
-
 		const showModalConfirmationCancel = (
 			<Modal 
 				modalIsOpen={this.state.modalConfirmationCancel}
-				toggleModal={this.toggleModalsConfirmation}
+				toggleModal={this.toggleButtonCancelModalsCancel}
 				classNameModal={this.props.className}
 				titleModalHeader="Cancel Question Confirmation"
 				sizeModal="md"
@@ -211,13 +201,7 @@ class AddQuestion extends React.Component {
 						valueCheckboxChoiceB={valueCheckboxChoiceB} 
 						valueCheckboxChoiceC={valueCheckboxChoiceC} 
 						valueCheckboxChoiceD={valueCheckboxChoiceD}
-						valueAnswerSingleChoiceA={valueAnswerSingleChoiceA}
-						valueAnswerSingleChoiceB={valueAnswerSingleChoiceB}
-						valueCheckboxSingleChoiceA={valueCheckboxSingleChoiceA}
-						valueCheckboxSingleChoiceB={valueCheckboxSingleChoiceB}
-						valueAnswerEssay={valueAnswerEssay}
 						listAnswerOption={[
-							{"id": 1, "name": "Single Choice", "value": "single_choice"},
 							{"id": 2, "name": "Multiple Choice", "value": "multiple_choice"},
 							{"id": 3, "name": "Essay", "value": "essay"},
 						]} 
@@ -227,10 +211,10 @@ class AddQuestion extends React.Component {
 						onHandleSelectOption={this.handleSelectOption}
 						onHandleSubmit={this.toggleModalsConfirmation}
 						showButtonPublish={true}
+						statusForm="add"
 					/>
 				</Container>
 				{ showModalConfirmationSave }
-				{ showModalConfirmationPublish }
 				{ showModalConfirmationCancel }
 			</div>
 		)

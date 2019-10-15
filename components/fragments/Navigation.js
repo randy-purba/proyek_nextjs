@@ -25,18 +25,23 @@ export default (props) => {
                     <NavMenu link="/list-users" href="/user/managementUser" width={navMinWidth} title="Administrator" iconName="icon-list1" />
                     <NavMenu link="/applicants" href="/user/managementApplicant" width={navMinWidth} title="Applicant" iconName="icon-list1" />
                 </NavSubMenu>
+                
+                <NavSubMenu width={navMinWidth} menuId="QuestionBank" title="Questions Bank" iconName="icon-database" isOpenMenu={stateParent.isOpenQuestionBank} onHandleClick={onHandleClick}>
+                    
+                    <NavSubMenu width={navMinWidth} menuId="TreasureHunt" title="Treasure Hunt" iconName="icon-gamepad" isOpenMenu={stateParent.isOpenTreasureHunt} onHandleClick={onHandleClick}>
+                        <NavMenu link="/add-question" href="/question/addQuestion" width={navMinWidth} title="Add Question" iconName="icon-plus-square" />
+                        <NavMenu link="/list-question" href="/question/listQuestion" width={navMinWidth} title="List Question" iconName="icon-list1" />
+                    </NavSubMenu>
 
-                <NavSubMenu width={navMinWidth} menuId="Question" title="Question" iconName="icon-database" isOpenMenu={stateParent.isOpenQuestion} onHandleClick={onHandleClick}>
-                    <NavMenu link="/add-question" href="/question/addQuestion" width={navMinWidth} title="Add Question" iconName="icon-plus-square" />
-                    <NavMenu link="/list-question" href="/question/listQuestion" width={navMinWidth} title="List Question" iconName="icon-list1" />
+                    <NavSubMenu width={navMinWidth} menuId="Interview" title="Video Interview" iconName="icon-user-tie" isOpenMenu={stateParent.isOpenInterview} onHandleClick={onHandleClick}>
+                        <NavMenu link="/add-interview" href="/interview/addInterview" width={navMinWidth} title="Add Interview" iconName="icon-plus-square" />
+                        <NavMenu link="/list-interview" href="/interview/listInter  view" width={navMinWidth} title="List Interview" iconName="icon-list1" />
+                    </NavSubMenu> 
+
                 </NavSubMenu>
 
-                <NavSubMenu width={navMinWidth} menuId="Interview" title="Interview" iconName="icon-user-tie" isOpenMenu={stateParent.isOpenInterview} onHandleClick={onHandleClick}>
-                    <NavMenu link="/add-interview" href="/interview/addInterview" width={navMinWidth} title="Add Interview" iconName="icon-plus-square" />
-                    <NavMenu link="/list-interview" href="/interview/listInter  view" width={navMinWidth} title="List Interview" iconName="icon-list1" />
-                </NavSubMenu>
 
-                <NavSubMenu width={navMinWidth} menuId="ReportInterview" title="Report Interview Video" iconName="icon-help-circle" isOpenMenu={stateParent.isOpenReportInterview} onHandleClick={onHandleClick}>
+                <NavSubMenu width={navMinWidth} menuId="ReportInterview" title="Interview Video Report" iconName="icon-help-circle" isOpenMenu={stateParent.isOpenReportInterview} onHandleClick={onHandleClick}>
                     <NavMenu link="/report-interview" href="/reportInterview" width={navMinWidth} title="List Applicant" iconName="icon-users" />
                 </NavSubMenu>
 

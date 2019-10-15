@@ -6,7 +6,7 @@ import { Container, Row, Col, Button } from 'reactstrap'
 import TableBox from '../../components/tables'
 import Pagination from '../../components/cards/PaginationCard'
 import { getListQuestion, getListAnswerType } from '../../components/actions'
-import { timestampToDateTime, numberToCurrency } from '../../components/functions'
+import { timestampToDateTime, capitalizeString } from '../../components/functions'
 import Modal from '../../components/modals'
 import DetailQuestion from '../../components/fragments/question/detailQuestion'
 
@@ -50,12 +50,20 @@ class ListQuestion extends React.Component {
 		}
 
 		this.toggleModalsDetailQuestion = this.toggleModalsDetailQuestion.bind(this)
+		this.toggleModalsConfirmation = this.toggleModalsConfirmation.bind(this)
 	}
 
 	toggleModalsDetailQuestion = (data) => {
 		this.setState(prevState => ({
 			modalDetailQuestion: !prevState.modalDetailQuestion,
 			dataDetailQuestion: data
+		}))
+	}
+
+	toggleModalsConfirmation = (status) => {
+		console.log(status + " / " + typeof status)
+		this.setState(prevState => ({
+			[`modalConfirmation${status}`]: !prevState[`modalConfirmation${status}`]
 		}))
 	}
 
@@ -93,8 +101,32 @@ class ListQuestion extends React.Component {
 		this.setState({questionSearchKey: keywords})
 	}
 
+	toggleDeleteQuestion(id){
+		this.setState({
+			idQuestionDeleted: id
+		})
+		this.toggleModalsConfirmation("Delete")
+	}
+
+	togglePublishQuestion(id, status){
+		this.setState({
+			idQuestionPublish: id,
+			statusModalsPublishQuestion: status 
+		})
+		this.toggleModalsConfirmation("Publish")
+	}
+
+	toggleButtonSubmitModalsDelete = () => {
+		console.log(this.state.idQuestionDeleted)
+		this.toggleModalsConfirmation("Delete")
+	}
+
+	toggleButtonSubmitModalsPublish = () => {
+		console.log(this.state.idQuestionPublish)
+		this.toggleModalsConfirmation("Publish")
+	}
+
 	redirectToEditQuestionPage(id){
-		console.log("redirectToEditQuestionPage" + id)
 		Router.push("/edit-question/"+ id)
 	}
 
@@ -113,9 +145,44 @@ class ListQuestion extends React.Component {
 				sizeModal="lg"
 				centeredModal={true}
 			>
-				<DetailQuestion
-					dataQuestion={this.state.dataDetailQuestion}
-				/>
+				{
+					this.state.modalDetailQuestion ? 
+						<DetailQuestion
+							dataQuestion={this.state.dataDetailQuestion}
+							toggleEditButton={this.redirectToEditQuestionPage}
+						/> : 
+						(null)
+				}
+			</Modal> 
+		)
+
+		const showModalConfirmationDelete = (
+			<Modal 
+				modalIsOpen={this.state.modalConfirmationDelete}
+				toggleModal={(e) => this.toggleModalsConfirmation("Delete")}
+				classNameModal={this.props.className}
+				titleModalHeader="Delete Question Confirmation"
+				sizeModal="md"
+				centeredModal={true}
+				showModalFooter={true}
+				onClickButtonSubmit={this.toggleButtonSubmitModalsDelete}
+			>
+				are you sure to delete this question ?
+			</Modal> 
+		)
+
+		const showModalConfirmationPublish = (
+			<Modal 
+				modalIsOpen={this.state.modalConfirmationPublish}
+				toggleModal={(e) => this.toggleModalsConfirmation("Publish")}
+				classNameModal={this.props.className}
+				titleModalHeader= {this.state.statusModalsPublishQuestion + " Question Confirmation"}
+				sizeModal="md"
+				centeredModal={true}
+				showModalFooter={true}
+				onClickButtonSubmit={this.toggleButtonSubmitModalsPublish}
+			>
+				are you sure to { this.state.statusModalsPublishQuestion ? this.state.statusModalsPublishQuestion.toLowerCase() : ""} this question ?
 			</Modal> 
 		)
 
@@ -182,8 +249,8 @@ class ListQuestion extends React.Component {
 											</th>
 											<td>{data.question_title}</td>
 											<td>{listAnswerType.filter(dataAnswer => dataAnswer.id === data.answer_type.id)[0].name}</td>
-											<td>{data.zone.value}</td>
-											<td>{data.marker.value}</td>
+											<td>{capitalizeString(data.zone.value)}</td>
+											<td>{capitalizeString(data.marker.value)}</td>
 											<td className="text-right">{data.score}</td>
 											<td>
 												{data.created_date ? timestampToDateTime(data.created_date, false) : (<i>-</i>)}
@@ -198,8 +265,8 @@ class ListQuestion extends React.Component {
 											<td>
 												<Button size="sm" color="secondary" className="mr-2 px-2 font-14" style={{marginTop: "5px", height: "31px"}} onClick={(e) => this.toggleModalsDetailQuestion(data)}><i className="icon-eye"></i></Button>
 												<Button size="sm" color="warning" className="mr-2 px-2 font-14" style={{marginTop: "5px", height: "31px"}} onClick={(e) => this.redirectToEditQuestionPage(data.id)}><i className="icon-edit"></i></Button>
-												<Button size="sm" color="danger" className="mr-2 px-2 font-14" style={{marginTop: "5px", height: "31px"}}><i className="icon-trash"></i></Button>
-												<Button size="sm" color={data.published ? "info" : "primary" } className="mr-2 px-2 font-14" style={{marginTop: "5px", height: "31px"}}><i className="mr-1 icon-plus"></i>{data.published ? "Unpublish" : "Publish" }</Button>
+												<Button size="sm" color="danger" className="mr-2 px-2 font-14" style={{marginTop: "5px", height: "31px"}} onClick={(e) => this.toggleDeleteQuestion(data.id)}><i className="icon-trash"></i></Button>
+												<Button size="sm" color={data.published ? "info" : "primary"} className="mr-2 px-2 font-14" style={{marginTop: "5px", height: "31px"}} onClick={(e) => this.togglePublishQuestion(data.id, data.published ? "Unpublish" : "Publish" )}><i className="mr-1 icon-plus"></i>{data.published ? "Unpublish" : "Publish" }</Button>
 											</td>
 										</tr>
 									))
@@ -208,6 +275,8 @@ class ListQuestion extends React.Component {
 						</Col>
 					</Row>
 					{ modalDetailQuestion }
+					{ showModalConfirmationDelete }
+					{ showModalConfirmationPublish }
 				</Container>
 			</div>
 		)

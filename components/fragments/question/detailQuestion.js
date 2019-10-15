@@ -1,15 +1,16 @@
-import { Label } from 'reactstrap'
+import { Label, Button, Badge } from 'reactstrap'
 import ItemOneLineCard from '../../cards/ItemOneLineCard'
-import ItemValueLinkOneLineCard from '../../cards/ItemValueLinkOneLineCard'
+import ItemDetailWithChildrenItem from '../../cards/ItemDetailWithChildrenItem'
 import { timestampToDateTime, capitalizeString } from '../../functions'
 
 export default (props) => {
 
     const { 
-        dataQuestion, title
+        dataQuestion, title, toggleEditButton
     } = props
 
     console.dir(dataQuestion)
+
     return (
         <div className="bg-white rounded shadow-sm p-3 mb-3 overflow-visible">
             {title ? <Label className="font-16 text-primary mb-3">{title}</Label> : ""}
@@ -21,7 +22,7 @@ export default (props) => {
                 title="Question"
                 value={dataQuestion.question_title}
             />
-            { dataQuestion.answer ? 
+            { dataQuestion.answer_type.id == 2 ? 
 				dataQuestion.answer.map((data, key) => (
                     <ItemOneLineCard 
                         key={key}
@@ -51,10 +52,14 @@ export default (props) => {
                 title="Published Date"
                 value={ dataQuestion.published_date ? timestampToDateTime(dataQuestion.published_date) : "-"}
             />
+            <ItemDetailWithChildrenItem title="Status">
+                { dataQuestion.published ?  <Badge color="success" className="my-1">Published</Badge> : <Badge color="secondary" className="my-1">Unpublished</Badge>}
+            </ItemDetailWithChildrenItem>
             <ItemOneLineCard 
                 title="Score"
                 value={dataQuestion.score}
             />
+             <Button size="lg" color="primary" onClick={(e) => toggleEditButton(dataQuestion.id)} className="float-right mt-4 px-5 text-uppercase font-12">Edit</Button>
         </div>
     )
 }

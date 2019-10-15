@@ -4,6 +4,7 @@ import ImagePreviewCard from '../cards/ImagePreviewCard'
 import VideoPreviewCard from '../cards/VideoPreviewCard'
 
 export default (props) => {
+    console.dir(props.formValue)
     return (
         <FormGroup 
             className={`mb-3 position-relative ${props.containerClassName ? props.containerClassName : ''}`}
@@ -17,7 +18,7 @@ export default (props) => {
                 props.formValue ? 
                     (props.fileType == "image" ? 
                         <ImagePreviewCard widthImage={props.widthImagePreview} heightImage={props.heightImagePreview} srcImage={props.formValue}/>
-                        : <VideoPreviewCard srcVideo={props.formValue}/> )
+                        : <VideoPreviewCard idVideo ="videoPreview"srcVideo={props.formValue}/> )
                  : ""
             }
             
@@ -29,7 +30,7 @@ export default (props) => {
                 placeholder={props.formPlaceholder} 
                 onChange={props.onChange} 
                 errorMessage={props.formErrorMessage} 
-                validate={props.formValidate} 
+                validate={props.formValue ? (null) : props.formValidate} 
                 related={props.formRelation}
                 // value={props.formValue}
                 bsSize={props.formSize}

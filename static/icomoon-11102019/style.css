@@ -1,10 +1,10 @@
 @font-face {
   font-family: 'icomoon';
-  src:  url('fonts/icomoon.eot?quwiok');
-  src:  url('fonts/icomoon.eot?quwiok#iefix') format('embedded-opentype'),
-    url('fonts/icomoon.ttf?quwiok') format('truetype'),
-    url('fonts/icomoon.woff?quwiok') format('woff'),
-    url('fonts/icomoon.svg?quwiok#icomoon') format('svg');
+  src:  url('fonts/icomoon.eot?cz99qd');
+  src:  url('fonts/icomoon.eot?cz99qd#iefix') format('embedded-opentype'),
+    url('fonts/icomoon.ttf?cz99qd') format('truetype'),
+    url('fonts/icomoon.woff?cz99qd') format('woff'),
+    url('fonts/icomoon.svg?cz99qd#icomoon') format('svg');
   font-weight: normal;
   font-style: normal;
   font-display: block;
@@ -25,6 +25,9 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.icon-gamepad:before {
+  content: "\e974";
+}
 .icon-bubbles4:before {
   content: "\e973";
 }

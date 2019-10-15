@@ -5,7 +5,7 @@ export default (props) => {
     console.dir(srcVideo)
     return (
         <Card body>
-            <video id={idVideo} width={widthVideo} height={heightVideo} controls>
+            <video id={idVideo} width={widthVideo} height={heightVideo} src={srcVideo} controls>
                 <source  src={srcVideo} type="video/mp4"/>
             </video>
         </Card>

@@ -4,20 +4,17 @@ import { bindActionCreators } from 'redux'
 import { Container, Row, Col, Button, Badge } from 'reactstrap'
 import TableBox from '../../components/tables'
 import Pagination from '../../components/cards/PaginationCard'
-import { getListUser, getDetailUserAdministrator } from '../../components/actions'
+import { getListUser, getDetailUserAdministrator, postAddUserAdministrator } from '../../components/actions'
 import { timestampToDateTime, regexHtmlTag, numberWithDot } from '../../components/functions'
 import Modal from '../../components/modals'
 import UserForm from '../../components/fragments/user/userForm'
 
-
 class ManagementUser extends React.Component {
 	static async getInitialProps({ store }) {
-		let props = { showHeader: true, showFooter: true, usersPage: 0, usersMaxLen: 10 }
+		let props = { showHeader: true, showFooter: true, usersPage: 0, usersMaxLen: 1, usersSearchKey: "", usersSortBy: "username" }
 		let stores = await store.getState()
-		
 		try {
-
-			if(!stores.listUser) await store.dispatch(getListUser(props.usersPage, props.usersMaxLen))
+			if(!stores.listUser) await store.dispatch(getListUser(props.usersPage, props.usersMaxLen, props.usersSearchKey, props.usersSortBy ))
 
 		} catch (e) {
 			props.error = 'Unable to fetch AsyncData on server'
@@ -39,10 +36,11 @@ class ManagementUser extends React.Component {
 			usersFetchLen: props.usersMaxLen,
 			usersDateFrom: undefined,
 			usersDateTo: undefined,
-			usersSortBy: "created_date",
-			usersSearchKey: "",
+			usersSortBy: props.usersSortBy,
+			usersSearchKey: props.usersSearchKey,
 			listUser: props.listUser,
 			detailUserAdministrator: props.detailUserAdministrator,
+			totalUserAdministrator:props.totalUserAdministrator,	
 			modalAddNewUserForm: false,
 			modalUpdateUserForm: false,
 			modalConfirmationInsert: false,
@@ -112,6 +110,8 @@ class ManagementUser extends React.Component {
 			navIsOpen: nextProps.navIsOpen,
 			listUser: nextProps.listUser,
 			detailUserAdministrator: nextProps.detailUserAdministrator,
+			totalUserAdministrator: nextProps.totalUserAdministrator,
+			resporesponsePostAddUserAdmin: nextProps.responsePostAddUserAdmin,
 			dataName: nextProps.detailUserAdministrator ? nextProps.detailUserAdministrator.name : "", 
 			dataEmail: nextProps.detailUserAdministrator ? nextProps.detailUserAdministrator.email : "", 
 			dataPassword: nextProps.detailUserAdministrator ? nextProps.detailUserAdministrator.password : "",
@@ -121,27 +121,26 @@ class ManagementUser extends React.Component {
 
 	onPaginationClick = (page) => {
 		const { usersFetchLen, usersDateFrom, usersDateTo, usersSortBy, usersSearchKey } = this.state
-		this.props.getListUser(page, usersFetchLen, usersDateFrom, usersDateTo, usersSortBy, usersSearchKey)
+		this.props.getListUser(page, usersFetchLen, usersSearchKey, usersSortBy, usersDateFrom, usersDateTo)
 		this.setState({usersPage: page})
-		this.props.getListUser()
 	}
 
 	onFilterInit = (dateFrom, dateTo) => {
 		const { usersFetchLen, usersSortBy, usersSearchKey } = this.state
-		this.props.getListUser(0, usersFetchLen, dateFrom, dateTo, usersSortBy, usersSearchKey)
+		this.props.getListUser(0, usersFetchLen, usersSearchKey, usersSortBy, dateFrom, dateTo)
 		this.setState({usersPage: 0, usersDateFrom: dateFrom, usersDateTo: dateTo})
 	}
 
 	onSortInit = (e) => {
 		const target = e.target, value = target.value
 		const { usersFetchLen, usersDateFrom, usersDateTo, usersSearchKey } = this.state
-		this.props.getListUser(0, usersFetchLen, usersDateFrom, usersDateTo, value, usersSearchKey)
+		this.props.getListUser(0, usersFetchLen, usersSearchKey, value, usersDateFrom, usersDateTo)
 		this.setState({usersPage: 0, usersSortBy: value})
 	}
 
 	onSearchKeyword = (keywords) => {
 		const { usersPage, usersFetchLen, usersDateFrom, usersDateTo, usersSortBy } = this.state
-		this.props.getListUser(usersPage, usersFetchLen, usersDateFrom, usersDateTo, usersSortBy, keywords)
+		this.props.getListUser(usersPage, usersFetchLen, keywords, usersSortBy, usersDateFrom, usersDateTo)
 		this.setState({usersSearchKey: keywords})
 	}
 
@@ -164,6 +163,7 @@ class ManagementUser extends React.Component {
 		console.log('%c 🌰 this.state.dataEmail: ', 'font-size:20px;background-color: #93C0A4;color:#fff;', this.state.dataEmail);
 		console.log('%c 🍹 dataPassword: ', 'font-size:20px;background-color: #42b983;color:#fff;', this.state.dataPassword);
 		console.log('%c 🍎 dataUserRole: ', 'font-size:20px;background-color: #465975;color:#fff;', this.state.dataUserRole);
+		this.props.postAddUserAdministrator(this.state.dataName, this.state.dataEmail, this.state.dataPassword)
 		this.toggleModalsConfirmationInsert()
 		this.toggleModalsAddNewUserForm()
 	}
@@ -186,8 +186,10 @@ class ManagementUser extends React.Component {
 	render() {
 		const { 
 			showHeader, headerHeight, navIsOpen, navMinWidth, navMaxWidth, listUser, 
-			usersPage, usersFetchLen, usersSortBy, detailUserAdministrator
+			usersPage, usersFetchLen, usersSortBy, totalUserAdministrator
 		} = this.state
+
+		console.dir(listUser)
 
 		const showModalAddNewUser = ( 
 			<Modal 
@@ -303,10 +305,9 @@ class ManagementUser extends React.Component {
 								isResponsive={true} 
 								tHead={["#", "Name", "Email", "Registered Date", "Role", "Actions"]}
 								sortItems={[
-									{ id: "name", name: "Name"}, 
+									{ id: "username", name: "Name"}, 
 									{ id: "email", name: "Email" },
-									{ id: "created_date", name: "Registered Date"}, 
-									{ id: "role", name: "Role"}
+									{ id: "registered_date", name: "Registered Date"}
 								]}
 								onSortClick={this.onSortInit}
 								sortValue={usersSortBy}
@@ -318,12 +319,12 @@ class ManagementUser extends React.Component {
 								onFilterClick={this.onFilterInit}
 								onKeySearch={this.onSearchKeyword}
 								exportData={listUser}
-								noResult={listUser.length === 0}
+								noResult={totalUserAdministrator === 0}
 								pagination={
 									<Pagination 
 										ariaLabel="Page navigation"
 										size="sm"
-										totalContent={listUser.length}
+										totalContent={totalUserAdministrator}
 										currentPage={usersPage}
 										contentMaxLength={usersFetchLen}
 										onClick={this.onPaginationClick}
@@ -333,16 +334,17 @@ class ManagementUser extends React.Component {
 								titleButtonHeader="Add New User"
 								onClickButtonHeader={this.toggleModalsAddNewUserForm}
 							>
-								{
+								{ listUser ? 
 									listUser.map((data, key) => (
+										
 										<tr key={key}>
 											<th scope="row">
 												{(key + 1) +  (usersPage * usersFetchLen)}
 											</th>
-											<td>{data.name}</td>
+											<td>{data.username}</td>
 											<td>{data.email}</td>
 											<td>
-												{timestampToDateTime(data.created_date, false)}
+												{timestampToDateTime(new Date(data.registered_date).getTime())}
 											</td>
 											<td>{
 													data.role == 1 ? <Badge color="primary">Super Admin</Badge> 
@@ -354,7 +356,7 @@ class ManagementUser extends React.Component {
 												<Button size="sm" color="danger" className="mr-2 px-2 font-14" style={{marginTop: "5px", height: "31px"}} onClick={(e) => this.toggleDeleteUser(data)}><i className="icon-trash"></i></Button>
 											</td>
 										</tr>
-									))
+									)) : (null)
 								}
 							</TableBox>
 						</Col>
@@ -373,7 +375,8 @@ class ManagementUser extends React.Component {
 const mapDispatchToProps = dispatch => {
 	return {
 		getListUser: bindActionCreators(getListUser, dispatch),
-		getDetailUserAdministrator: bindActionCreators(getDetailUserAdministrator, dispatch)
+		getDetailUserAdministrator: bindActionCreators(getDetailUserAdministrator, dispatch),
+		postAddUserAdministrator: bindActionCreators(postAddUserAdministrator, dispatch)
 	}
 }
 
