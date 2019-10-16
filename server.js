@@ -1,7 +1,9 @@
+
 const next = require('next')
 const jsonServer = require('json-server')
 const express = require('express')
-var cookieParser = require('cookie-parser')
+// var cookieParser = require('cookie-parser')
+var bodyParser = require('body-parser')
 const path = require('path')
 const { parse } = require('url')
 
@@ -30,15 +32,15 @@ const app = next({
 
 app.prepare().then(() => {
   const server = express()
-  server.use(cookieParser())
-  /* const middlewares = [
+  // server.use(cookieParser())
+   const middlewares = [
     bodyParser.urlencoded(),
     bodyParser.json() 
 
     //cookieParser('sesh-dash'),
     //csrfProtection
   ] 
-  server.use(middlewares)   */
+  server.use(middlewares)
 
   // Use default router
   server.use('/api', router)
@@ -119,6 +121,11 @@ app.prepare().then(() => {
     const actualPage = "/interview/addQuestionOfInterview"
     const queryParams = { id: req.params.id }
     return app.render(req, res, actualPage, queryParams)
+  })
+
+  server.get('/list-event', (req, res) => {
+    const actualPage = '/event/listEvent'
+    return app.render(req, res, actualPage)
   })
 
   // server.get('/banner/:id/:slug', (req, res) => {

@@ -8,13 +8,17 @@ import { getListUser, getDetailUserAdministrator, postAddUserAdministrator } fro
 import { timestampToDateTime, regexHtmlTag, numberWithDot } from '../../components/functions'
 import Modal from '../../components/modals'
 import UserForm from '../../components/fragments/user/userForm'
+import cookies from 'next-cookies'
 
 class ManagementUser extends React.Component {
-	static async getInitialProps({ store }) {
-		let props = { showHeader: true, showFooter: true, usersPage: 0, usersMaxLen: 1, usersSearchKey: "", usersSortBy: "username" }
+	static async getInitialProps({ store, req }) {
+		let { token } = cookies({req})
+		const access_token = JSON.parse(token).access_token
+		
+		let props = { access_token: access_token , showHeader: true, showFooter: true, usersPage: 0, usersMaxLen: 1, usersSearchKey: "", usersSortBy: "username" }
 		let stores = await store.getState()
 		try {
-			if(!stores.listUser) await store.dispatch(getListUser(props.usersPage, props.usersMaxLen, props.usersSearchKey, props.usersSortBy ))
+			if(!stores.listUser) await store.dispatch(getListUser(props.access_token, props.usersPage, props.usersMaxLen, props.usersSearchKey, props.usersSortBy ))
 
 		} catch (e) {
 			props.error = 'Unable to fetch AsyncData on server'
@@ -32,6 +36,7 @@ class ManagementUser extends React.Component {
 			navIsOpen: props.navIsOpen,
 			navMaxWidth: props.showHeader ? props.navMaxWidth : "0px",
 			navMinWidth: props.showHeader ? props.navMinWidth : "0px",
+			access_token: props.access_token,
 			usersPage: props.usersPage,
 			usersFetchLen: props.usersMaxLen,
 			usersDateFrom: undefined,
@@ -120,27 +125,27 @@ class ManagementUser extends React.Component {
 	}
 
 	onPaginationClick = (page) => {
-		const { usersFetchLen, usersDateFrom, usersDateTo, usersSortBy, usersSearchKey } = this.state
-		this.props.getListUser(page, usersFetchLen, usersSearchKey, usersSortBy, usersDateFrom, usersDateTo)
+		const { access_token, usersFetchLen, usersDateFrom, usersDateTo, usersSortBy, usersSearchKey } = this.state
+		this.props.getListUser(access_token, page, usersFetchLen, usersSearchKey, usersSortBy, usersDateFrom, usersDateTo)
 		this.setState({usersPage: page})
 	}
 
 	onFilterInit = (dateFrom, dateTo) => {
-		const { usersFetchLen, usersSortBy, usersSearchKey } = this.state
-		this.props.getListUser(0, usersFetchLen, usersSearchKey, usersSortBy, dateFrom, dateTo)
+		const { access_token, usersFetchLen, usersSortBy, usersSearchKey } = this.state
+		this.props.getListUser(access_token, 0, usersFetchLen, usersSearchKey, usersSortBy, dateFrom, dateTo)
 		this.setState({usersPage: 0, usersDateFrom: dateFrom, usersDateTo: dateTo})
 	}
 
 	onSortInit = (e) => {
 		const target = e.target, value = target.value
-		const { usersFetchLen, usersDateFrom, usersDateTo, usersSearchKey } = this.state
-		this.props.getListUser(0, usersFetchLen, usersSearchKey, value, usersDateFrom, usersDateTo)
+		const { access_token, usersFetchLen, usersDateFrom, usersDateTo, usersSearchKey } = this.state
+		this.props.getListUser(access_token, 0, usersFetchLen, usersSearchKey, value, usersDateFrom, usersDateTo)
 		this.setState({usersPage: 0, usersSortBy: value})
 	}
 
 	onSearchKeyword = (keywords) => {
-		const { usersPage, usersFetchLen, usersDateFrom, usersDateTo, usersSortBy } = this.state
-		this.props.getListUser(usersPage, usersFetchLen, keywords, usersSortBy, usersDateFrom, usersDateTo)
+		const { access_token, usersPage, usersFetchLen, usersDateFrom, usersDateTo, usersSortBy } = this.state
+		this.props.getListUser(access_token, usersPage, usersFetchLen, keywords, usersSortBy, usersDateFrom, usersDateTo)
 		this.setState({usersSearchKey: keywords})
 	}
 

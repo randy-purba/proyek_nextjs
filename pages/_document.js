@@ -24,7 +24,7 @@ class MyDocument extends Document {
 					<meta name="msapplication-TileColor" content="#ffffff" />
 					<meta name="msapplication-TileImage" content="/_next/static/icons/icon_144x144.png" />
 					<meta name="theme-color" content="#FFFFFF" />
-					<link href="/static/icomoon-11102019/style.css" rel="stylesheet" />
+					<link href="/static/icomoon-16102019/style.css" rel="stylesheet" />
 					<script src="https://cdn.polyfill.io/v2/polyfill.min.js" />
 					{this.props.styleTags}
 				</Head>

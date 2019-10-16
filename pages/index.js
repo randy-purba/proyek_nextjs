@@ -53,7 +53,7 @@ class Home extends React.Component {
   					password: password
 				})
 				const response = await getAuthorizationCode()
-				userLogin(response)
+				userLogin(response, email)
 			} catch (error) {
 				this.setState({onFetch: false})
 				console.error(

@@ -5,8 +5,8 @@ export default (props) => {
         <div className={`navListItem d-inline-block w-100 ${props.className}`}>
             <Link href={props.href} as={props.link}>
                 <a 
-                    className="navItem animate-all position-relative d-inline-block w-100"
-                    style={{paddingLeft: props.width}}
+                    className="navItem animate-all position-relative d-inline-block w-100 py-2"
+                    style={{paddingLeft: props.width, padding: "10"}}
                     title={props.title}
                 >
                     <span 

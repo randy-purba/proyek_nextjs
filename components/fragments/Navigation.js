@@ -40,10 +40,20 @@ export default (props) => {
 
                 </NavSubMenu>
 
-
                 <NavSubMenu width={navMinWidth} menuId="ReportInterview" title="Interview Video Report" iconName="icon-help-circle" isOpenMenu={stateParent.isOpenReportInterview} onHandleClick={onHandleClick}>
                     <NavMenu link="/report-interview" href="/reportInterview" width={navMinWidth} title="List Applicant" iconName="icon-users" />
                 </NavSubMenu>
+
+                <NavSubMenu width={navMinWidth} menuId="GeneralParameter" title="General Parameter" iconName="icon-globe" isOpenMenu={stateParent.isOpenGeneralParameter} onHandleClick={onHandleClick}>
+                    <NavSubMenu width={navMinWidth} menuId="Event" title="Event" iconName="icon-calendar" isOpenMenu={stateParent.isOpenEvent} onHandleClick={onHandleClick}>
+                        <NavMenu link="/add-event" href="/event/addEvent" width={navMinWidth} title="Add Event" iconName="icon-plus-square" />
+                        <NavMenu link="/list-event" href="/event/listEvent" width={navMinWidth} title="List Event" iconName="icon-list1" />
+                    </NavSubMenu> 
+                    <NavSubMenu width={navMinWidth} menuId="Timer" title="Timer" iconName="icon-stopwatch" isOpenMenu={stateParent.isOpenTimer} onHandleClick={onHandleClick}>
+                        <NavMenu link="/timer-treasure-hunt" href="/timer/treasureHunt" width={navMinWidth} title="Treasure Hunt" iconName="icon-plus-square" />
+                        <NavMenu link="/timer-interview-user" href="/timer/interviewUser" width={navMinWidth} title="Interview User" iconName="icon-list1" />
+                    </NavSubMenu>     
+                </NavSubMenu> 
 
                 {/* <NavMenu link="/applicants" href="/applicants" width={navMinWidth} title="Applicants" iconName="icon-users" />
                 <NavMenu link="/bank-soal" href="/listBankQuestion" width={navMinWidth} title="Bank Soal" iconName="icon-database" /> */}
