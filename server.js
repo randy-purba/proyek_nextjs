@@ -128,6 +128,11 @@ app.prepare().then(() => {
     return app.render(req, res, actualPage)
   })
 
+  server.get('/add-event', (req, res) => {
+    const actualPage = '/event/addEvent'
+    return app.render(req, res, actualPage)  
+  })
+
   // server.get('/banner/:id/:slug', (req, res) => {
   //   const actualPage = '/banner/detail'
   //   const queryParams = { id: req.params.id }

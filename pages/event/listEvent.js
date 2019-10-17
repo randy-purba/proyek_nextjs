@@ -2,25 +2,26 @@ import React from 'react'
 import Router from 'next/router'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
-import { Container, Row, Col, Button } from 'reactstrap'
+import { Container, Row, Col, Button, Badge } from 'reactstrap'
 import TableBox from '../../components/tables'
 import Pagination from '../../components/cards/PaginationCard'
 import { getListEvent } from '../../components/actions'
 import { timestampToDateTime, capitalizeString } from '../../components/functions'
 import Modal from '../../components/modals'
-import DetailQuestion from '../../components/fragments/question/detailQuestion'
+// import DetailEvent from '../../components/fragments/event/detailEvent'
 import cookies from 'next-cookies'
 
 class ListEvent extends React.Component {
 
 	static async getInitialProps({ store, req }) {
-        let { token } = cookies({ req })
-        const access_token = JSON.parse(token).access_token
-		let props = { access_token: access_token, showHeader: true, showFooter: true, questionPage: 0, questionMaxLen: 10 }
+		let { token } = cookies({ req })
+		console.dir(token)
+        const access_token = token ? JSON.parse(token).access_token : ''
+		let props = { access_token: access_token, showHeader: true, showFooter: true, eventPage: 0, eventMaxLen: 2 }
 		let stores = await store.getState()
 		try {
 			
-			if(!stores.listEvent) await store.dispatch(getListEvent(props.access_token, props.questionPage, props.questionMaxLen))
+			if(!stores.listEvent) await store.dispatch(getListEvent(props.access_token, props.eventPage, props.eventMaxLen))
 
 		} catch (e) {
 			props.error = 'Unable to fetch AsyncData on server'
@@ -39,26 +40,26 @@ class ListEvent extends React.Component {
 			navMaxWidth: props.showHeader ? props.navMaxWidth : "0px",
             navMinWidth: props.showHeader ? props.navMinWidth : "0px",
             access_token: props.access_token,
-			questionPage: props.questionPage,
-			questionFetchLen: props.questionMaxLen,
-			questionDateFrom: undefined,
-			questionDateTo: undefined,
-			questionSortBy: "date",
-			questionSearchKey: "",
+			eventPage: props.eventPage,
+			eventFetchLen: props.eventMaxLen,
+			eventDateFrom: undefined,
+			eventDateTo: undefined,
+			eventSortBy: "date",
+			eventSearchKey: "",
 			listEvent: props.listEvent,
 			totalListEvent: props.totalListEvent,
-			dataDetailQuestion: props.dataDetailQuestion,
-			modalDetailQuestion: false
+			dataDetailEvent: props.dataDetailEvent,
+			modalDetailEvent: false
 		}
 
-		this.toggleModalsDetailQuestion = this.toggleModalsDetailQuestion.bind(this)
+		this.toggleModalsDetailEvent = this.toggleModalsDetailEvent.bind(this)
 		this.toggleModalsConfirmation = this.toggleModalsConfirmation.bind(this)
 	}
 
-	toggleModalsDetailQuestion = (data) => {
+	toggleModalsDetailEvent = (data) => {
 		this.setState(prevState => ({
-			modalDetailQuestion: !prevState.modalDetailQuestion,
-			dataDetailQuestion: data
+			modalDetailEvent: !prevState.modalDetailEvent,
+			dataDetailEvent: data
 		}))
 	}
 
@@ -78,82 +79,99 @@ class ListEvent extends React.Component {
 	}
 
 	onPaginationClick = (page) => {
-		const { access_token, questionFetchLen, questionDateFrom, questionDateTo, questionSortBy, questionSearchKey } = this.state
-		this.props.getListEvent(access_token, page, questionFetchLen, questionDateFrom, questionDateTo, questionSortBy, questionSearchKey)
-		this.setState({questionPage: page})
+		const { access_token, eventFetchLen, eventDateFrom, eventDateTo, eventSortBy, eventSearchKey } = this.state
+		this.props.getListEvent(access_token, page, eventFetchLen, eventDateFrom, eventDateTo, eventSortBy, eventSearchKey)
+		this.setState({eventPage: page})
 	}
 
 	onFilterInit = (dateFrom, dateTo) => {
-		const { questionFetchLen, questionSortBy, questionSearchKey } = this.state
-		this.props.getListEvent(access_token, 0, questionFetchLen, dateFrom, dateTo, questionSortBy, questionSearchKey)
-		this.setState({questionPage: 0, questionDateFrom: dateFrom, questionDateTo: dateTo})
+		const { access_token, eventFetchLen, eventSortBy, eventSearchKey } = this.state
+		this.props.getListEvent(access_token, 0, eventFetchLen, dateFrom, dateTo, eventSortBy, eventSearchKey)
+		this.setState({eventPage: 0, eventDateFrom: dateFrom, eventDateTo: dateTo})
 	}
 
 	onSortInit = (e) => {
 		const target = e.target, value = target.value
-		const { questionFetchLen, questionDateFrom, questionDateTo, questionSearchKey } = this.state
-		this.props.getListEvent(access_token, 0, questionFetchLen, questionDateFrom, questionDateTo, value, questionSearchKey)
-		this.setState({questionPage: 0, questionSortBy: value})
+		const { access_token, eventFetchLen, eventDateFrom, eventDateTo, eventSearchKey } = this.state
+		this.props.getListEvent(access_token, 0, eventFetchLen, eventDateFrom, eventDateTo, value, eventSearchKey)
+		this.setState({eventPage: 0, eventSortBy: value})
 	}
 
 	onSearchKeyword = (keywords) => {
-		const { questionPage, questionFetchLen, questionDateFrom, questionDateTo, questionSortBy } = this.state
-		this.props.getListEvent(access_token, questionPage, questionFetchLen, questionDateFrom, questionDateTo, questionSortBy, keywords)
-		this.setState({questionSearchKey: keywords})
+		const { access_token, eventPage, eventFetchLen, eventDateFrom, eventDateTo, eventSortBy } = this.state
+		this.props.getListEvent(access_token, eventPage, eventFetchLen, eventDateFrom, eventDateTo, eventSortBy, keywords)
+		this.setState({eventSearchKey: keywords})
 	}
 
-	toggleDeleteQuestion(id){
+	toggleDeleteEvent(id){
 		this.setState({
-			idQuestionDeleted: id
+			idEventDeleted: id
 		})
 		this.toggleModalsConfirmation("Delete")
 	}
 
-	togglePublishQuestion(id, status){
+	toggleChangeStatusEvent(id, status){
 		this.setState({
-			idQuestionPublish: id,
-			statusModalsPublishQuestion: status 
+			idEventChangeStatus: id,
+			statusModalsChangeStatusEvent: status 
 		})
-		this.toggleModalsConfirmation("Publish")
+		this.toggleModalsConfirmation("ChangeStatus")
 	}
 
 	toggleButtonSubmitModalsDelete = () => {
-		console.log(this.state.idQuestionDeleted)
+		console.log(this.state.idEventDeleted)
 		this.toggleModalsConfirmation("Delete")
 	}
 
-	toggleButtonSubmitModalsPublish = () => {
-		console.log(this.state.idQuestionPublish)
-		this.toggleModalsConfirmation("Publish")
+	toggleButtonSubmitModalsChangeStatus = () => {
+		console.log(this.state.idEventChangeStatus)
+		this.toggleModalsConfirmation("ChangeStatus")
 	}
 
-	redirectToEditQuestionPage(id){
-		Router.push("/edit-question/"+ id)
+	redirectToEditEventPage(id){
+		Router.push("/edit-event/"+ id)
 	}
 
 	render() {
 		const { 
 			showHeader, headerHeight, navIsOpen, navMinWidth, navMaxWidth,
-			listEvent, totalListEvent, questionPage, questionFetchLen, questionSortBy
+			listEvent, totalListEvent, eventPage, eventFetchLen, eventSortBy
 		} = this.state
 
-		const modalDetailQuestion = (
+		console.dir(listEvent)
+
+		// const modalDetailEvent = (
+		// 	<Modal 
+		// 		modalIsOpen={this.state.modalDetailEvent}
+		// 		toggleModal={this.toggleModalsDetailEvent}
+		// 		classNameModal={this.props.className}
+		// 		titleModalHeader="Detail Event"
+		// 		sizeModal="lg"
+		// 		centeredModal={true}
+		// 	>
+		// 		{
+		// 			this.state.modalDetailEvent ? 
+		// 				<DetailEvent
+		// 					dataEvent={this.state.dataDetailEvent}
+		// 					toggleEditButton={this.redirectToEditEventPage}
+		// 				/> : 
+		// 				(null)
+		// 		}
+		// 	</Modal> 
+		// )
+
+		const showModalConfirmationUpdate = (
 			<Modal 
-				modalIsOpen={this.state.modalDetailQuestion}
-				toggleModal={this.toggleModalsDetailQuestion}
+				modalIsOpen={this.state.modalConfirmationUpdate}
+				toggleModal={(e) => this.toggleModalsConfirmation("Update")}
 				classNameModal={this.props.className}
-				titleModalHeader="Detail Question"
-				sizeModal="lg"
+				titleModalHeader="Update Event Confirmation"
+				sizeModal="md"
 				centeredModal={true}
+				showModalFooter={true}
+				onClickButtonSubmit={this.toggleButtonSubmitModalsUpdate}
 			>
-				{
-					this.state.modalDetailQuestion ? 
-						<DetailQuestion
-							dataQuestion={this.state.dataDetailQuestion}
-							toggleEditButton={this.redirectToEditQuestionPage}
-						/> : 
-						(null)
-				}
+				are you sure to update this event ?
 			</Modal> 
 		)
 
@@ -162,28 +180,28 @@ class ListEvent extends React.Component {
 				modalIsOpen={this.state.modalConfirmationDelete}
 				toggleModal={(e) => this.toggleModalsConfirmation("Delete")}
 				classNameModal={this.props.className}
-				titleModalHeader="Delete Question Confirmation"
+				titleModalHeader="Delete Event Confirmation"
 				sizeModal="md"
 				centeredModal={true}
 				showModalFooter={true}
 				onClickButtonSubmit={this.toggleButtonSubmitModalsDelete}
 			>
-				are you sure to delete this question ?
+				are you sure to delete this event ?
 			</Modal> 
 		)
 
-		const showModalConfirmationPublish = (
+		const showModalConfirmationChangeStatus = (
 			<Modal 
-				modalIsOpen={this.state.modalConfirmationPublish}
-				toggleModal={(e) => this.toggleModalsConfirmation("Publish")}
+				modalIsOpen={this.state.modalConfirmationChangeStatus}
+				toggleModal={(e) => this.toggleModalsConfirmation("ChangeStatus")}
 				classNameModal={this.props.className}
-				titleModalHeader= {this.state.statusModalsPublishQuestion + " Question Confirmation"}
+				titleModalHeader= {this.state.statusModalsChangeStatusEvent + " Event Confirmation"}
 				sizeModal="md"
 				centeredModal={true}
 				showModalFooter={true}
-				onClickButtonSubmit={this.toggleButtonSubmitModalsPublish}
+				onClickButtonSubmit={this.toggleButtonSubmitModalsChangeStatus}
 			>
-				are you sure to { this.state.statusModalsPublishQuestion ? this.state.statusModalsPublishQuestion.toLowerCase() : ""} this question ?
+				are you sure to { this.state.statusModalsChangeStatusEvent ? this.state.statusModalsChangeStatusEvent.toLowerCase() : ""} this event ?
 			</Modal> 
 		)
 
@@ -210,22 +228,21 @@ class ListEvent extends React.Component {
 							<TableBox 
 								title="List Event" 
 								isResponsive={true} 
-								tHead={["#", "Question Title", "Answer Type", "Zone", "Marker", "Score", "Created Date", "Updated Date", "Published Date", "Published", "Action"]}
+								tHead={["#", "Name", "Event Date", "Expired Date", "Participants", "Status", "Action"]}
 								sortItems={[
-									{ id: "question_title", name: "Question Title"}, 
-									{ id: "answer_type", name: "Answer Type" }, 
-									{ id: "created_date", name: "Created Date" }, 
-									{ id: "updated_date", name: "Updated Date" }, 
-									{ id: "published_date", name: "Published Date" }, 
-									{ id: "published", name: "Published"}
+									{ id: "name", name: "Name"}, 
+									{ id: "event_date", name: "Event Date" }, 
+									{ id: "expired_event_date", name: "Expired Date" }, 
+									{ id: "participants", name: "Participants" }, 
+									{ id: "status", name: "Status" }
 								]}
 								onSortClick={this.onSortInit}
-								sortValue={questionSortBy}
+								sortValue={eventSortBy}
 								deepSearch={true}
 								maxRangeDateFilter={5}
 								exportToFile={true}
 								exportData={listEvent}
-								exportFileName={`List_Question_${(new Date()).getTime()}`}
+								exportFileName={`List_Event_${(new Date()).getTime()}`}
 								onFilterClick={this.onFilterInit}
 								onKeySearch={this.onSearchKeyword}
 								noResult={totalListEvent === 0}
@@ -234,37 +251,34 @@ class ListEvent extends React.Component {
 										ariaLabel="Page navigation"
 										size="sm"
 										totalContent={totalListEvent}
-										currentPage={questionPage}
-										contentMaxLength={questionFetchLen}
+										currentPage={eventPage}
+										contentMaxLength={eventFetchLen}
 										onClick={this.onPaginationClick}
 									/>
 								}
-								tHead={["#", "Question Title", "Answer Type", "Zone", "Marker", "Score", "Created Date", "Updated Date", "Published Date", "Published", "Action"]}
+								tHead={["#", "Name", "Event Date", "Expired Date", "Participants", "Status", "Action"]}
 							>
 								{
 									listEvent.map((data, key) => (
 										
 										<tr key={key}>
 											<th scope="row">
-												{(key + 1) +  (questionPage * questionFetchLen)}
+												{(key + 1) +  (eventPage * eventFetchLen)}
 											</th>
-											<td>{data.question_title}</td>
-											<td className="text-right">{data.score}</td>
+											<td>{data.name}</td>
 											<td>
-												{data.created_date ? timestampToDateTime(data.created_date, false) : (<i>-</i>)}
+												{data.event_date ? timestampToDateTime(data.event_date, false) : (<i>-</i>)}
 											</td>
 											<td>
-												{data.updated_date ? timestampToDateTime(data.updated_date, false) : (<i>-</i>)}
+												{data.expired_event_date ? timestampToDateTime(data.expired_event_date, false) : (<i>-</i>)}
 											</td>
+											<td>{data.participants}</td>
+											<td>{data.status == 0 ? <Badge color="primary">Draft</Badge> : (data.status == 1 ? <Badge color="secondary">Unpublish</Badge> : <Badge color="success">Publish</Badge>)}</td>
 											<td>
-												{data.published_date ? timestampToDateTime(data.published_date, false) : (<i>-</i>)}
-											</td>
-											<td>{data.published ? <i className="icon-check-square font-22 float-right" /> : <i className="icon-x-square font-22 float-right" />}</td>
-											<td>
-												<Button size="sm" color="secondary" className="mr-2 px-2 font-14" style={{marginTop: "5px", height: "31px"}} onClick={(e) => this.toggleModalsDetailQuestion(data)}><i className="icon-eye"></i></Button>
-												<Button size="sm" color="warning" className="mr-2 px-2 font-14" style={{marginTop: "5px", height: "31px"}} onClick={(e) => this.redirectToEditQuestionPage(data.id)}><i className="icon-edit"></i></Button>
-												<Button size="sm" color="danger" className="mr-2 px-2 font-14" style={{marginTop: "5px", height: "31px"}} onClick={(e) => this.toggleDeleteQuestion(data.id)}><i className="icon-trash"></i></Button>
-												<Button size="sm" color={data.published ? "info" : "primary"} className="mr-2 px-2 font-14" style={{marginTop: "5px", height: "31px"}} onClick={(e) => this.togglePublishQuestion(data.id, data.published ? "Unpublish" : "Publish" )}><i className="mr-1 icon-plus"></i>{data.published ? "Unpublish" : "Publish" }</Button>
+												<Button size="sm" color="info" className="mr-2 px-2 font-14" style={{marginTop: "5px", height: "31px"}} onClick={(e) => this.toggleModalsDetailEvent(data)}><i className="icon-eye"></i></Button>
+												<Button size="sm" color="warning" className="mr-2 px-2 font-14" style={{marginTop: "5px", height: "31px"}} onClick={(e) => this.redirectToEditEventPage(data.id)}><i className="icon-edit"></i></Button>
+												<Button size="sm" color="danger" className="mr-2 px-2 font-14" style={{marginTop: "5px", height: "31px"}} onClick={(e) => this.toggleDeleteEvent(data.id)}><i className="icon-trash"></i></Button>
+												<Button size="sm" color={data.status == 2  ? "secondary" : "success"} className="mr-2 px-2 font-14" style={{marginTop: "5px", height: "31px"}} onClick={(e) => this.toggleChangeStatusEvent(data.id, data.status == 2 ? "Unpublish" : "Publish" )}><i className="mr-1 icon-plus"></i>{data.status == 2 ? "Unpublish" : "Publish" }</Button>
 											</td>
 										</tr>
 									))
@@ -272,9 +286,10 @@ class ListEvent extends React.Component {
 							</TableBox>	
 						</Col>
 					</Row>
-					{ modalDetailQuestion }
+					{/* { modalDetailEvent } */}
 					{ showModalConfirmationDelete }
-					{ showModalConfirmationPublish }
+					{ showModalConfirmationChangeStatus }
+					{ showModalConfirmationUpdate }
 				</Container>
 			</div>
 		)

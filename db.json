@@ -483,21 +483,21 @@
             "name": "event kopi sae",
             "event_date": 1562267610234,
             "expired_event_date": 1562999910234,
-            "status": 0,
+            "status": 1,
             "participants":20
         },{
             "id": 3,
             "name": "event kopi kengangan mantan",
             "event_date": 1562267610234,
             "expired_event_date": 1562999910234,
-            "status": 0,
+            "status": 2,
             "participants":15
         },{
             "id": 4,
             "name": "event kopi saeloe",
             "event_date": 1562267610234,
             "expired_event_date": 1562999910234,
-            "status": 0,
+            "status": 1,
             "participants":5
         }
     ]

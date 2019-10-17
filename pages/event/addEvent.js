@@ -5,10 +5,10 @@ import { Container, Row, Col, Button } from 'reactstrap'
 import { regexHtmlTag, convertStringToBoolean } from '../../components/functions'
 import { getListCities } from '../../components/actions'
 import FormQuestion from '../../components/fragments/question/questionFormNew'
-import FormAddVideoInterview from '../../components/fragments/interview/interviewForm'
+import FormAddEvent from '../../components/fragments/event/eventForm'
 import Modal from '../../components/modals'
 
-class AddInterview extends React.Component {
+class AddEvent extends React.Component {
 	static async getInitialProps({ store }) {
 		let props = { showHeader: true, showFooter: true }
 		let stores = await store.getState()
@@ -161,8 +161,8 @@ class AddInterview extends React.Component {
 						marginLeft: navIsOpen ? navMaxWidth-navMinWidth : 0,
 						width: navIsOpen ? `calc(100% - ${navMaxWidth-navMinWidth}px)` : '100%'
 					}}>
-					<FormAddVideoInterview 
-						title="Add Video Interview"
+					<FormAddEvent 
+						title="Add Event"
 						dataTitleVideo={valueTitleVideo}
 						dataFileVideo={valueFileVideo}
 						dataFileCoverVideo={valueFileCoverVideo}
@@ -185,4 +185,4 @@ const mapDispatchToProps = dispatch => {
 		getListCities: bindActionCreators(getListCities, dispatch)
 	}
 }
-export default connect(state => state, mapDispatchToProps)(AddInterview)
+export default connect(state => state, mapDispatchToProps)(AddEvent)

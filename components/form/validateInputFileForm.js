@@ -1,10 +1,10 @@
 import { AvField } from 'availity-reactstrap-validation'
-import { FormGroup, Label } from 'reactstrap'
+import { CustomInput, FormGroup, Label } from 'reactstrap'
 import ImagePreviewCard from '../cards/ImagePreviewCard'
 import VideoPreviewCard from '../cards/VideoPreviewCard'
 
 export default (props) => {
-    console.dir(props.formValue)
+    console.dir(props.formValidate)
     return (
         <FormGroup 
             className={`mb-3 position-relative ${props.containerClassName ? props.containerClassName : ''}`}
@@ -22,7 +22,19 @@ export default (props) => {
                  : ""
             }
             
-            <AvField 
+            <CustomInput 
+                className={props.formClassName} 
+                id={props.formId} 
+                type="file" 
+                name={props.formName} 
+                placeholder={props.formPlaceholder} 
+                onChange={props.onChange} 
+                errorMessage={props.formErrorMessage} 
+                validate={props.formValidate} 
+                related={props.formRelation}
+                // value={props.formValue}
+                bsSize={props.formSize}/>
+            {/* <AvField 
                 className={props.formClassName} 
                 id={props.formId} 
                 type="file" 
@@ -33,8 +45,8 @@ export default (props) => {
                 validate={props.formValue ? (null) : props.formValidate} 
                 related={props.formRelation}
                 // value={props.formValue}
-                bsSize={props.formSize}
-            />
+                bsSize={props.formSize} 
+            />*/}
         </FormGroup>
     )
 }
