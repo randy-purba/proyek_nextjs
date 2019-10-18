@@ -4,17 +4,17 @@ import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { Container, Row, Col, Button } from 'reactstrap'
 import { regexHtmlTag, convertStringToBoolean } from '../../components/functions'
-import { getDetailInterviewVideo } from '../../components/actions'
-import FormQuestion from '../../components/fragments/question/questionFormNew'
-import FormAddVideoInterview from '../../components/fragments/interview/interviewForm'
+import { getListCities, getDetailEvent } from '../../components/actions'
+import FormUpdateEvent from '../../components/fragments/event/eventForm'
 import Modal from '../../components/modals'
 
-class EditQuestion extends React.Component {
+class UpdateEvent extends React.Component {
 	static async getInitialProps({ store, req }) {
-		let props = { showHeader: true, showFooter: true, idInterview: req.params.id }
+		let props = { showHeader: true, showFooter: true, idEvent: req.params.id }
 		let stores = await store.getState()
 		try {
-            if(!stores.detailInterviewVideo) await store.dispatch(getDetailInterviewVideo(props.idInterview))
+            if(!stores.listCity) await store.dispatch(getListCities())
+            if(!stores.detailEvent) await store.dispatch(getDetailEvent(props.idEvent))
 		} catch (e) {
 			props.error = 'Unable to fetch AsyncData on server'
 		}
@@ -27,19 +27,20 @@ class EditQuestion extends React.Component {
 			title: props.companyName,
 			subTitle: "Content Management System",
 			showHeader: props.showHeader,
-            headerHeight: props.headerHeight,
-            idInterview: props.idInterview,
+			headerHeight: props.headerHeight,
 			navIsOpen: props.navIsOpen,
 			navMaxWidth: props.showHeader ? props.navMaxWidth : "0px",
-			navMinWidth: props.showHeader ? props.navMinWidth : "0px",
-			detailInterviewVideo: props.detailInterviewVideo,
-			valueTitleVideo: props.detailInterviewVideo.title,
-			valueFileVideo: props.detailInterviewVideo.video_url,
-			valueFileCoverVideo: props.detailInterviewVideo.cover_video,
+            navMinWidth: props.showHeader ? props.navMinWidth : "0px",
+            detailEvent: props.detailEvent,
+			valueDescription: props.detailEvent.description,
+			valueMaxUser: props.detailEvent.participants,
+			valueEventDate: props.detailEvent.event_date,
+			valueExpiredDate: props.detailEvent.expired_event_date,
 			modalConfirmationSave: false
 		}
-		this.toggleModalsConfirmation = this.toggleModalsConfirmation.bind(this)
-	}
+        this.toggleModalsConfirmation = this.toggleModalsConfirmation.bind(this)
+        console.dir(this.state.detailEvent)
+    }
 
 	handleClick(name) {
         this.setState(prevState => {
@@ -51,7 +52,6 @@ class EditQuestion extends React.Component {
 	}
 	
 	toggleModalsConfirmation (status) {
-		console.log(status)
 		this.setState(prevState => ({
 			[`modalConfirmation${status}`]: !prevState[`modalConfirmation${status}`]
 		}))
@@ -59,7 +59,8 @@ class EditQuestion extends React.Component {
 
 	UNSAFE_componentWillReceiveProps(nextProps) {
 		this.setState({
-			detailInterviewVideo: nextProps.detailInterviewVideo,
+            listCity: nextProps.listCity,
+            detailEvent: nextProps.detailEvent,
 			navIsOpen: nextProps.navIsOpen
 		})
 	}
@@ -71,21 +72,9 @@ class EditQuestion extends React.Component {
 	}
 
 	handleChange = (e) => {
-		console.log("handleChange")
 		const target = e.target, value = target.value, name = target.name, related = target.getAttribute('related')
 		this.setState({ [name]: regexHtmlTag(value) })
 		if(related) this.setState({ [related]: regexHtmlTag(value) })
-	}
-
-	handleFileInputChange = (e) => {
-		console.log("handleFileInputChange")
-		const target = e.target, value = target.value, name = target.name, file = target.files[0]
-		this.setState({ [name]: URL.createObjectURL(file)})
-		console.dir(target)
-		console.dir(value)
-		console.dir(name)
-		console.dir(URL.createObjectURL(file))
-		console.log(typeof file)	
 	}
 
 	handleSelectOption = (e) => {
@@ -94,28 +83,66 @@ class EditQuestion extends React.Component {
 		if(related) this.setState({ [related]: 0 })
 	}
 
-	handleCancelEdit = (e) => {
-		console.log("handleCancelEdit")
+	handleDatepickerChange = (date, formName) => {
+		let timestamp = new Date(date).getTime()
+		if((new Date(date) > new Date(this.state.valueExpiredDate)) && formName == "valueEventDate"){
+			this.setState({ 
+				[formName]: timestamp, 
+				valueExpiredDate: timestamp
+			})
+		} else {
+			this.setState({ [formName]: timestamp})
+		}
+	}
+
+	handleCancelAddQuestion = (e) => {
+		console.log("handleCancelAddQuestion")
 		this.toggleModalsConfirmation("Cancel")
-		this.redirectToListVideoInterview()
+		this.redirectToListEventPage()
+	}
+
+	handlePublishAddQuestion = (e) => {
+		console.log(this.state.valueDescription)
+		console.log(this.state.valueMaxUser)
+		console.log(this.state.valueEventDate)
+		console.log(this.state.valueExpiredDate)
+		console.log("this.state.valueIsPublished : " + true)
+		this.toggleModalsConfirmation("Publish")
 	}
 
 	handleSubmit = (e) => {
-		console.log('%c 🍸 valueTitleVideo: ', 'font-size:20px;background-color: #33A5FF;color:#fff;', this.state.valueTitleVideo);
-		console.log('%c 🥦 valueFileVideo: ', 'font-size:20px;background-color: #B03734;color:#fff;', this.state.valueFileVideo);
-		console.log('%c 🍸 valueFileCoverVideo: ', 'font-size:20px;background-color: #4b4b4b;color:#fff;', this.state.valueFileCoverVideo);
-
+		console.log(this.state.valueDescription)
+		console.log(this.state.valueMaxUser)
+		console.log(this.state.valueEventDate)
+		console.log(this.state.valueExpiredDate)
+		console.log("this.state.valueIsPublished : " + false)
 		this.toggleModalsConfirmation("Save")
 	}
- 
-	redirectToListVideoInterview(){
-		Router.push('/list-interview')
-	}
 
+	redirectToListEventPage(){
+		Router.push("/list-event")
+	}
+ 
 	render() {
-		const { showHeader, headerHeight, navIsOpen, navMinWidth, navMaxWidth, 
-			valueTitleVideo, valueFileVideo, valueFileCoverVideo, detailInterviewVideo
+		const { showHeader, headerHeight, navIsOpen, navMinWidth, navMaxWidth, detailEvent
 		} = this.state
+
+        console.dir(this.state.valueEventDate)
+
+		const showModalConfirmationPublish = (
+			<Modal 
+				modalIsOpen={this.state.modalConfirmationPublish}
+				toggleModal={(e) => this.toggleModalsConfirmation("Publish")}
+				classNameModal={this.props.className}
+				titleModalHeader="Publish Question Confirmation"
+				sizeModal="md"
+				centeredModal={true}
+				showModalFooter={true}
+				onClickButtonSubmit={this.handlePublishAddQuestion}
+			>
+				are you sure to publish this video interview ?
+			</Modal> 
+		)
 
 		const showModalConfirmationSave = (
 			<Modal 
@@ -128,7 +155,7 @@ class EditQuestion extends React.Component {
 				showModalFooter={true}
 				onClickButtonSubmit={this.handleSubmit}
 			>
-				are you sure to save this question ?
+				are you sure to save this video interview ?
 			</Modal> 
 		)
 
@@ -141,9 +168,9 @@ class EditQuestion extends React.Component {
 				sizeModal="md"
 				centeredModal={true}
 				showModalFooter={true}
-				onClickButtonSubmit={this.handleCancelEdit}
+				onClickButtonSubmit={this.handleCancelAddQuestion}
 			>
-				are you sure to cancel this question ?
+				are you sure to cancel this video interview ?
 			</Modal> 
 		)
 
@@ -163,18 +190,20 @@ class EditQuestion extends React.Component {
 						marginLeft: navIsOpen ? navMaxWidth-navMinWidth : 0,
 						width: navIsOpen ? `calc(100% - ${navMaxWidth-navMinWidth}px)` : '100%'
 					}}>
-					<FormAddVideoInterview 
-						title="Add Video Interview"
-						dataTitleVideo={valueTitleVideo}
-						dataFileVideo={valueFileVideo}
-						dataFileCoverVideo={valueFileCoverVideo}
+					<FormUpdateEvent 
+						formStatus="update"
+						title="Update Event"
+						dataDescription={this.state.valueDescription}
+						dataMaxUser={this.state.valueMaxUser}
+						dataEventDate={this.state.valueEventDate}
+						dataExpiredDate={this.state.valueExpiredDate}
+						onHandleDatePickerChange={this.handleDatepickerChange}
 						onHandleChange={this.handleChange} 
-						onHandleFileInputChange={this.handleFileInputChange}
 						onHandleCheckbox={this.handleCheckbox}
-						onHandleSelectOption={this.handleSelectOption}
 						onHandleSubmit={this.toggleModalsConfirmation}
 					/>
 				</Container>
+				{ showModalConfirmationPublish }
 				{ showModalConfirmationSave }
 				{ showModalConfirmationCancel }
 			</div>
@@ -184,7 +213,8 @@ class EditQuestion extends React.Component {
 
 const mapDispatchToProps = dispatch => {
 	return {
-		getDetailInterviewVideo: bindActionCreators(getDetailInterviewVideo, dispatch)
+        getListCities: bindActionCreators(getListCities, dispatch),
+        getDetailEvent: bindActionCreators(getDetailEvent, dispatch)
 	}
 }
-export default connect(state => state, mapDispatchToProps)(EditQuestion)
+export default connect(state => state, mapDispatchToProps)(UpdateEvent)

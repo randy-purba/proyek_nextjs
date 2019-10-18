@@ -21,8 +21,9 @@ export default (props) => {
                 timeFormat={props.formTimeFormat}
                 timeIntervals={props.formTimeIntervals}
                 dateFormat={props.formDateFormat}
-                validate={props.formValidate} 
+                required={props.formRequired} 
                 errorMessage={props.formErrorMessage} 
+                minDate={props.formMinDate}
                 showTimeSelect
             />
         </FormGroup>

@@ -244,7 +244,7 @@
             "id": 1,
             "name": "apul",
             "password": "apul 123",
-            "no_hp": 1234567890,
+            "number_phone": 1234567890,
             "email": "apul@mail.com",
             "created_date": 1573700520,
             "updated_date": 1565567610234,
@@ -256,7 +256,7 @@
             "id": 2,
             "name": "ujang",
             "password": "ujang123",
-            "no_hp": 678923450,
+            "number_phone": 678923450,
             "email": "ujang@mail.com",
             "created_date": 1573959720,
             "updated_date": 1565567610234,
@@ -268,7 +268,7 @@
             "id": 3,
             "name": "jankrik boss",
             "password": "jankrik123",
-            "no_hp": 56789123,
+            "number_phone": 56789123,
             "email": "jangkrik.boss@mail.com",
             "created_date": 1565999610567,
             "updated_date": 1565567610234,
@@ -281,7 +281,7 @@
             "id": 4,
             "name": "boss kadal",
             "password": "kadal123",
-            "no_hp": 6789456123,
+            "number_phone": 6789456123,
             "email": "kadal@mail.com",
             "created_date": 1568887610789,
             "updated_date": 1565567610234,
@@ -473,32 +473,36 @@
     "listEvent": [
         {
             "id": 1,
-            "name": "event kopi kengangan",
-            "event_date": 1562267610234,
-            "expired_event_date": 1562999910234,
+            "description": "event kopi kengangan",
+            "event_date": 1571645412000,
+            "expired_event_date": 1572423012000,
             "status": 0,
-            "participants":10
+            "participants":10,
+            "max_user_and_zone": 12
         },{
             "id": 2,
-            "name": "event kopi sae",
-            "event_date": 1562267610234,
-            "expired_event_date": 1562999910234,
+            "description": "event kopi sae",
+            "event_date": 1571645412000,
+            "expired_event_date": 1572423012000,
             "status": 1,
-            "participants":20
+            "participants":20,
+            "max_user_and_zone": 18
         },{
             "id": 3,
-            "name": "event kopi kengangan mantan",
-            "event_date": 1562267610234,
-            "expired_event_date": 1562999910234,
+            "description": "event kopi kengangan mantan",
+            "event_date": 1571645412000,
+            "expired_event_date": 1572423012000,
             "status": 2,
-            "participants":15
+            "participants":15,
+            "max_user_and_zone": 20
         },{
             "id": 4,
-            "name": "event kopi saeloe",
-            "event_date": 1562267610234,
-            "expired_event_date": 1562999910234,
+            "description": "event kopi saeloe",
+            "event_date": 1571645412000,
+            "expired_event_date": 1572423012000,
             "status": 1,
-            "participants":5
+            "participants":5,
+            "max_user_and_zone": 12
         }
     ]
 }

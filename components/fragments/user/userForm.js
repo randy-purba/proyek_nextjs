@@ -63,7 +63,6 @@ export default (props) => {
                             formName="dataPassword" 
                             formPlaceholder="Input Password" 
                             formValue={dataPassword}
-                            onChange={onHandleChange}
                             formValidate={{
                                 required: { value: true, errorMessage: "Password can't be empty" }
                             }} 

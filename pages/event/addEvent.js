@@ -4,7 +4,6 @@ import { bindActionCreators } from 'redux'
 import { Container, Row, Col, Button } from 'reactstrap'
 import { regexHtmlTag, convertStringToBoolean } from '../../components/functions'
 import { getListCities } from '../../components/actions'
-import FormQuestion from '../../components/fragments/question/questionFormNew'
 import FormAddEvent from '../../components/fragments/event/eventForm'
 import Modal from '../../components/modals'
 
@@ -30,9 +29,10 @@ class AddEvent extends React.Component {
 			navIsOpen: props.navIsOpen,
 			navMaxWidth: props.showHeader ? props.navMaxWidth : "0px",
 			navMinWidth: props.showHeader ? props.navMinWidth : "0px",
-			valueTitleVideo: "",
-			valueFileVideo: "",
-			valueFileCoverVideo: "",
+			valueDescription:"",
+			valueMaxUser: "",
+			valueEventDate: new Date(),
+			valueExpiredDate: new Date(),
 			modalConfirmationSave: false
 		}
 		this.toggleModalsConfirmation = this.toggleModalsConfirmation.bind(this)
@@ -48,7 +48,7 @@ class AddEvent extends React.Component {
 	}
 	
 	toggleModalsConfirmation (status) {
-		console.log(status)
+		console.dir(status)
 		this.setState(prevState => ({
 			[`modalConfirmation${status}`]: !prevState[`modalConfirmation${status}`]
 		}))
@@ -74,21 +74,22 @@ class AddEvent extends React.Component {
 		if(related) this.setState({ [related]: regexHtmlTag(value) })
 	}
 
-	handleFileInputChange = (e) => {
-		console.log("handleFileInputChange")
-		const target = e.target, value = target.value, name = target.name, file = target.files[0]
-		this.setState({ [name]: URL.createObjectURL(file)})
-		console.dir(target)
-		console.dir(value)
-		console.dir(name)
-		console.dir(URL.createObjectURL(file))
-		console.log(typeof file)	
-	}
-
 	handleSelectOption = (e) => {
 		const target = e.target, value = target.value, name = target.name, related = target.getAttribute('related')
 		this.setState({ [name]: Number(value) })
 		if(related) this.setState({ [related]: 0 })
+	}
+
+	handleDatepickerChange = (date, formName) => {
+		let timestamp = new Date(date).getTime()
+		if((new Date(date) > new Date(this.state.valueExpiredDate)) && formName == "valueEventDate"){
+			this.setState({ 
+				[formName]: timestamp, 
+				valueExpiredDate: timestamp
+			})
+		} else {
+			this.setState({ [formName]: timestamp})
+		}
 	}
 
 	handleCancelAddQuestion = (e) => {
@@ -97,23 +98,41 @@ class AddEvent extends React.Component {
 	}
 
 	handlePublishAddQuestion = (e) => {
-		console.log("handlePublishAddQuestion")
+		console.log(this.state.valueDescription)
+		console.log(this.state.valueMaxUser)
+		console.log(this.state.valueEventDate)
+		console.log(this.state.valueExpiredDate)
+		console.log("this.state.valueIsPublished : " + true)
 		this.toggleModalsConfirmation("Publish")
 	}
 
 	handleSubmit = (e) => {
-
-		console.log('%c 🍸 valueTitleVideo: ', 'font-size:20px;background-color: #33A5FF;color:#fff;', this.state.valueTitleVideo);
-		console.log('%c 🥦 valueFileVideo: ', 'font-size:20px;background-color: #B03734;color:#fff;', this.state.valueFileVideo);
-		console.log('%c 🍸 valueFileCoverVideo: ', 'font-size:20px;background-color: #4b4b4b;color:#fff;', this.state.valueFileCoverVideo);
-
+		console.log(this.state.valueDescription)
+		console.log(this.state.valueMaxUser)
+		console.log(this.state.valueEventDate)
+		console.log(this.state.valueExpiredDate)
+		console.log("this.state.valueIsPublished : " + false)
 		this.toggleModalsConfirmation("Save")
 	}
  
 	render() {
-		const { showHeader, headerHeight, navIsOpen, navMinWidth, navMaxWidth, 
-			valueTitleVideo, valueFileVideo, valueFileCoverVideo
+		const { showHeader, headerHeight, navIsOpen, navMinWidth, navMaxWidth
 		} = this.state
+
+		const showModalConfirmationPublish = (
+			<Modal 
+				modalIsOpen={this.state.modalConfirmationPublish}
+				toggleModal={(e) => this.toggleModalsConfirmation("Publish")}
+				classNameModal={this.props.className}
+				titleModalHeader="Publish Question Confirmation"
+				sizeModal="md"
+				centeredModal={true}
+				showModalFooter={true}
+				onClickButtonSubmit={this.handlePublishAddQuestion}
+			>
+				are you sure to publish this video interview ?
+			</Modal> 
+		)
 
 		const showModalConfirmationSave = (
 			<Modal 
@@ -162,17 +181,19 @@ class AddEvent extends React.Component {
 						width: navIsOpen ? `calc(100% - ${navMaxWidth-navMinWidth}px)` : '100%'
 					}}>
 					<FormAddEvent 
+						formStatus="add"
 						title="Add Event"
-						dataTitleVideo={valueTitleVideo}
-						dataFileVideo={valueFileVideo}
-						dataFileCoverVideo={valueFileCoverVideo}
+						dataDescription={this.state.valueDescription}
+						dataMaxUser={this.state.valueMaxUser}
+						dataEventDate={this.state.valueEventDate}
+						dataExpiredDate={this.state.valueExpiredDate}
+						onHandleDatePickerChange={this.handleDatepickerChange}
 						onHandleChange={this.handleChange} 
-						onHandleFileInputChange={this.handleFileInputChange}
 						onHandleCheckbox={this.handleCheckbox}
-						onHandleSelectOption={this.handleSelectOption}
 						onHandleSubmit={this.toggleModalsConfirmation}
 					/>
 				</Container>
+				{ showModalConfirmationPublish }
 				{ showModalConfirmationSave }
 				{ showModalConfirmationCancel }
 			</div>

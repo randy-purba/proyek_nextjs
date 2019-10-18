@@ -65,7 +65,7 @@ export default (props) => {
                                 <div className="mr-2 w-50" style={{paddingTop: "5px"}}>
                                     <DatePicker
                                         selected={startDate}
-                                        onChange={date => {
+                                        onChange={ date => {
                                             setStartDate(date)
                                             setEndDate(addDays(new Date(date), maxRangeDateFilter))
                                         }}

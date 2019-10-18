@@ -133,6 +133,18 @@ app.prepare().then(() => {
     return app.render(req, res, actualPage)  
   })
 
+  server.get('/update-event/:id', (req, res) => {
+    const actualPage = "/event/updateEvent"
+    const queryParams = { id: req.params.id }
+    return app.render(req, res, actualPage, queryParams)
+  })
+
+  server.get('/add-applicant/:id', (req, res) => {
+    const actualPage = "/applicant/addApplicant"
+    const queryParams = { id: req.params.id }
+    return app.render(req, res, actualPage, queryParams)
+  })
+
   // server.get('/banner/:id/:slug', (req, res) => {
   //   const actualPage = '/banner/detail'
   //   const queryParams = { id: req.params.id }

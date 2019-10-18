@@ -11,52 +11,52 @@ import itemDetailWithVideoPreviewCard from '../../cards/ItemDetailWithVideoPrevi
 export default (props) => {
 
     const { 
-        dataInterview, title, dataQuestion, questionPage, questionFetchLen, totalListQuestion,
-        onPaginationClick, toggleToEditInterviewPage, toggleToAddQuestionPage
+        dataEvent, title, applicantsPage, applicantsFetchLen, totalListApplicant,
+        onPaginationClick, toggleToEditInterviewPage, dataListApplicant, toggleToAddApplicantPage
     } = props
+
+    console.dir(dataListApplicant)
 
     return (
         <div className="bg-white rounded shadow-sm p-3 mb-3 overflow-visible">
             {title ? <Label className="font-16 text-primary mb-3">{title}</Label> : ""}
             {
-                dataInterview ? 
+                dataEvent ? 
                 (
                     <div>
                         <ItemOneLineCard 
-                            title="Title"
-                            value={dataInterview.title}
-                        />172.20.2.153
+                            title="Description"
+                            value={capitalizeString(dataEvent.description)}
+                        />
                         <ItemOneLineCard 
-                            title="Total Question"
-                            value={dataInterview.total_question}
+                            title="Max User & Zone"
+                            value={dataEvent.max_user_and_zone}
                         />
-                        <ItemDetailWithImageCard 
-                            title="Thumbnail"
-                            srcImage={dataInterview.cover_video}
-                            idImage="thumbnailCoverVideo" 
-                            widthImage="200px" 
-                            heightImage="100px"
+                        <ItemOneLineCard 
+                            title="Event Date"
+                            value={timestampToDateTime(dataEvent.event_date)}
                         />
-                        <ItemDetailWithVideoPreviewCard 
-                            title="Video"
-                            srcVideo={dataInterview.video_url}
-                            idVideo="videoInterview"
-                            widthVideo="100%"
-                            heightVideo="75%"
+                        <ItemOneLineCard 
+                            title="Expired Date"
+                            value={timestampToDateTime(dataEvent.expired_event_date)}
                         />
-                        <TableBox 
-                            title="List Question" 
+                        <ItemOneLineCard 
+                            title="Participants"
+                            value={dataEvent.participants}
+                        />
+                        { dataListApplicant ? 
+                            <TableBox 
+                            title="List Applicant" 
                             isResponsive={false} 
-                            tHead={["#", "Question", "Question Type", "Zona", "Marker","Action"]}
-                            sortItems={[
-                            ]}
+                            tHead={["#", "Name", "Number Phone", "Registered Date","Action"]}
+                            sortItems={[]}
                             // onSortClick={this.onSortInit}
                             sortValue="question"
                             deepSearch={false}
                             maxRangeDateFilter={5}
                             exportToFile={false}
-                            exportData={dataQuestion}
-                            exportFileName={`Question_of_video${(new Date()).getTime()}`}
+                            exportData={dataListApplicant}
+                            exportFileName={`List_Applicant_${(new Date()).getTime()}`}
                             // onFilterClick={this.onFilterInit}
                             // onKeySearch={this.onSearchKeyword}
                             // noResult={dataBankQuestion.questions.length === 0}
@@ -64,26 +64,24 @@ export default (props) => {
                                 <Pagination 
                                     ariaLabel="Page navigation"
                                     size="sm"
-                                    totalContent={totalListQuestion}
-                                    currentPage={questionPage}
-                                    contentMaxLength={questionFetchLen}
+                                    totalContent={totalListApplicant}
+                                    currentPage={applicantsPage}
+                                    contentMaxLength={applicantsFetchLen}
                                     onClick={onPaginationClick}
                                 />
                             }
                             showButtonHeader={true}
-                            titleButtonHeader="Add Question"
-                            onClickButtonHeader={(e) => toggleToAddQuestionPage(dataInterview.id)}
-                        >
+                            titleButtonHeader="Add Applicant"
+                            onClickButtonHeader={(e) => toggleToAddApplicantPage(dataEvent.id)}>
                             {
-                                dataQuestion.map((data, key) => (
+                                dataListApplicant.map((data, key) => (
                                     <tr key={key}>
                                         <th scope="row">
-                                            {(key + 1) + (questionPage * questionFetchLen) }
+                                            {(key + 1) + (applicantsPage * applicantsFetchLen) }
                                         </th>
-                                        <td>{data.question_title}</td>
-                                        <td>{data.answer_type.name}</td>
-                                        <td>{data.zone.value}</td>
-                                        <td>{data.marker.value}</td>
+                                        <td>{data.name}</td>
+                                        <td>{data.number_phone}</td>
+                                        <td>{timestampToDateTime(data.created_date)}</td>
                                         <td>
                                             <Button size="sm" color="secondary" className="mr-2 px-2 font-14" style={{marginTop: "5px", height: "31px"}}><i className="icon-eye"></i></Button>
                                             <Button size="sm" color="warning" className="mr-2 px-2 font-14" style={{marginTop: "5px", height: "31px"}}><i className="icon-edit"></i></Button>
@@ -92,13 +90,14 @@ export default (props) => {
                                     </tr>
                                 ))
                             }
-                        </TableBox>
+                        </TableBox> : (null)
+                    }
                         
                     </div>
                 )
                 : (null)
             }
-            <Button size="sm" color="primary" className="float-right my-3 px-5 font-14" style={{marginTop: "5px", height: "31px"}} onClick={(e) => toggleToEditInterviewPage(dataInterview.id)}><i className="icon-edit"></i>Edit</Button>
+            <Button size="sm" color="primary" className="float-right my-3 px-5 font-14" style={{marginTop: "5px", height: "31px"}} onClick={(e) => toggleToEditInterviewPage(dataEvent.id)}><i className="icon-edit"></i>Edit</Button>
         </div>
        
     )

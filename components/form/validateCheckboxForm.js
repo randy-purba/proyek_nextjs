@@ -3,8 +3,6 @@ import { FormGroup, Label } from 'reactstrap'
 
 export default (props) => {
 
-    console.dir(props.formValue)
-    
     return (
         <FormGroup 
             className={`mb-3 position-relative ${props.containerClassName ? props.containerClassName : ''}`}
@@ -20,11 +18,11 @@ export default (props) => {
                 label={props.formLabel} 
                 validate={props.formValidate} 
                 value={props.formValue}
-                onChange={props.onChange} 
             >
                 { props.data ? 
                         props.data.map((data, index) => (
-                            <AvCheckbox key={index} label={data.label} value={data.value} />
+                            <AvCheckbox key={index} label={data.label} value={data.value} 
+                            onChange={props.onChange}  />
                         ))
                     : (null)}
             </AvCheckboxGroup>

@@ -4,7 +4,7 @@ import { bindActionCreators } from 'redux'
 import { Container, Row, Col,Button } from 'reactstrap'
 import TableBox from '../../components/tables'
 import Pagination from '../../components/cards/PaginationCard'
-import { getListUser, getDetailUserAdministrator } from '../../components/actions'
+import { getListApplicant, getDetailUserAdministrator } from '../../components/actions'
 import { timestampToDateTime, regexHtmlTag, numberWithDot } from '../../components/functions'
 import Modal from '../../components/modals'
 import UserForm from '../../components/fragments/user/userApplicantForm'
@@ -17,7 +17,7 @@ class ManagementApplicant extends React.Component {
 		
 		try {
 
-            if(!stores.listUser) await store.dispatch(getListUser(props.usersPage, props.usersMaxLen))
+            if(!stores.listApplicant) await store.dispatch(getListApplicant(props.usersPage, props.usersMaxLen))
             
 		} catch (e) {
 			props.error = 'Unable to fetch AsyncData on server'
@@ -41,7 +41,7 @@ class ManagementApplicant extends React.Component {
 			usersDateTo: undefined,
 			usersSortBy: "created_date",
 			usersSearchKey: "",
-			listUser: props.listUser,
+			listApplicant: props.listApplicant,
 			detailUserAdministrator: props.detailUserAdministrator,
 			modalAddNewUserForm: false,
 			modalUpdateUserForm: false,
@@ -122,7 +122,7 @@ class ManagementApplicant extends React.Component {
 	UNSAFE_componentWillReceiveProps(nextProps) {
 		this.setState({
 			navIsOpen: nextProps.navIsOpen,
-			listUser: nextProps.listUser,
+			listApplicant: nextProps.listApplicant,
 			detailUserAdministrator: nextProps.detailUserAdministrator,
 			modelUserApplicant: {
 				dataName: nextProps.detailUserAdministrator ? nextProps.detailUserAdministrator.name : "", 
@@ -134,27 +134,27 @@ class ManagementApplicant extends React.Component {
 
 	onPaginationClick = (page) => {
 		const { usersFetchLen, usersDateFrom, usersDateTo, usersSortBy, usersSearchKey } = this.state
-		this.props.getListUser(page, usersFetchLen, usersDateFrom, usersDateTo, usersSortBy, usersSearchKey)
+		this.props.getListApplicant(page, usersFetchLen, usersDateFrom, usersDateTo, usersSortBy, usersSearchKey)
 		this.setState({usersPage: page})
-		this.props.getListUser()
+		this.props.getListApplicant()
 	}
 
 	onFilterInit = (dateFrom, dateTo) => {
 		const { usersFetchLen, usersSortBy, usersSearchKey } = this.state
-		this.props.getListUser(0, usersFetchLen, dateFrom, dateTo, usersSortBy, usersSearchKey)
+		this.props.getListApplicant(0, usersFetchLen, dateFrom, dateTo, usersSortBy, usersSearchKey)
 		this.setState({usersPage: 0, usersDateFrom: dateFrom, usersDateTo: dateTo})
 	}
 
 	onSortInit = (e) => {
 		const target = e.target, value = target.value
 		const { usersFetchLen, usersDateFrom, usersDateTo, usersSearchKey } = this.state
-		this.props.getListUser(0, usersFetchLen, usersDateFrom, usersDateTo, value, usersSearchKey)
+		this.props.getListApplicant(0, usersFetchLen, usersDateFrom, usersDateTo, value, usersSearchKey)
 		this.setState({usersPage: 0, usersSortBy: value})
 	}
 
 	onSearchKeyword = (keywords) => {
 		const { usersPage, usersFetchLen, usersDateFrom, usersDateTo, usersSortBy } = this.state
-		this.props.getListUser(usersPage, usersFetchLen, usersDateFrom, usersDateTo, usersSortBy, keywords)
+		this.props.getListApplicant(usersPage, usersFetchLen, usersDateFrom, usersDateTo, usersSortBy, keywords)
 		this.setState({usersSearchKey: keywords})
 	}
 
@@ -197,7 +197,7 @@ class ManagementApplicant extends React.Component {
 
 	render() {
 		const { 
-			showHeader, headerHeight, navIsOpen, navMinWidth, navMaxWidth, listUser, usersPage, usersFetchLen, usersSortBy
+			showHeader, headerHeight, navIsOpen, navMinWidth, navMaxWidth, listApplicant, usersPage, usersFetchLen, usersSortBy
 		} = this.state
 
 		const showModalAddNewUser = ( 
@@ -315,17 +315,17 @@ class ManagementApplicant extends React.Component {
 								deepSearch={true}
 								maxRangeDateFilter={5}
 								exportToFile={true}
-								exportData={listUser}
+								exportData={listApplicant}
 								exportFileName={`Transaction${(new Date()).getTime()}`}
 								onFilterClick={this.onFilterInit}
 								onKeySearch={this.onSearchKeyword}
-								exportData={listUser}
-								noResult={listUser.length === 0}
+								exportData={listApplicant}
+								noResult={listApplicant.length === 0}
 								pagination={
 									<Pagination 
 										ariaLabel="Page navigation"
 										size="sm"
-										totalContent={listUser.length}
+										totalContent={listApplicant.length}
 										currentPage={usersPage}
 										contentMaxLength={usersFetchLen}
 										onClick={this.onPaginationClick}
@@ -336,7 +336,7 @@ class ManagementApplicant extends React.Component {
 								onClickButtonHeader={this.toggleModalsAddNewUserForm}
 							>
 								{
-									listUser.map((data, key) => (
+									listApplicant.map((data, key) => (
 										<tr key={key}>
 											<th scope="row">
 												{(key + 1) +  (usersPage * usersFetchLen)}
@@ -369,7 +369,7 @@ class ManagementApplicant extends React.Component {
 
 const mapDispatchToProps = dispatch => {
 	return {
-		getListUser: bindActionCreators(getListUser, dispatch),
+		getListApplicant: bindActionCreators(getListApplicant, dispatch),
 		getDetailUserAdministrator: bindActionCreators(getDetailUserAdministrator, dispatch)
 	}
 }

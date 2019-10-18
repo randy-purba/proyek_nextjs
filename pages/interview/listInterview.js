@@ -64,8 +64,10 @@ class ListInterview extends React.Component {
 
 	
 	toggleModalsDetailQuestion = (id) => {
-		this.onInitListQuestion()
-		this.props.getDetailInterviewVideo(id)
+		if(typeof id == 'number'){
+			this.onInitListQuestion()
+			this.props.getDetailInterviewVideo(id)
+		}
 		this.setState(prevState => ({
 			modalDetailInterview: !prevState.modalDetailInterview,
 		}))
@@ -162,9 +164,6 @@ class ListInterview extends React.Component {
 			interviewVideoPage, interviewVideoFetchLen, interviewVideoSortBy, totalListInterviewVideo, listQuestion,
 			questionPage, questionFetchLen, totalListQuestion
 		} = this.state
-		
-		console.dir(listInterviewVideo)
-
 
 		const modalDetailInterview = (
 			<Modal 
